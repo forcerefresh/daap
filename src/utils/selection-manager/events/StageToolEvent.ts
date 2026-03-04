@@ -41,12 +41,22 @@ export interface StageToolSelectEventData extends StageToolEventData {
   // more props
 }
 
+export interface StageToolPointsRepositionEventData extends StageToolEventData {
+  eventType: StageToolEnum.POINTS_REPOSITION;
+  mouseMove: Point;
+  contextMatrix: DOMMatrix;
+  objectRotation: number;
+  objectScale: number;
+  handle: "point0" | "point1";
+}
+
 export type StageToolEventDataUnion =
   | StageToolRotateEventData
   | StageToolMoveEventData
   | StageToolSelectEventData
   | StageToolPanEventData
-  | StageToolScaleEventData;
+  | StageToolScaleEventData
+  | StageToolPointsRepositionEventData;
 
 export class StageToolEvent<
   T = StageToolEventDataUnion

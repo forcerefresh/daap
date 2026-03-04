@@ -25,7 +25,6 @@ import {
   getCommonPropertiesValues,
 } from "webslider-sdk/lib/objects/common-properties";
 import { applyNewAnimationIdsToTransitionAbleElement } from "./objects";
-import { getAbsEl } from "../../panels/stage-panel-new/WithRotationHandle";
 import { Rect } from "../../webslider-sdk/object/i-tool-class";
 
 const getLayersDefault = () => ({ layerById: {}, allLayers: [] });

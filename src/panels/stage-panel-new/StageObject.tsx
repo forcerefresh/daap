@@ -46,7 +46,6 @@ import { IStore } from "../../store/store";
 import { withErrorBoundary } from "react-use-error-boundary";
 import { connect } from "react-redux";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
-import { WithRotationHandle } from "./WithRotationHandle";
 import {
   activateObject,
   addObjectsToSelection,
@@ -88,7 +87,6 @@ import {
   computeGroupChildrenBounds,
   populateObjectThreeIds,
 } from "../../store/actions/actions-utils";
-import { WithResizeHandle } from "./WithResizeHandle";
 import { ILayer } from "../../store/reducers/i-layers";
 import {
   SVG_MASK,
@@ -476,28 +474,7 @@ export function StageObjectInternal(props: IStageLayer) {
         dangerouslySetInnerHTML={{ __html: clipMaskHtml }}
       ></div>
 
-      <WithResizeHandle
-        key={`object-${object.id}`}
-        object={object}
-        stageZoom={stageZoom ?? 1}
-        rotation={object.rotation ?? 0}
-        scale={object.scale ?? 1}
-        selectionPath={selectionPath}
-        objectById={objectById}
-        isSelected={isSelected}
-        forceHide={!!activeTool}
-      >
-        <WithRotationHandle
-          key={`object-${object.id}`}
-          object={object}
-          stageZoom={stageZoom ?? 1}
-          rotation={object.rotation ?? 0}
-          scale={object.scale ?? 1}
-          selectionPath={selectionPath}
-          objectById={objectById}
-          forceHide={!!activeTool}
-        >
-          <div
+      <div
             ref={childRef}
             style={objectHolderStyle}
             className={cx(`object-holder-${object.id}`)}
@@ -597,8 +574,6 @@ export function StageObjectInternal(props: IStageLayer) {
             />
             <div className="object-selection" style={selectionStyle} />
           </div>
-        </WithRotationHandle>
-      </WithResizeHandle>
     </React.Fragment>
   );
 }

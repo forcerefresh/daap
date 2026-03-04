@@ -190,7 +190,6 @@ import {
   linePostProcess,
   lineSizeUpdate,
 } from "./line/line";
-import LineStageTool from "./line/line-stage-tool";
 import {
   createSvgMaskObject,
   getSvgMaskAssetsUrls,
@@ -469,11 +468,6 @@ registerObject(
   undefined,
 );
 
-registerObjectTool({
-  type: LINE,
-  meta: lineMeta,
-  toolClass: LineStageTool,
-});
 // -------------------------
 
 // registerObject(

@@ -257,11 +257,9 @@ export function processMoveStopEvent(
   // NOTE: mouseup and down in the same point (no mouse move)
   if (x === 0 && y === 0) {
     if (selectedObjectIds.length === 1 && selectedObjectIds[0] === objectId) {
-      // TODO
       if (
         (objectById[objectId].type === "io.forcerefresh.layout.object" ||
-          objectById[objectId].type === "io.forcerefresh.text.object" ||
-          objectById[objectId].type === "io.forcerefresh.line.object") &&
+          objectById[objectId].type === "io.forcerefresh.text.object") &&
         !recentlySelectedRef.current
       ) {
         activateTool(objectById[objectId].type, "latest", objectId);

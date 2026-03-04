@@ -24,7 +24,6 @@ import { IStore } from "../../store/store";
 import { withErrorBoundary } from "react-use-error-boundary";
 import { connect } from "react-redux";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
-import { WithRotationHandle } from "./WithRotationHandle";
 import {
   activateObject,
   addObjectsToSelection,
@@ -64,7 +63,6 @@ import {
 import { StageManagerContext } from "./StageManagerProvider";
 import { StageToolEnum } from "../../utils/selection-manager/types";
 import { populateObjectThreeIds } from "../../store/actions/actions-utils";
-import { WithResizeHandle } from "./WithResizeHandle";
 import { ILayer } from "../../store/reducers/i-layers";
 
 const groupSelectionColor = "#48aff0"; /// "#48f08d";

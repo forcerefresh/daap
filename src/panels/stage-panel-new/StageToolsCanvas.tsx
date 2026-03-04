@@ -55,6 +55,7 @@ import { StageManagerContext } from "./StageManagerProvider";
 import { StageToolEnum } from "../../utils/selection-manager/types";
 import { Point } from "../../webslider-sdk/object/i-tool-class";
 import { getGroupMatrixFromSelectionPath } from "./stage-panel-utils";
+import { resolveTransformCapabilities } from "../../utils/stage/transformCapabilities";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -347,11 +348,37 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
     [objectById, selectionPath, selectedObjectIds, stageManager],
   );
 
+  const handlePointsRepositionMouseDown = useCallback(
+    (e: React.MouseEvent, handle: "point0" | "point1") => {
+      e.stopPropagation();
+
+      const groupsMatrix = getGroupMatrixFromSelectionPath(
+        selectionPath,
+        objectById,
+      );
+
+      const object = objectById[selectedObjectIds[0]];
+
+      stageManager.start(StageToolEnum.POINTS_REPOSITION, {
+        mousePosition: getMousePosition(e.nativeEvent),
+        contextMatrix: groupsMatrix,
+        objectId: selectedObjectIds[0],
+        objectRotation: object.rotation ?? 0,
+        objectScale: object.scale ?? 1,
+        originalMouseEvent: e.nativeEvent,
+        handle,
+        boundingClientRects: [],
+      });
+    },
+    [objectById, selectionPath, selectedObjectIds, stageManager],
+  );
+
   const objectMeta = selectedObject
     ? getAppObjectDefinition(selectedObject.type, "latest")?.meta
     : null;
-  const showWidthResize = objectMeta?.supportWidthResize ?? false;
-  const showHeightResize = objectMeta?.supportHeightResize ?? false;
+  const capabilities = resolveTransformCapabilities(objectMeta);
+  const showWidthResize = capabilities.resize && (objectMeta?.supportWidthResize ?? false);
+  const showHeightResize = capabilities.resize && (objectMeta?.supportHeightResize ?? false);
 
   const handleColor = "#48aff0";
   const borderRadius = "10%";
@@ -386,7 +413,7 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
         <div
           ref={holderRef}
           className="selection-rect"
-          style={{ position: "absolute" }}
+          style={{ position: "absolute", overflow: "visible" }}
         >
           {/* Selection outline */}
           <div
@@ -403,56 +430,62 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
           {!selectedObject.isLocked && selectedObjectIds.length === 1 && (
             <>
               {/* Rotation handle */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: `calc(-2 * var(--hs) - ${ROTATION_HANDLE_GAP} * var(--hw))`,
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  width: "var(--hs)",
-                  height: "var(--hs)",
-                  background: handleColor,
-                  boxShadow: "0 0 0 var(--hw) white",
-                  borderRadius: "50%",
-                  pointerEvents: "all",
-                  cursor: "grab",
-                }}
-                onMouseDown={handleRotateMouseDown}
-              />
+              {capabilities.rotate && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: `calc(-2 * var(--hs) - ${ROTATION_HANDLE_GAP} * var(--hw))`,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "var(--hs)",
+                    height: "var(--hs)",
+                    background: handleColor,
+                    boxShadow: "0 0 0 var(--hw) white",
+                    borderRadius: "50%",
+                    pointerEvents: "all",
+                    cursor: "grab",
+                  }}
+                  onMouseDown={handleRotateMouseDown}
+                />
+              )}
 
               {/* Corner handles */}
-              <div
-                style={{
-                  ...cornerStyle,
-                  left: "calc(-1 * var(--hs))",
-                  top: "calc(-1 * var(--hs))",
-                }}
-                onMouseDown={(e) => handleScaleMouseDown(e, "tl")}
-              />
-              <div
-                style={{
-                  ...cornerStyle,
-                  right: "calc(-1 * var(--hs))",
-                  top: "calc(-1 * var(--hs))",
-                }}
-                onMouseDown={(e) => handleScaleMouseDown(e, "tr")}
-              />
-              <div
-                style={{
-                  ...cornerStyle,
-                  left: "calc(-1 * var(--hs))",
-                  bottom: "calc(-1 * var(--hs))",
-                }}
-                onMouseDown={(e) => handleScaleMouseDown(e, "bl")}
-              />
-              <div
-                style={{
-                  ...cornerStyle,
-                  right: "calc(-1 * var(--hs))",
-                  bottom: "calc(-1 * var(--hs))",
-                }}
-                onMouseDown={(e) => handleScaleMouseDown(e, "br")}
-              />
+              {capabilities.scale && (
+                <>
+                  <div
+                    style={{
+                      ...cornerStyle,
+                      left: "calc(-1 * var(--hs))",
+                      top: "calc(-1 * var(--hs))",
+                    }}
+                    onMouseDown={(e) => handleScaleMouseDown(e, "tl")}
+                  />
+                  <div
+                    style={{
+                      ...cornerStyle,
+                      right: "calc(-1 * var(--hs))",
+                      top: "calc(-1 * var(--hs))",
+                    }}
+                    onMouseDown={(e) => handleScaleMouseDown(e, "tr")}
+                  />
+                  <div
+                    style={{
+                      ...cornerStyle,
+                      left: "calc(-1 * var(--hs))",
+                      bottom: "calc(-1 * var(--hs))",
+                    }}
+                    onMouseDown={(e) => handleScaleMouseDown(e, "bl")}
+                  />
+                  <div
+                    style={{
+                      ...cornerStyle,
+                      right: "calc(-1 * var(--hs))",
+                      bottom: "calc(-1 * var(--hs))",
+                    }}
+                    onMouseDown={(e) => handleScaleMouseDown(e, "br")}
+                  />
+                </>
+              )}
 
               {/* Edge handles */}
               {showWidthResize && (
@@ -488,6 +521,54 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
                   }}
                   onMouseDown={(e) => handleScaleMouseDown(e, "height")}
                 />
+              )}
+
+              {/* Endpoint handles for pointsReposition objects (e.g. lines) */}
+              {capabilities.pointsReposition && (
+                <>
+                  <div
+                    data-reposition-point={`point0-${selectedObject.id}`}
+                    data-base-left={selectedObject.x1 ?? 0}
+                    data-base-top={selectedObject.y1 ?? 0}
+                    style={{
+                      position: "absolute",
+                      left: selectedObject.x1 ?? 0,
+                      top: selectedObject.y1 ?? 0,
+                      transform: "translate(-50%, -50%)",
+                      width: "var(--hs)",
+                      height: "var(--hs)",
+                      background: handleColor,
+                      boxShadow: "0 0 0 var(--hw) white",
+                      borderRadius: "50%",
+                      pointerEvents: "all",
+                      cursor: "crosshair",
+                    }}
+                    onMouseDown={(e) =>
+                      handlePointsRepositionMouseDown(e, "point0")
+                    }
+                  />
+                  <div
+                    data-reposition-point={`point1-${selectedObject.id}`}
+                    data-base-left={selectedObject.x2 ?? 0}
+                    data-base-top={selectedObject.y2 ?? 0}
+                    style={{
+                      position: "absolute",
+                      left: selectedObject.x2 ?? 0,
+                      top: selectedObject.y2 ?? 0,
+                      transform: "translate(-50%, -50%)",
+                      width: "var(--hs)",
+                      height: "var(--hs)",
+                      background: handleColor,
+                      boxShadow: "0 0 0 var(--hw) white",
+                      borderRadius: "50%",
+                      pointerEvents: "all",
+                      cursor: "crosshair",
+                    }}
+                    onMouseDown={(e) =>
+                      handlePointsRepositionMouseDown(e, "point1")
+                    }
+                  />
+                </>
               )}
             </>
           )}

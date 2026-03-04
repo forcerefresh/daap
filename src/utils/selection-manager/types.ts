@@ -8,6 +8,7 @@ export enum StageToolEnum {
   //   RESIZE = "RESIZE",
   PAN = "PAN",
   // DESELECT = "DESELECT",
+  POINTS_REPOSITION = "POINTS_REPOSITION",
 }
 
 export interface IStageTool extends EventTarget {

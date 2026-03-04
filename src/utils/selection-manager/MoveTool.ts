@@ -1,4 +1,3 @@
-import { getAbsEl } from "../../panels/stage-panel-new/WithRotationHandle";
 import { screenPointToLocal } from "../../panels/stage-panel-new/stage-panel-utils";
 import { Point } from "../../webslider-sdk/object/i-tool-class";
 import { getMousePosition } from "../doom-utils/common";

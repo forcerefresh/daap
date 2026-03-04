@@ -43,12 +43,12 @@ export type LinePropertiesTuple = [
   IColorInput<"strokeColor">,
   // IButtonGroupInput<"strokeLineJoin">,
   IButtonGroupInput<"strokeLineCap">,
-  ITextInput<"strokeDashArray">
+  ITextInput<"strokeDashArray">,
   // IColorInput<"fillColor">
 ];
 
 export function createLineObject(
-  initialValue?: Record<string, any>
+  initialValue?: Record<string, any>,
 ): Omit<IObject, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(LINE);
 
@@ -206,11 +206,11 @@ export function getLineHtml(props: GetHtmlFuncPropsType) {
 }
 
 export async function lineSizeUpdate(
-  props: UpdateObjectSizeFuncPropsType
+  props: UpdateObjectSizeFuncPropsType,
 ): Promise<void> {}
 
 export function linePostProcess(
-  props: PostProcessFuncPropsType
+  props: PostProcessFuncPropsType,
 ): PostProcessFuncReturnType {
   const { object, prevObject } = props;
 
@@ -230,8 +230,15 @@ export const lineMeta = {
   description: "Line object",
   // preloadOrder: PreloadOrder.MIDDLE,
   icon: svg,
-  sizeType: "line", //"rect" | "line"
+  sizeType: "line" as const, //"rect" | "line"
   //isEditable: false, // not needed default is false
+  transformCapabilities: {
+    move: true,
+    scale: false,
+    resize: false,
+    rotate: true,
+    pointsReposition: true,
+  },
 };
 
 export function getBounds(object: IObject) {

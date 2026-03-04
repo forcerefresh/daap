@@ -43,6 +43,11 @@ import {
   processPanChangeEvent,
   processPanStopEvent,
 } from "./handlers/pan-handler";
+import {
+  processPointsRepositionStartEvent,
+  processPointsRepositionChangeEvent,
+  processPointsRepositionStopEvent,
+} from "./handlers/points-reposition-handler";
 
 // Re-export snap utilities that other modules depend on
 export { clearSnapHolder, isNear } from "./handlers/move-handler";
@@ -150,6 +155,9 @@ export const StageManagerProviderInternal = (
             },
           );
           break;
+        case StageToolEnum.POINTS_REPOSITION:
+          processPointsRepositionStartEvent(eData, objectById);
+          break;
       }
     };
 
@@ -184,6 +192,9 @@ export const StageManagerProviderInternal = (
               _setStagePan,
             },
           );
+          break;
+        case StageToolEnum.POINTS_REPOSITION:
+          processPointsRepositionChangeEvent(eData, objectById, { zoom });
           break;
       }
       // All DOM mutations are done — notify StageToolsCanvas so it can
@@ -258,6 +269,9 @@ export const StageManagerProviderInternal = (
               _setStagePan,
             },
           );
+          break;
+        case StageToolEnum.POINTS_REPOSITION:
+          processPointsRepositionStopEvent(eData, objectById, { zoom }, { _updateObject });
           break;
       }
     };

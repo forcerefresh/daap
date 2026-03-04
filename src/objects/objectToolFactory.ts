@@ -1,5 +1,6 @@
 import { IToolbarProps } from "../utils/tools/types";
 import { IToolClass } from "../webslider-sdk/object/i-tool-class";
+import { TransformCapabilities } from "webslider-sdk/lib/objects/objects-register";
 import semver from "semver";
 export interface IToolDefinition {
   type: string;
@@ -11,6 +12,7 @@ export interface IToolDefinition {
     supportWidthResize?: boolean;
     supportHeightResize?: boolean;
     sizeType?: "line" | "rect"; // default "rect"
+    transformCapabilities?: TransformCapabilities;
   };
   toolClass?: new () => IToolClass;
   toolBar?: (props: IToolbarProps) => React.ReactElement | null;

@@ -3,8 +3,35 @@ import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { Point, Rect } from "../../webslider-sdk/object/i-tool-class";
-import { getAbsEl } from "./WithRotationHandle";
 import { degrees_to_radians } from "./StageManagerProvider";
+
+let absEl: Record<string, HTMLDivElement> = {};
+
+export function getAbsEl(
+  id: string,
+  { x, y }: { x: any; y: any } = { x: 0, y: 0 },
+  append = true
+): HTMLDivElement {
+  if (absEl[id]) {
+    absEl[id].style.left = parseInt(x) + "px";
+    absEl[id].style.top = parseInt(y) + "px";
+    return absEl[id];
+  }
+
+  absEl[id] = document.createElement("div");
+  absEl[id].style.position = "absolute";
+  absEl[id].style.width = "6px";
+  absEl[id].style.height = "6px";
+  absEl[id].style.zIndex = "2000";
+  absEl[id].style.backgroundColor = "red";
+  absEl[id].style.left = parseInt(x) + "px";
+  absEl[id].style.top = parseInt(y) + "px";
+  absEl[id].style.pointerEvents = "none";
+
+  if (append) document.body.appendChild(absEl[id]);
+
+  return absEl[id];
+}
 import { isObjectGroup } from "../../store/actions/actions-utils";
 import { ILayer } from "../../store/reducers/i-layers";
 

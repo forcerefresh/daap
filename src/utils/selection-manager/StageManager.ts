@@ -1,8 +1,8 @@
-import { getAbsEl } from "../../panels/stage-panel-new/WithRotationHandle";
 import { Point } from "../../webslider-sdk/object/i-tool-class";
 import { getMousePosition } from "../doom-utils/common";
 import { MoveTool } from "./MoveTool";
 import { PanTool } from "./PanTool";
+import { PointsRepositionTool } from "./PointsRepositionTool";
 import { RotateTool } from "./RotateTool";
 import { ScaleTool } from "./ScaleTool";
 import { StageToolEvent } from "./events/StageToolEvent";
@@ -93,6 +93,9 @@ function createStageTool(
       return new PanTool(data);
     case StageToolEnum.SCALE: {
       return new ScaleTool(data);
+    }
+    case StageToolEnum.POINTS_REPOSITION: {
+      return new PointsRepositionTool(data);
     }
   }
 }
