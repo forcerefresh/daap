@@ -49,11 +49,11 @@ export type StarPropertiesTuple = [
   IButtonGroupInput<"strokeLineJoin">,
   IColorGradientInput<"fill">,
   INumberInput<"points">,
-  ISliderInput<"radius">
+  ISliderInput<"radius">,
 ];
 
 export function createStarObject(
-  initialValue?: Record<string, any>
+  initialValue?: Record<string, any>,
 ): Omit<IObject, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(STAR);
 
@@ -139,7 +139,7 @@ export function getStarHtml(props: GetHtmlFuncPropsType) {
 
   const starValues = getObjectValuesForDevice(
     object.properties as StarValues,
-    deviceType
+    deviceType,
   );
 
   let style = "";
@@ -150,25 +150,25 @@ export function getStarHtml(props: GetHtmlFuncPropsType) {
     parseFloat(calculatedObjectSize.width) / 2,
     parseFloat(calculatedObjectSize.height) / 2,
     starValues.points ?? 5,
-    starValues.radius ?? 50
+    starValues.radius ?? 50,
   );
 
   const fillObj = getSVGFill(starValues.fill, object.id);
 
   const svg = `
     <svg viewBox="0 0 ${object.width} ${
-    object.height
-  }" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      object.height
+    }" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       ${fillObj.gradient}   
       <path  d="${path}" stroke-width="${starValues.strokeWidth}" stroke="${
-    convertRGBColor2CSSStyle(starValues.strokeColor).backgroundColor
-  }" ${fillObj.fillAttr} stroke-linejoin="${starValues.strokeLineJoin}"></path>
+        convertRGBColor2CSSStyle(starValues.strokeColor).backgroundColor
+      }" ${fillObj.fillAttr} stroke-linejoin="${starValues.strokeLineJoin}"></path>
      </svg>`;
   return `<div class="object-content object-content-${object.id}" style="${style}">${svg}</div>`;
 }
 
 export async function starSizeUpdate(
-  props: UpdateObjectSizeFuncPropsType
+  props: UpdateObjectSizeFuncPropsType,
 ): Promise<void> {
   const {
     id,
@@ -183,13 +183,13 @@ export async function starSizeUpdate(
   } = props;
   const starValues = getObjectValuesForDevice(
     properties as StarValues,
-    deviceType
+    deviceType,
   );
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
   const objectContentEl = objectEl.getElementsByClassName(
-    "object-content"
+    "object-content",
   )[0] as HTMLElement;
 
   const child = objectEl.firstChild! as HTMLDivElement;
@@ -207,7 +207,7 @@ export async function starSizeUpdate(
   addTransformStyleToObjectElementContent(
     objectContentEl,
     transform,
-    deviceType
+    deviceType,
   );
 
   const transformProperties = getObjectValuesForDevice(transform);
@@ -222,15 +222,13 @@ export const starMeta = {
   name: "Star",
   description: "Add star object",
   icon: svg,
-  supportWidthResize: true,
-  supportHeightResize: true,
 };
 
 const svgStarPath = (
   w: number,
   h: number,
   numPoints: number,
-  radius: number
+  radius: number,
 ) => {
   const innerRadius = (w / 100) * radius;
   const outerRadius = w;

@@ -339,6 +339,4 @@ export const imageMeta = {
   description: "Add Image Object",
   preloadOrder: PreloadOrder.FIRST,
   icon: svg,
-  supportWidthResize: true,
-  supportHeightResize: true,
 };

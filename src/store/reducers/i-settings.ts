@@ -32,4 +32,6 @@ export interface ISettings {
   //theme
   theme: ITheme;
   themeClass: string;
+
+  groupNesting: "one" | "unlimited";
 }

@@ -45,11 +45,11 @@ export type CirclePropertiesTuple = [
   INumberInput<"strokeWidth">,
   IColorInput<"strokeColor">,
   IColorGradientInput<"fill">,
-  IButtonGroupInput<"type">
+  IButtonGroupInput<"type">,
 ];
 
 export function createCircleObject(
-  initialValue?: Record<string, any>
+  initialValue?: Record<string, any>,
 ): Omit<IObject, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(CIRCLE);
 
@@ -109,7 +109,7 @@ export function getCircleHtml(props: GetHtmlFuncPropsType) {
 
   const circleValues = getObjectValuesForDevice(
     object.properties as CircleValues,
-    deviceType
+    deviceType,
   );
 
   let style = "font-size: 0px;";
@@ -133,7 +133,7 @@ export function getCircleHtml(props: GetHtmlFuncPropsType) {
   } else {
     const minSize = Math.min(
       parseFloat(calculatedObjectSize.width),
-      parseFloat(calculatedObjectSize.height)
+      parseFloat(calculatedObjectSize.height),
     );
     element = `<circle cx="${minSize / 2}" cy="${minSize / 2}" r="${
       minSize / 2
@@ -155,7 +155,7 @@ export function getCircleHtml(props: GetHtmlFuncPropsType) {
 }
 
 export async function circleSizeUpdate(
-  props: UpdateObjectSizeFuncPropsType
+  props: UpdateObjectSizeFuncPropsType,
 ): Promise<void> {
   const {
     id,
@@ -170,13 +170,13 @@ export async function circleSizeUpdate(
   } = props;
   const circleValues = getObjectValuesForDevice(
     properties as CircleValues,
-    deviceType
+    deviceType,
   );
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
   const objectContentEl = objectEl.getElementsByClassName(
-    "object-content"
+    "object-content",
   )[0] as HTMLElement;
 
   const child = objectEl.firstChild! as HTMLDivElement;
@@ -194,7 +194,7 @@ export async function circleSizeUpdate(
   addTransformStyleToObjectElementContent(
     objectContentEl,
     transform,
-    deviceType
+    deviceType,
   );
 
   const transformProperties = getObjectValuesForDevice(transform);
@@ -209,6 +209,4 @@ export const circleMeta = {
   name: "Circle",
   description: "Add circle object",
   icon: svg,
-  supportWidthResize: true,
-  supportHeightResize: true,
 };

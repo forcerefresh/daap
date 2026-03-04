@@ -9,8 +9,6 @@ export interface IToolDefinition {
     name: string;
     description?: string;
     icon?: string;
-    supportWidthResize?: boolean;
-    supportHeightResize?: boolean;
     sizeType?: "line" | "rect"; // default "rect"
     transformCapabilities?: TransformCapabilities;
   };
@@ -27,7 +25,7 @@ export function registerObjectTool(toolDefinition: IToolDefinition): void {
 
 export function getObjectToolDefinitions(
   type: string,
-  version?: string
+  version?: string,
 ): IToolDefinition | null {
   if (version === "latest") {
     const latestAppObjectsMap = getLatestVersionsMap(toolsBank);
@@ -36,13 +34,13 @@ export function getObjectToolDefinitions(
 
   return (
     toolsBank.find(
-      (toolItem) => toolItem.type === type && toolItem.version === version
+      (toolItem) => toolItem.type === type && toolItem.version === version,
     ) ?? null
   );
 }
 
 export function getLatestVersionsMap<T>(
-  data: (T & { type: string; version?: string })[]
+  data: (T & { type: string; version?: string })[],
 ) {
   // Create a map to store the latest version of each type
   const latestVersionMap = new Map<string, (typeof data)[0]>();

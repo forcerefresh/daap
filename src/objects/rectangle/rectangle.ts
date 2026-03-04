@@ -216,8 +216,6 @@ export const rectangleMeta = {
   name: "Rectangle",
   description: "Add rectangle object",
   icon: svg,
-  supportWidthResize: true,
-  supportHeightResize: true,
 };
 
 const svgRectWithCornerRadius = (

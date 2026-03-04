@@ -229,8 +229,8 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
     // If children bounds differ from stored bounds, shift center accordingly.
     // The delta is in group-local coords; transform it through combinedMatrix
     // (rotation+scale only, translation zeroed) to get the delta in stage coords.
-    const dX = (localOffsetX + w / 2) - storedW / 2;
-    const dY = (localOffsetY + h / 2) - storedH / 2;
+    const dX = localOffsetX + w / 2 - storedW / 2;
+    const dY = localOffsetY + h / 2 - storedH / 2;
     if (dX !== 0 || dY !== 0) {
       const delta = combinedMatrix.transformPoint({ x: dX, y: dY });
       centerX += delta.x;
@@ -275,7 +275,9 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
   useEffect(() => {
     const fn = () => positionAllRef.current();
     afterDomUpdateRef.current.add(fn);
-    return () => { afterDomUpdateRef.current.delete(fn); };
+    return () => {
+      afterDomUpdateRef.current.delete(fn);
+    };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // After Redux-driven updates (selection change, zoom, object props): wait 1ms
@@ -377,8 +379,8 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
     ? getAppObjectDefinition(selectedObject.type, "latest")?.meta
     : null;
   const capabilities = resolveTransformCapabilities(objectMeta);
-  const showWidthResize = capabilities.resize && (objectMeta?.supportWidthResize ?? false);
-  const showHeightResize = capabilities.resize && (objectMeta?.supportHeightResize ?? false);
+  const showWidthResize = capabilities.resizeWidth;
+  const showHeightResize = capabilities.resizeHeight;
 
   const handleColor = "#48aff0";
   const borderRadius = "10%";

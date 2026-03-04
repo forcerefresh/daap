@@ -215,6 +215,10 @@ const getSettingsDefault = (props?: {
   //theme
   theme: "dark",
   themeClass: "bp5-dark",
+
+  groupNesting: "one",
+
+  outlineColor: { r: 0, g: 0, b: 0 },
 });
 
 export function settings(

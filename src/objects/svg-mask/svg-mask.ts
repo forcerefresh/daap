@@ -85,10 +85,12 @@ export function updateSvgMaskClipTransform(
   if (!targetId) return;
 
   // Editor uses object-holder-*, player uses object-wrapper-*
-  const targetHolderEl = (
-    document.querySelector(`.object-holder-${targetId}`) ??
-    document.querySelector(`.object-wrapper-${targetId}`)
-  ) as HTMLElement | null;
+  const targetHolderEl = (document.querySelector(
+    `.object-holder-${targetId}`,
+  ) ??
+    document.querySelector(
+      `.object-wrapper-${targetId}`,
+    )) as HTMLElement | null;
   if (!targetHolderEl) return;
 
   const maskLeft = parseFloat(maskCalcSize.left);
@@ -108,10 +110,8 @@ export function updateSvgMaskClipTransform(
 
   const maskObject = objects.objectById[maskId];
   // Read mask transform from DOM — always current even during drag
-  const maskHolderEl = (
-    document.querySelector(`.object-holder-${maskId}`) ??
-    document.querySelector(`.object-wrapper-${maskId}`)
-  ) as HTMLElement | null;
+  const maskHolderEl = (document.querySelector(`.object-holder-${maskId}`) ??
+    document.querySelector(`.object-wrapper-${maskId}`)) as HTMLElement | null;
   const maskTransformStr = maskHolderEl?.style.transform ?? "";
   const maskRotationMatch = maskTransformStr.match(/rotate\((-?[\d.]+)deg\)/);
   const maskScaleMatch = maskTransformStr.match(/scale\((-?[\d.]+)\)/);
@@ -125,7 +125,9 @@ export function updateSvgMaskClipTransform(
   const targetObject = objects.objectById[targetId];
   // Read target transform from DOM — store is stale during processScaleChangeEvent / processRotateChangeEvent
   const targetTransformStr = targetHolderEl.style.transform ?? "";
-  const targetRotationMatch = targetTransformStr.match(/rotate\((-?[\d.]+)deg\)/);
+  const targetRotationMatch = targetTransformStr.match(
+    /rotate\((-?[\d.]+)deg\)/,
+  );
   const targetScaleMatch = targetTransformStr.match(/scale\((-?[\d.]+)\)/);
   const targetRotation = targetRotationMatch
     ? parseFloat(targetRotationMatch[1])
@@ -225,10 +227,12 @@ export function getSvgMaskHtml(props: GetHtmlFuncPropsType) {
         el.innerHTML = getClipMaskFromSvg(svgContent, clipMaskId, "", "");
         // Read from the holder's current DOM state so async fetch picks up the
         // actual rendered position rather than the stale render-closure value.
-        const maskHolderEl = (
-          document.querySelector(`.object-holder-${object.id}`) ??
-          document.querySelector(`.object-wrapper-${object.id}`)
-        ) as HTMLElement | null;
+        const maskHolderEl = (document.querySelector(
+          `.object-holder-${object.id}`,
+        ) ??
+          document.querySelector(
+            `.object-wrapper-${object.id}`,
+          )) as HTMLElement | null;
         updateSvgMaskClipTransform(
           object.id,
           maskHolderEl
@@ -295,7 +299,11 @@ export async function svgMaskSizeUpdate(
     "object-content",
   )[0] as HTMLElement;
   addCommonStyleToObjectElementContent(objectContentEl, style, deviceType);
-  addTransformStyleToObjectElementContent(objectContentEl, transform, deviceType);
+  addTransformStyleToObjectElementContent(
+    objectContentEl,
+    transform,
+    deviceType,
+  );
 
   const transformProperties = getObjectValuesForDevice(
     transform as unknown as TransformPropertiesValues,
@@ -348,6 +356,4 @@ export const svgMaskMeta = {
   description: "Add SVG Mask Object",
   preloadOrder: PreloadOrder.FIRST,
   icon: svg,
-  supportWidthResize: true,
-  supportHeightResize: true,
 };

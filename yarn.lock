@@ -10884,10 +10884,10 @@ webslider-sdk@^1.1.144:
     semver "^7.7.2"
     webslider-sdk "^1.1.144"
 
-webslider-sdk@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-2.0.0.tgz#30d299f86f28a4c05eed7053e0027d39fbd91ff6"
-  integrity sha512-QugNcA2HH240i6xm7gl0HqKRwTzmlSljYosG1IzAoqMIAgMY5Yw7FFQ2W9l6Qo5FpYdWDdUuRB6Lupsyj9zFdQ==
+webslider-sdk@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-2.2.0.tgz#e87062b4f37724839af1be1c30ac289298a8b453"
+  integrity sha512-NxSpIQHbgvZRp6yhCtuVgH1ZOVhh3EzXnqGG2We67VAHKb7/oPB45v1989pBJYJKC38GwO2/Hkk4fDFNUyVTlw==
   dependencies:
     "@types/lodash-es" "^4.17.12"
     "@types/semver" "^7.7.0"

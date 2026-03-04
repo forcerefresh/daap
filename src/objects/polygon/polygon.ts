@@ -222,8 +222,6 @@ export const polygonMeta = {
   name: "Polygon",
   description: "Add polygon object",
   icon: svg,
-  supportWidthResize: true,
-  supportHeightResize: true,
 };
 
 const svgPolygonPath = (

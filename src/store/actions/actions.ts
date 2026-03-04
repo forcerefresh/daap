@@ -213,26 +213,29 @@ export function deleteSlideThree(pageId: string) {
   return function (dispatch: Dispatch, getState: () => IStore) {
     const layerIds = getState().project.pages.pageById[pageId].layerIds;
     const objectById = getState().project.objects.objectById;
-    const layerById = getState().project.layers.layerById;
 
-    const rootObjectIds = getState().project.objects.allObjects.filter(
+    const objectIds = getState().project.objects.allObjects.filter(
       (objectId: string) =>
-        layerIds.indexOf(
-          getState().project.objects.objectById[objectId].parentId!,
-        ) !== -1,
+        layerIds.indexOf(objectById[objectId].parentId!) !== -1,
     );
 
-    const objectIds = rootObjectIds.reduce(
-      (acc: string[], objectId: string) => {
-        const threeIds: string[] = [];
-        populateObjectThreeIds(threeIds, objectId, objectById, layerById);
-        return [...acc, ...threeIds];
-      },
-      [],
-    );
+    // determine next page to select before deleting
+    const pages = getState().project.pages.pages;
+    const deletedIndex = pages.indexOf(pageId);
+    const nextPageId =
+      deletedIndex > 0
+        ? pages[deletedIndex - 1]
+        : pages[deletedIndex + 1];
+
     dispatch(deleteObjects(objectIds));
     dispatch(deleteLayers(layerIds));
     dispatch(deleteSlide(pageId));
+
+    if (nextPageId) {
+      dispatch(activateSlide(nextPageId) as any);
+      dispatch(selectSlides([nextPageId]) as any);
+      dispatch(selectForProperties({ id: nextPageId, type: "slide" }) as any);
+    }
   };
 }
 

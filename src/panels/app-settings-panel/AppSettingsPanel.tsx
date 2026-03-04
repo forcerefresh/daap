@@ -254,7 +254,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
             <div className="input60">
               {getSelectField(
                 "Group nesting",
-                globals.groupNesting ?? "one",
+                globals.groupNesting,
                 [
                   { value: "one", label: "One level (default)" },
                   { value: "unlimited", label: "Unlimited" },
@@ -269,7 +269,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                   });
 
                   _updateProjectSettings({
-                    groupNesting: groupNesting as "one" | "unlimited",
+                    groupNesting,
                   });
                 },
               )}
