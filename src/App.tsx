@@ -22,7 +22,7 @@ import {
 } from "./store/actions/actions";
 import { IStore } from "./store/store";
 
-import gsap from "gsap";
+// import gsap from "gsAAap";
 import animejs from "animejs";
 import { AppToaster } from "./utils/components/app-toaster/AppToaster";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
@@ -47,7 +47,7 @@ import { generateFilename } from "./panels/create-panel/utils";
 import { useWPPublicTemplate } from "./template-generator/hooks/useWPPublicTemplate";
 import { useFullscreen } from "./integration/hooks/fullscreen-hook/fullscreen-hook";
 
-gsap.install(window);
+// gsap.install(window);
 (window as any).animejs = animejs;
 
 type IAppProps = typeof mapDispatchToProps &

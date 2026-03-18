@@ -1,6 +1,5 @@
 import { CSSProperties } from "react";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
-import { IDefinition } from "webslider-sdk/lib/objects/i-object";
 import {
   addCommonPropertiesToCSSProperties,
   addTransformPropertiesToCSSProperties,
@@ -8,7 +7,7 @@ import {
 
 export function getObjectElementById(id: string): HTMLDivElement {
   const el = document.getElementsByClassName(
-    `object-${id}`
+    `object-${id}`,
   )[0] as HTMLDivElement;
   return el;
 }
@@ -20,7 +19,7 @@ export function getObjectOrLayerElementById(id: string): HTMLDivElement {
 
 export function getObjectWrapperElementById(id: string): HTMLDivElement {
   const el = document.getElementsByClassName(
-    `object-wrapper-${id}`
+    `object-wrapper-${id}`,
   )[0] as HTMLDivElement;
   return el;
 }
@@ -28,11 +27,11 @@ export function getObjectWrapperElementById(id: string): HTMLDivElement {
 export function addCommonStyleToObjectElementContent(
   objectContentEl: HTMLElement,
   style?: Record<string, any>,
-  deviceType?: DeviceType
+  deviceType?: DeviceType,
 ) {
   const cssProperties: CSSProperties = {};
   addCommonPropertiesToCSSProperties(
-    cssProperties
+    cssProperties,
     // commonStyleDefinition?.values,
     // commonStyleDefinition?.valuesMetadata,
     // deviceType
@@ -46,11 +45,11 @@ export function addCommonStyleToObjectElementContent(
 export function addTransformStyleToObjectElementContent(
   objectContentEl: HTMLElement,
   style?: Record<string, any>,
-  deviceType?: DeviceType
+  deviceType?: DeviceType,
 ) {
   const cssProperties: CSSProperties = {};
   addTransformPropertiesToCSSProperties(
-    cssProperties
+    cssProperties,
     // commonStyleDefinition?.values,
     // commonStyleDefinition?.valuesMetadata,
     // deviceType
@@ -73,14 +72,14 @@ export function addTransformStyleToObjectElementContent(
 
 export function getLayerWrapperElementById(id: string): HTMLDivElement {
   const el = document.getElementsByClassName(
-    `layer-wrapper-${id}`
+    `layer-wrapper-${id}`,
   )[0] as HTMLDivElement;
   return el;
 }
 
 export function getLayerElementById(id: string): HTMLDivElement {
   const el = document.getElementsByClassName(
-    `layer-${id}`
+    `layer-${id}`,
   )[0] as HTMLDivElement;
   return el;
 }
@@ -89,7 +88,7 @@ export function getLayerElementById(id: string): HTMLDivElement {
 export function getParameters(
   rows: number,
   columns: number,
-  startFrom: string
+  startFrom: string,
 ) {
   switch (startFrom) {
     case "random":

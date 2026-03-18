@@ -5732,10 +5732,6 @@ graham_scan@^1.0.4:
   resolved "https://registry.yarnpkg.com/graham_scan/-/graham_scan-1.0.5.tgz#0c7f6864aaf9034e80f29c40529aefaa7e2c2416"
   integrity sha512-471KIBS1jOrAHpEStAbOjYI5U7MGBSyqy+wIEnvRYaFDNmpUUhbDZWLRsCSh/OnlY0dCg0NaDyN/2XLoypgIfA==
 
-"gsap@file:gsap-bonus.tgz":
-  version "3.6.1"
-  resolved "file:gsap-bonus.tgz#b0d1dbf3d78ca6b2196fc0f8810f0eec2ddc1586"
-
 gulp-cli@^2.2.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/gulp-cli/-/gulp-cli-2.3.0.tgz#ec0d380e29e52aa45e47977f0d32e18fd161122f"

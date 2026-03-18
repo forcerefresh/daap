@@ -42,7 +42,7 @@ import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import getTickerInstance from "./Ticker";
 import { Timeline } from "./Timeline";
 import { RootTimeline } from "./RootTimeline";
-import gsap from "gsap";
+// import gsap from "gsap";
 import animejs from "animejs";
 import {
   getLayerWrapperElementById,
@@ -50,8 +50,8 @@ import {
   getObjectWrapperElementById,
 } from "../../animations/animation-utils";
 
-gsap.defaults(); // in order to bundle gsap
-gsap.install(window);
+// gsap.defaults(); // in order to bundle gsap
+// gsap.install(window);
 (window as any).animejs = animejs;
 
 export enum InTransitionEnum {
@@ -139,7 +139,7 @@ export class Player {
     playerConfig: IPlayerConfig = {
       isApp: false,
       deviceAuto: true,
-    }
+    },
   ) {
     this.playerData = playerData;
 
@@ -152,20 +152,20 @@ export class Player {
 
     this.breakpointChecker = new BreakpointChecker(
       playerData?.breakpoints || { breakpointsConfiguration: [] },
-      breakpointReferenceDiv
+      breakpointReferenceDiv,
     );
     this.breakpointChecker.init();
     this.breakpointChecker.setBPChangeHandler(
-      this.breakpointChangeHandler.bind(this)
+      this.breakpointChangeHandler.bind(this),
     );
     this.breakpointChecker.setSizeChangeHandler(
-      this.sizeChangeHandler.bind(this)
+      this.sizeChangeHandler.bind(this),
     );
     this.currentDeviceType = this.breakpointChecker.getCurrentDeviceType()!;
 
     // current breakpoint configuration
     this.currentBp = this.playerData?.breakpoints.breakpointsConfiguration.find(
-      (bp) => bp.type === (this.forceDevice || this.currentDeviceType)
+      (bp) => bp.type === (this.forceDevice || this.currentDeviceType),
     )!;
 
     this.playerConfig = playerConfig;
@@ -184,12 +184,12 @@ export class Player {
     this.hideAllSlides();
 
     this.bgEl = rootDiv.getElementsByClassName(
-      "sliderBackground"
+      "sliderBackground",
     )[0] as HTMLDivElement;
 
     this.bgEl.style.position = "absolute";
     this.bgEl.style.background = convertRGBColor2CSSProperties(
-      this.playerData?.config.pageBackgroundColor
+      this.playerData?.config.pageBackgroundColor,
     ).backgroundColor as string;
 
     this.createNavigationEvents(rootDiv);
@@ -218,7 +218,7 @@ export class Player {
     } else {
       this.playerData?.extensions?.forEach((extension) => {
         this.extComponentPreloaders.push(
-          loadAndRegisterExternalComponentForPlayer(extension)
+          loadAndRegisterExternalComponentForPlayer(extension),
         );
       });
 
@@ -258,8 +258,8 @@ export class Player {
             tlObj.rootTimeline.isPaused
               ? 1
               : tlObj.rootTimeline.direction === -1
-              ? 1
-              : -1
+                ? 1
+                : -1,
           );
           tlObj.rootTimeline.resume();
         });
@@ -316,7 +316,7 @@ export class Player {
   private excludeNonVisibleItems(data: ISlideData) {
     const newItems = data.items.filter((item) => {
       const itemVisibility = this.playerData?.itemsVisibility.find(
-        (itemVis) => itemVis.id === item.itemId
+        (itemVis) => itemVis.id === item.itemId,
       );
       if (!itemVisibility) {
         return true;
@@ -350,7 +350,7 @@ export class Player {
 
     //TODO: set sliderRoot height
     const sliderRoot = this.rootDiv.getElementsByClassName(
-      "sliderRoot"
+      "sliderRoot",
     )[0] as HTMLDivElement;
     if (sliderRoot) {
       sliderRoot.style.height = bp?.normal._page!.height + "px";
@@ -447,7 +447,7 @@ export class Player {
       // DEBUG SLIDER FRAME - GUIDEBOX
       const debugSlideFrameGuide = createOrSelect(
         el,
-        "slide-debug-frame-guidelines"
+        "slide-debug-frame-guidelines",
       );
       debugSlideFrameGuide.style.pointerEvents = "none";
       debugSlideFrameGuide.style.position = "absolute";
@@ -469,7 +469,7 @@ export class Player {
 
   private calculateSizeParameters(
     bp: BreakpointConfiguration,
-    bounds: { width: number; height: number }
+    bounds: { width: number; height: number },
   ) {
     let wScale = this.getScale(bp.normal.page.width, bounds.width);
     let hScale = this.getScale(bp.normal.page.height, bounds.height);
@@ -580,7 +580,7 @@ export class Player {
 
   private getParentTransitionData(
     items: IItemsData[],
-    itemId?: string
+    itemId?: string,
   ): IItemsData | undefined {
     return items.find((item) => item.itemId === itemId);
   }
@@ -589,7 +589,7 @@ export class Player {
     data.items.forEach((transitionData) => {
       const parentLayout = this.getParentTransitionData(
         data.items,
-        transitionData.parentItemId
+        transitionData.parentItemId,
       )?.layout as ILayout;
 
       // TODO: use only per device (add per device for layer)
@@ -598,7 +598,7 @@ export class Player {
         parentLayout,
         this.currentBp,
         { resetPosition: false },
-        this.scaleParams
+        this.scaleParams,
       );
 
       /*
@@ -609,7 +609,7 @@ export class Player {
 
       let objDef = getPlayerObjectDefinition(
         transitionData.itemType,
-        transitionData.itemVersion
+        transitionData.itemVersion,
       ); // TODO VERSION
 
       if (transitionData.itemType === "layer") {
@@ -657,43 +657,41 @@ export class Player {
       // getBooleanValue(transitionData.layout.layoutAdvance?.updateScale, true);
 
       try {
-        objDef?.onResize?.(
-          {
-            id: transitionData.itemId,
-            properties: transitionData.properties,
-            style: transitionData.style,
-            transform: transitionData.transform,
-            // values: transitionData.itemValues,
-            // valuesMetadata: transitionData.itemValuesMetadata,
-            // commonStyleDefinition: transitionData.commonStyleDefinition,
-            // transformDefinition: transitionData.transformDefinition,
-            className: transitionData.objectClass,
-            calculatedObjectSize: calObjSize,
-            scale: this.scaleParams,
-            skipSizeUpdate: !forceUpdateSize,
-            deviceType: this.currentBp.type,
-            // calculateSize: (
-            //   value: string,
-            //   propertyName: "width" | "height" | "left" | "top"
-            // ) => {
-            //   const relativeTo = getRelativeTo(
-            //     transitionData.layout as ILayout,
-            //     this.currentBp
-            //   );
+        objDef?.onResize?.({
+          id: transitionData.itemId,
+          properties: transitionData.properties,
+          style: transitionData.style,
+          transform: transitionData.transform,
+          // values: transitionData.itemValues,
+          // valuesMetadata: transitionData.itemValuesMetadata,
+          // commonStyleDefinition: transitionData.commonStyleDefinition,
+          // transformDefinition: transitionData.transformDefinition,
+          className: transitionData.objectClass,
+          calculatedObjectSize: calObjSize,
+          scale: this.scaleParams,
+          skipSizeUpdate: !forceUpdateSize,
+          deviceType: this.currentBp.type,
+          // calculateSize: (
+          //   value: string,
+          //   propertyName: "width" | "height" | "left" | "top"
+          // ) => {
+          //   const relativeTo = getRelativeTo(
+          //     transitionData.layout as ILayout,
+          //     this.currentBp
+          //   );
 
-            //   return unitValueToPx(
-            //     value,
-            //     propertyName,
-            //     relativeTo,
-            //     this.currentBp
-            //   );
-            // },
-            isInitial,
-          }
-        );
+          //   return unitValueToPx(
+          //     value,
+          //     propertyName,
+          //     relativeTo,
+          //     this.currentBp
+          //   );
+          // },
+          isInitial,
+        });
       } catch (ex) {
         console.error(
-          "Function onResize() has crashed for object " + objDef?.type + ""
+          "Function onResize() has crashed for object " + objDef?.type + "",
         );
         console.error(ex);
       }
@@ -709,7 +707,7 @@ export class Player {
 
   private sizeChangeHandler(
     size: { width: number; height: number },
-    bp: BreakpointConfiguration
+    bp: BreakpointConfiguration,
   ) {
     this.setBp(bp);
   }
@@ -731,7 +729,7 @@ export class Player {
       }
 
       this.breakpointChecker.setReferenceDiv(
-        bpRef === "viewport" ? undefined : breakpointReferenceDiv
+        bpRef === "viewport" ? undefined : breakpointReferenceDiv,
       );
       this.resizeAll();
     }
@@ -742,8 +740,8 @@ export class Player {
 
     this.setBp(
       this.playerData?.breakpoints.breakpointsConfiguration.find(
-        (bp) => bp.type === this.currentDeviceType
-      )!
+        (bp) => bp.type === this.currentDeviceType,
+      )!,
     );
   }
 
@@ -756,7 +754,7 @@ export class Player {
 
     this.scaleParams = this.calculateSizeParameters(
       this.currentBp!,
-      this.breakpointChecker.currentViewportSize!
+      this.breakpointChecker.currentViewportSize!,
     );
 
     this.bpUpdateSlide();
@@ -772,7 +770,7 @@ export class Player {
           ? "layer-wrapper"
           : itemVisibility.itemType;
       const itemEl = this.rootDiv.getElementsByClassName(
-        elType + "-" + itemVisibility.id
+        elType + "-" + itemVisibility.id,
       )[0] as HTMLDivElement | undefined;
 
       if (itemEl) {
@@ -804,7 +802,7 @@ export class Player {
 
     this.scaleParams = this.calculateSizeParameters(
       this.currentBp!,
-      this.breakpointChecker.currentViewportSize!
+      this.breakpointChecker.currentViewportSize!,
     );
 
     this.bpUpdateSlide(isInitial);
@@ -1007,7 +1005,7 @@ export class Player {
       item.el.style.display = "block";
       //addClass(item.el, "wsSpinnerFadeIn");
       const cEl = item.el.getElementsByClassName(
-        "object-content"
+        "object-content",
       )[0] as HTMLDivElement;
       cEl.style.transitionDuration = item.inTime + "ms";
       addClass(cEl, "wsSpinnerVisible");
@@ -1023,7 +1021,7 @@ export class Player {
         item.el.style.display = "none";
       } else {
         const cEl = item.el.getElementsByClassName(
-          "object-content"
+          "object-content",
         )[0] as HTMLDivElement;
         cEl.style.transitionDuration = item.outTime + "ms";
         removeClass(cEl, "wsSpinnerVisible");
@@ -1058,7 +1056,7 @@ export class Player {
   public playSlide(
     slideIdx: number = 0,
     prevTlTime: number = 0,
-    isManual = false
+    isManual = false,
   ) {
     logger.player.notice("Play slide:  " + slideIdx);
 
@@ -1231,7 +1229,7 @@ export class Player {
     this.currentSlideTimeline.emitter.removeAllListeners("update");
     this.currentSlideTimeline.emitter.addListener(
       "update",
-      currentSlideTimelineUpdateCallback
+      currentSlideTimelineUpdateCallback,
     );
 
     const currentSlideTimelineStopCallback = () => {
@@ -1241,7 +1239,7 @@ export class Player {
     this.currentSlideTimeline.emitter.removeAllListeners("stop");
     this.currentSlideTimeline.emitter.addListener(
       "stop",
-      currentSlideTimelineStopCallback
+      currentSlideTimelineStopCallback,
     );
 
     this.currentSlideTimeline.emitter.removeAllListeners("start");
@@ -1306,7 +1304,7 @@ export class Player {
 
         this.triggerTransitionNextSlideHandler(
           slideIdx,
-          this.currentSlideTimeline!
+          this.currentSlideTimeline!,
         );
       };
       triggerTimeline?.emitter.removeAllListeners("stop");
@@ -1338,7 +1336,7 @@ export class Player {
 
     if (this.slideTransitionInProgress) {
       logger.player.info(
-        "Slide transition is in progress. Slide transition canceled."
+        "Slide transition is in progress. Slide transition canceled.",
       );
 
       return;
@@ -1379,7 +1377,7 @@ export class Player {
       // 1. decreaseDelay for out animation timelines
       const timelinesForOutAnimation =
         this.currentSlideTimeline!.getChildrenByGroup(
-          DYNAMIC_OUT_EFF_TIMELINE_GROUP
+          DYNAMIC_OUT_EFF_TIMELINE_GROUP,
         );
 
       if (timelinesForOutAnimation.length > 0) {
@@ -1563,7 +1561,7 @@ export class Player {
       // Note: create logic for objects (start, stop, preloaders, ....)
       const objDef = getPlayerObjectDefinition(
         itemData.itemType,
-        itemData.itemVersion
+        itemData.itemVersion,
       ); // TODO VERSION
 
       /*
@@ -1585,7 +1583,7 @@ export class Player {
           objDef.onStop,
           objDef.onTimeUpdate,
           itemData.properties,
-          calObjSize
+          calObjSize,
         );
         staticTl.add(execTl);
       }
@@ -1599,7 +1597,7 @@ export class Player {
           calculatedObjectSize: calObjSize!,
         });
         this.preloaders[objDef.preloadOrder || PreloadOrder.MIDDLE].push(
-          preloadPromise
+          preloadPromise,
         );
       }
     });
@@ -1626,10 +1624,10 @@ export class Player {
       const ppEl = document.querySelector(".object-" + transitionData.itemId);
       if (ppEl) {
         const inTime = convertTimeUnitToMs(
-          (transitionData.properties as any).fadeInTime
+          (transitionData.properties as any).fadeInTime,
         );
         const outTime = convertTimeUnitToMs(
-          (transitionData.properties as any).fadeOutTime
+          (transitionData.properties as any).fadeOutTime,
         );
 
         // ppEl.style.display = "none";
@@ -1735,7 +1733,7 @@ export class Player {
       // Note: create logic for objects (start, stop, preloaders, ....)
       const objDef = getPlayerObjectDefinition(
         itemData.itemType,
-        itemData.itemVersion
+        itemData.itemVersion,
       ); // TODO VERSION
 
       /*
@@ -1757,7 +1755,7 @@ export class Player {
           objDef.onStop,
           objDef.onTimeUpdate,
           itemData.properties,
-          calObjSize
+          calObjSize,
         );
         slideTimeline.add(execTl);
       }
@@ -1771,7 +1769,7 @@ export class Player {
           calculatedObjectSize: calObjSize!,
         });
         this.preloaders[objDef.preloadOrder || PreloadOrder.MIDDLE].push(
-          preloadPromise
+          preloadPromise,
         );
       }
     });
@@ -1824,7 +1822,7 @@ export class Player {
 
   private triggerTransitionNextSlideHandler(
     slideIdx: number,
-    prevTl: RootTimeline
+    prevTl: RootTimeline,
   ) {
     const total = this.normalSlideDataArr?.length || -1;
 
@@ -1866,7 +1864,7 @@ export class Player {
 
       const overlapPosition =
         convertTimeUnitToMs(
-          this.normalSlideDataArr?.[slideIdx]?.slide?.duration?.customValue!
+          this.normalSlideDataArr?.[slideIdx]?.slide?.duration?.customValue!,
         ) - overlap;
 
       //this.timeOffsetCorrection = Date.now();
@@ -1913,14 +1911,14 @@ function getSlideById(id?: string) {
   }
   const slideClassname = "slide-" + id;
   const slideEl = document.getElementsByClassName(
-    slideClassname
+    slideClassname,
   )[0] as HTMLDivElement;
   return slideEl;
 }
 
 function getAllSlider(rootDiv: HTMLDivElement): HTMLDivElement[] {
   return Array.from(
-    rootDiv.getElementsByClassName("slide")
+    rootDiv.getElementsByClassName("slide"),
   ) as HTMLDivElement[];
 }
 
