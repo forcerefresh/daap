@@ -20,6 +20,7 @@ import ConfirmButton from "../../utils/components/confirm-button/confirm-button"
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import cx from "classnames";
 
+import { renderInlineSvgPreview } from "../../utils/components/inline-svg-preview/InlineSvgPreview";
 import css from "./MediaManagementPanel.module.scss";
 
 interface IMediaManagementPanelProps {
@@ -152,12 +153,7 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
 
   const renderPreviewImage = (mediaItem: SaaSMediaData) => {
     if (mediaItem.inlineSvgPreview) {
-      return (
-        <div
-          className={css.inlineSvgPreview}
-          dangerouslySetInnerHTML={{ __html: mediaItem.inlineSvgPreview }}
-        />
-      );
+      return renderInlineSvgPreview(mediaItem.inlineSvgPreview, 136, 150);
     }
     return <img src={getMediaSrc(mediaItem, "small", "previewSizes")} alt="" />;
   };

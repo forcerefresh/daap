@@ -12,6 +12,7 @@ import {
 } from "webslider-sdk/lib/inputs/i-inputs";
 import { SaaSMediaData } from "webslider-sdk/lib/common/i-media-types";
 import { Portal } from "@blueprintjs/core";
+import { renderInlineSvgPreview } from "../../utils/components/inline-svg-preview/InlineSvgPreview";
 import css from "./svg-mask-input.module.scss";
 import { Panel } from "@blueprintjs/icons/lib/esm/generated/16px/paths";
 
@@ -36,12 +37,9 @@ export const SvgMaskInputForm: React.FC<ISvgMaskInput & IUpdateInput> = (
       inline
       className={css.main}
     >
-      {value?.inlineSvgPreview ? (
-        <div
-          className={css.previewHolder}
-          dangerouslySetInnerHTML={{ __html: value.inlineSvgPreview }}
-        />
-      ) : null}
+      {value?.inlineSvgPreview
+        ? renderInlineSvgPreview(value.inlineSvgPreview, 70, 70)
+        : null}
 
       <Button
         small

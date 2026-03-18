@@ -268,9 +268,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                     },
                   });
 
-                  _updateProjectSettings({
-                    groupNesting,
-                  });
+                  _updateGlobalConfiguration({ groupNesting });
                 },
               )}
             </div>
