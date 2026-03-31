@@ -8,13 +8,12 @@ export const useExtensionsHook = () => {
     search?: string,
     tags?: string[],
     missingExtensions?: string[],
-    apiKey?: string
+    apiKey?: string,
   ): Promise<{ data: IExtensionItem[] }> => {
     logger.app.trace("Get extensions from directory (electron)");
 
-    const apiUrl = `${
-      import.meta.env.VITE_APP_EXTENSIONS_BASE_URL
-    }/api/v1?api-key=${apiKey}`;
+    //import.meta.env.VITE_APP_EXTENSIONS_BASE_URL
+    const apiUrl = `${""}/api/v1?api-key=${apiKey}`;
     let url = `${apiUrl}&from=${from}`;
 
     if (search) {
@@ -49,7 +48,7 @@ export const useExtensionsHook = () => {
 
   /*install extension from directory*/
   const installExtension = async (
-    extension: IExtensionItem
+    extension: IExtensionItem,
   ): Promise<IExtensionItem> => {
     return new Promise((resolve, reject) => {
       const { ipcRenderer } = window.require("electron");

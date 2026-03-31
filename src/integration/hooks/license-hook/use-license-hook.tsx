@@ -5,17 +5,17 @@ export const useLicenseHook = () => {
     serial: string;
     allowTransfer: boolean;
   }): Promise<void> => {
-    const license = JSON.parse(localStorage.getItem(`license`) || "{}");
+    // const license = JSON.parse(localStorage.getItem(`license`) || "{}");
 
-    license.serial = props.serial;
+    // license.serial = props.serial;
 
-    const licenseData = await fetch(
-      `https://subscriptions.webslider.io/check-subscription?subscription-id=${props.serial}`
-    ).then((data) => data.json());
+    // const licenseData = await fetch(
+    //   `https://subscriptions.webslider.io/check-subscription?subscription-id=${props.serial}`
+    // ).then((data) => data.json());
 
-    license.license = licenseData;
+    // license.license = licenseData;
 
-    localStorage.setItem(`license`, JSON.stringify(license));
+    // localStorage.setItem(`license`, JSON.stringify(license));
 
     return Promise.resolve();
   };

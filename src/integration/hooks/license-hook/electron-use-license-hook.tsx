@@ -5,19 +5,19 @@ export const useLicenseHook = () => {
     serial: string;
     allowTransfer: boolean;
   }): Promise<void> => {
-    return new Promise(async (resolve, reject) => {
-      const { ipcRenderer } = window.require("electron");
-
-      const license = {
-        serial: props.serial,
-        allowTransfer: props.allowTransfer,
-      };
-      ipcRenderer
-        .invoke("License::SaveSerialAndLicense", JSON.stringify(license))
-        .then((result: any) => {
-          resolve();
-        });
-    });
+    // return new Promise(async (resolve, reject) => {
+    //   const { ipcRenderer } = window.require("electron");
+    //   const license = {
+    //     serial: props.serial,
+    //     allowTransfer: props.allowTransfer,
+    //   };
+    //   ipcRenderer
+    //     .invoke("License::SaveSerialAndLicense", JSON.stringify(license))
+    //     .then((result: any) => {
+    //       resolve();
+    //     });
+    // });
+    return Promise.resolve();
   };
 
   // TODO: update any

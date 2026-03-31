@@ -132,7 +132,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   const { setReplaceItem } = useContext(GlobalEventsContext);
 
   const globalContext = useContext(IntegrationContext);
-  const { getLicenseDetails } = globalContext.useLicenseHook();
+  // const { getLicenseDetails } = globalContext.useLicenseHook();
 
   const [defaultSettingsSelectedTabId, setDefaultSettingsSelectedTabId] =
     useState<string | undefined>();

@@ -33,19 +33,19 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
   } = props;
 
   const globalContext = useContext(IntegrationContext);
-  const { getLicenseDetails } = globalContext.useLicenseHook();
+  // const { getLicenseDetails } = globalContext.useLicenseHook();
 
-  const [hasLicense, setHasLicense] = useState<boolean>(false);
+  const [hasLicense, _setHasLicense] = useState<boolean>(true);
 
-  useEffect(() => {
-    getLicenseDetails().then((data) => {
-      if (data?.status === "OK" || data?.status === "EXPIRED") {
-        setHasLicense(true);
-      } else {
-        setHasLicense(false);
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   getLicenseDetails().then((data) => {
+  //     if (data?.status === "OK" || data?.status === "EXPIRED") {
+  //       setHasLicense(true);
+  //     } else {
+  //       setHasLicense(false);
+  //     }
+  //   });
+  // }, []);
 
   const isObjectDisabledForFree = (type: string) => {
     if (hasLicense) return false;

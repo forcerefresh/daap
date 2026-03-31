@@ -102,7 +102,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   const globalContext = useContext(IntegrationContext);
 
   const UploadComponent = globalContext?.getMyUploadComponent;
-  const { getLicenseDetails } = globalContext.useLicenseHook();
+  // const { getLicenseDetails } = globalContext.useLicenseHook();
   const { fetchMedias, deleteMedias } = globalContext.useMyMediaHook();
   const { fetchLibraryMedias, deleteLibraryMedias } =
     globalContext.useLibraryMediaHook();
@@ -110,15 +110,15 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   const [forceUpdate, setForceUpdate] = useState(0);
   const [apiKey, setApiKey] = useState<string | null>(null);
 
-  useEffect(() => {
-    getLicenseDetails().then((data) => {
-      setApiKey(data.apiKey || null);
-    });
-  }, []);
+  // useEffect(() => {
+  //   getLicenseDetails().then((data) => {
+  //     setApiKey(data.apiKey || null);
+  //   });
+  // }, []);
 
-  const apiUrl = `${
-    import.meta.env.VITE_APP_ASSETS_BASE_URL
-  }/api/v1?api-key=${apiKey}`;
+  // const apiUrl = `${
+  //   import.meta.env.VITE_APP_ASSETS_BASE_URL
+  // }/api/v1?api-key=${apiKey}`;
 
   //if (apiKey === null) return null;
 
@@ -723,6 +723,7 @@ const mapDispatchToProps = {
   _replaceObject: replaceObject,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  MediaLibraryPanel,
-) as React.ComponentType<IMediaLibraryPanelProps>;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MediaLibraryPanel) as React.ComponentType<IMediaLibraryPanelProps>;

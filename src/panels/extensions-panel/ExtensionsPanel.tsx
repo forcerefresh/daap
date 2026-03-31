@@ -92,7 +92,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
   const cachedMissingExtensions = useMemo(
     () => missingExtensions.map((item) => item.type),
-    []
+    [],
   );
 
   const fetchData = (from = -1) => {
@@ -107,7 +107,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
       searchValue,
       undefined,
       cachedMissingExtensions,
-      apiKeyRef.current
+      apiKeyRef.current,
     ).then(
       (result) => {
         const err = checkIfAssetsServiceHasError(result);
@@ -126,7 +126,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
       (error) => {
         logger.app.error(error);
-      }
+      },
     );
   };
 
@@ -202,12 +202,12 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
       const newMissingExtensions = removeExtensionFromMissing(
         missingExtensions,
-        mItem.type
+        mItem.type,
       );
       _updateEditor({
         missingExtensions: newMissingExtensions,
         outdatedExtensions: outdatedExtensions.filter(
-          (ext) => ext.type !== item.type
+          (ext) => ext.type !== item.type,
         ),
       });
     });
@@ -293,7 +293,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
               }));
             },
             "",
-            { alignIndicator: "left" }
+            { alignIndicator: "left" },
           )}
         </div>
         {/* <Checkbox
@@ -356,17 +356,17 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
               <div
                 className={cx(css.headerSection, css.tableRow, {
                   [css.missingExtension]: cachedMissingExtensions.includes(
-                    extension.type
+                    extension.type,
                   ),
                 })}
               >
                 {/*<div className={css.id}>{extension.id}</div>*/}
                 <div className={css.thumb}>
                   <div className={css.thumbHolder}>
-                    <ExternalSVG
+                    {/* <ExternalSVG
                       fallbackSrc=""
                       src={`https://extensions.bucket.forcerefresh.io/${extension.type}/${extension.version}/icon.svg`}
-                    />
+                    /> */}
                   </div>
                 </div>
                 <div className={css.nameAndDesc}>
@@ -410,14 +410,14 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                       {currentlyInstallingExtensions[extension.type]
                         ? "Installing..."
                         : extension.installed && !extension.upToDate
-                        ? "Upgrade"
-                        : "Install"}
+                          ? "Upgrade"
+                          : "Install"}
                     </Button>
                   )}
 
                   {installedExtensions &&
                     !!installedExtensions?.find(
-                      (item) => item.type === extension.type
+                      (item) => item.type === extension.type,
                     ) && (
                       <>
                         {/* <p className={css.installedMessage}>

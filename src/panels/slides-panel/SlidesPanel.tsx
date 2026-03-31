@@ -74,17 +74,17 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   } = props;
 
   const globalContext = useContext(IntegrationContext);
-  const { getLicenseDetails } = globalContext.useLicenseHook();
-  const [hasLicense, setHasLicense] = useState<boolean>(false);
-  useEffect(() => {
-    getLicenseDetails().then((data) => {
-      if (data?.status === "OK" || data?.status === "EXPIRED") {
-        setHasLicense(true);
-      } else {
-        setHasLicense(false);
-      }
-    });
-  }, []);
+  // const { getLicenseDetails } = globalContext.useLicenseHook();
+  const [hasLicense, _setHasLicense] = useState<boolean>(true);
+  // useEffect(() => {
+  //   getLicenseDetails().then((data) => {
+  //     if (data?.status === "OK" || data?.status === "EXPIRED") {
+  //       setHasLicense(true);
+  //     } else {
+  //       setHasLicense(false);
+  //     }
+  //   });
+  // }, []);
 
   const dropLayersOnLoadHandler = (item: any, monitor: any) => {
     if (!loadSlideId) return; // TODO
@@ -107,7 +107,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
       //   return slide.layerIds.indexOf(item[0]) !== -1;
       // },
     }),
-    [loadSlideId]
+    [loadSlideId],
   );
 
   const dropLayersOnFrontHandler = (item: any, monitor: any) => {
@@ -131,7 +131,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
       //   return slide.layerIds.indexOf(item[0]) !== -1;
       // },
     }),
-    [frontSlideId]
+    [frontSlideId],
   );
 
   const dropLayersOnBackHandler = (item: any, monitor: any) => {
@@ -155,7 +155,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
       //   return slide.layerIds.indexOf(item[0]) !== -1;
       // },
     }),
-    [backSlideId]
+    [backSlideId],
   );
 
   const [showSettingsPanelForSlideId, setShowSettingsPanelForSlideId] =
@@ -163,7 +163,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
 
   const onPageClick = (
     event: React.MouseEvent<HTMLDivElement>,
-    pageId: string
+    pageId: string,
   ) => {
     if (event.shiftKey) {
       selectedSlideIds.indexOf(pageId) === -1
@@ -368,7 +368,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                         _moveSlides(
                           dropItem.id,
                           dropItem.where,
-                          dropItem.idsToMove
+                          dropItem.idsToMove,
                         );
                       }}
                     />
@@ -383,11 +383,11 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                   inPlay={isSlideInPlay(pageId)}
                   realSlideDuration={getRealSlideDurationVisual(
                     slide,
-                    settings
+                    settings,
                   )}
                   realSlideExitDuration={getRealExitSlideDurationVis(
                     slide,
-                    settings
+                    settings,
                   )}
                   setStagePreview={_setStagePreview}
                   deleteSlideThree={(pageId: string) => {
@@ -410,7 +410,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                       _moveSlides(
                         dropItem.id,
                         dropItem.where,
-                        dropItem.idsToMove
+                        dropItem.idsToMove,
                       );
                     }}
                   />
@@ -463,12 +463,12 @@ const mapDispatchToProps = {
   _moveSlides: (
     refId: string,
     where: "above" | "bottom" | string,
-    moveIds: string[]
+    moveIds: string[],
   ) => moveSlides(refId, where, moveIds),
   _moveLayers: (
     refId: string,
     where: "above" | "below" | "layer" | "slide" | "bottom",
-    moveIds: string[]
+    moveIds: string[],
   ) => moveLayers(refId, where, moveIds),
 };
 
