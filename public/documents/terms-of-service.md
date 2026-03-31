@@ -1,6 +1,8 @@
 # ForceRefresh Terms of Service
 
-**Effective Date:** 17th December 2025
+**Version:** 2.0
+**Effective Date:** 31 March 2026
+**Previous version:** 1.0 (17 December 2025)
 
 ## 1. Who We Are
 
