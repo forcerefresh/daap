@@ -67,12 +67,12 @@ ForceRefresh provides a library of **AI-generated stock images** ("AI Stock Imag
 
 ### 6.2 Limited In-Platform License
 
-When you use AI Stock Images from our library, you receive a **limited, non-exclusive, non-transferable license** that allows you to:
+When you use AI Stock Images from our library, you receive a **limited, non-exclusive, non-transferable license** that allows you to use AI Stock Images as **one component within a composite design** (combined with text, vectors, shapes, backgrounds, or other elements). This license does not extend to the AI Stock Image as a standalone asset.
 
 **6.2.1 Allowed Usage:**
 
 - Select and insert AI Stock Images into social media post designs within ForceRefresh
-- Edit and customize these images using our built-in tools (cropping, filtering, adding text)
+- Edit and customize these images using our built-in tools (cropping, filtering, adding text, overlaying vectors, shapes, and other design elements)
 - Publish the final designed posts containing AI Stock Images to your connected social media accounts
 - Save post designs containing AI Stock Images within your ForceRefresh account
 
