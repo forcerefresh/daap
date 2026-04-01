@@ -101,15 +101,21 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
   const [opacity, setOpacity] = useState(1);
 
   const parentId = objectById[selectedObjectIds?.[0]]?.parentId;
-  const groupingDisabled =
-    groupNesting === "unlimited"
-      ? false
-      : (selectedObjectIds.length === 1 &&
-          isObjectGroup(objectById[selectedObjectIds[0]])) ||
-        isObjectGroup(objectById[parentId!]);
+  // const groupingDisabled =
+  //   groupNesting === "unlimited"
+  //     ? false
+  //     : (selectedObjectIds.length === 1 &&
+  //         isObjectGroup(objectById[selectedObjectIds[0]])) ||
+  //       isObjectGroup(objectById[parentId!]);
 
   // const groupingAllowed = isGroupingPossible(objectById, selectedObjectIds);
-  const ungroupingAllowed = isUngroupingPossible(objectById, selectedObjectIds);
+  // const ungroupingAllowed = isUngroupingPossible(objectById, selectedObjectIds);
+
+  const groupingDisabled = selectedObjectIds.length < 2; // || isObjectGroup(objectById[parentId!]);
+  const ungroupDisabled = !(
+    selectedObjectIds.length === 1 &&
+    objectById[selectedObjectIds[0]]?.type === "group"
+  );
 
   // useEffect(() => {
   //   setIsVisible(selectedObjectIds.length === 1);
@@ -228,7 +234,7 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
                   </Button>
                 )}
 
-                {ungroupingAllowed && (
+                {!ungroupDisabled && (
                   <Button
                     icon="ungroup-objects"
                     onClick={() => {

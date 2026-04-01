@@ -132,8 +132,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
   const parentId = objectById[selectedObjectIds?.[0]]?.parentId;
 
   // >> ----
-  const groupingDisabled =
-    selectedObjectIds.length < 2 || isObjectGroup(objectById[parentId!]);
+  const groupingDisabled = selectedObjectIds.length < 2; //|| isObjectGroup(objectById[parentId!]);
   const ungroupDisabled = !(
     selectedObjectIds.length === 1 &&
     objectById[selectedObjectIds[0]]?.type === "group"

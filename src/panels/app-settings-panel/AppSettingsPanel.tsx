@@ -251,7 +251,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
               )}
             </div>
 
-            <div className="input60">
+            {/* <div className="input60">
               {getSelectField(
                 "Group nesting",
                 globals.groupNesting,
@@ -271,7 +271,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                   _updateGlobalConfiguration({ groupNesting });
                 },
               )}
-            </div>
+            </div> */}
           </div>
         )}
       </section>

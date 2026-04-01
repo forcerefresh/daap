@@ -76,9 +76,7 @@ import {
   boundsUnion,
   getObjectBoundingBox,
 } from "../helpers/objectBoundingBox";
-import {
-  getUngroupObjectsCalculation,
-} from "../../panels/stage-panel-new/stage-panel-utils";
+import { getUngroupObjectsCalculation } from "../../panels/stage-panel-new/stage-panel-utils";
 import {
   getAncestorLayer,
   getTransformedObjectBounds,
@@ -223,9 +221,7 @@ export function deleteSlideThree(pageId: string) {
     const pages = getState().project.pages.pages;
     const deletedIndex = pages.indexOf(pageId);
     const nextPageId =
-      deletedIndex > 0
-        ? pages[deletedIndex - 1]
-        : pages[deletedIndex + 1];
+      deletedIndex > 0 ? pages[deletedIndex - 1] : pages[deletedIndex + 1];
 
     dispatch(deleteObjects(objectIds));
     dispatch(deleteLayers(layerIds));
@@ -1700,7 +1696,7 @@ export function groupObjects(objectIdsFromProps: string[]): any {
       });
     }
 
-    const groupNesting = globals.groupNesting ?? "one";
+    const groupNesting = globals.groupNesting ?? "unlimited";
 
     // ***********
     // 1. UNGROUP (only in "one" mode — flatten selected groups into their children)
