@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { Button, Spinner } from "@blueprintjs/core";
 import styles from "./templates-grid-v2.module.scss";
 
@@ -136,108 +136,6 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   onUseTemplate,
   selectedLanguage = "en",
 }) => {
-  const [columnCount, setColumnCount] = useState<number>(4);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const lastWidthRef = useRef<number>(0);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-
-  // Calculate column count based on container width with more precise breakpoints
-  const calculateColumnCount = (currentWidth: number) => {
-    const containerWidth =
-      currentWidth || (containerRef.current?.offsetWidth ?? 0);
-
-    if (containerWidth >= 1580) return 6;
-    if (containerWidth >= 1380) return 5;
-    if (containerWidth >= 1180) return 4;
-    if (containerWidth >= 880) return 3;
-    if (containerWidth >= 580) return 2;
-    return 1;
-  };
-
-  // Update column count with proper width measurement
-  const updateColumnCount = () => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const currentWidth = container.offsetWidth;
-
-    if (Math.abs(currentWidth - lastWidthRef.current) < 10) return;
-
-    lastWidthRef.current = currentWidth;
-    const newColumnCount = calculateColumnCount(currentWidth);
-    setColumnCount(newColumnCount);
-  };
-
-  // Update column count on resize and initial load
-  useEffect(() => {
-    const attemptInitialCalculation = (attempt = 0) => {
-      updateColumnCount();
-
-      if (attempt < 3) {
-        setTimeout(
-          () => attemptInitialCalculation(attempt + 1),
-          100 * (attempt + 1),
-        );
-      }
-    };
-
-    attemptInitialCalculation();
-
-    let resizeTimeoutId: NodeJS.Timeout;
-    const handleResize = () => {
-      clearTimeout(resizeTimeoutId);
-      resizeTimeoutId = setTimeout(updateColumnCount, 150);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      clearTimeout(resizeTimeoutId);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  // Update when templates change (container might have resized)
-  useEffect(() => {
-    const timeoutId = setTimeout(updateColumnCount, 50);
-    return () => clearTimeout(timeoutId);
-  }, [templates.length]);
-
-  // Distribute templates into columns
-  const distributeTemplatesToColumns = (allTemplates: TemplateItem[]) => {
-    const columns: TemplateItem[][] = Array.from(
-      { length: columnCount },
-      () => [],
-    );
-
-    allTemplates.forEach((template, index) => {
-      const columnIndex = index % columnCount;
-      columns[columnIndex].push(template);
-    });
-
-    return columns;
-  };
-
-  // Handle item click
-  const handleItemClick = (templateId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    // Selection logic if needed
-  };
-
-  // Add click handler to container to deselect when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (selectedId !== null) {
-        setSelectedId(null);
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [selectedId]);
 
   const getSimilarityColor = (similarity: number): string => {
     if (similarity > 0.7) return styles.highSimilarity;
@@ -248,9 +146,6 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   const formatSimilarity = (similarity: number): string => {
     return `${(similarity * 100).toFixed(1)}%`;
   };
-
-  // Distribute current templates to columns
-  const columns = distributeTemplatesToColumns(templates);
 
   if (isLoading && templates.length === 0) {
     return (
@@ -273,107 +168,92 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   }
 
   return (
-    <div ref={containerRef} className={styles.container}>
+    <div className={styles.container}>
       {error && (
         <div className={styles.inlineError}>
           <p>{error}</p>
         </div>
       )}
 
-      <div
-        className={`${styles.masonryContainer} ${
-          selectedId ? styles.hasSelected : ""
-        }`}
-      >
-        {columns.map((columnTemplates, columnIndex) => (
-          <div
-            key={`column-${columnIndex}-${columnCount}`}
-            className={styles.masonryColumn}
-          >
-            {columnTemplates.map((template) => {
-              const aspectRatioClass = getAspectRatioClass(
-                template.template.documentType.widthPx,
-                template.template.documentType.heightPx,
-              );
+      <div className={styles.masonryContainer}>
+        {templates.map((template) => {
+          const aspectRatioClass = getAspectRatioClass(
+            template.template.documentType.widthPx,
+            template.template.documentType.heightPx,
+          );
 
-              return (
-                <div
-                  key={`template-${template.id}`}
-                  className={`${styles.masonryItem} ${
-                    styles[aspectRatioClass]
-                  } ${selectedId === template.id ? styles.selected : ""}`}
-                  onClick={(e) => handleItemClick(template.id, e)}
-                >
-                  <div className={styles.card}>
-                    <div className={styles.imageContainer}>
-                      <img
-                        src={`${
-                          import.meta.env.VITE_SAAS_API_URL
-                        }/public/public-media/${
-                          template.template.previewUid
-                        }.jpeg?language=${metadata?.language || selectedLanguage}`}
-                        alt={template.promptStr}
-                        className={styles.image}
-                        loading="lazy"
-                      />
-                      <div className={styles.similarityBadge}>
-                        <span
-                          className={`${styles.similarity} ${getSimilarityColor(
-                            template.similarity,
-                          )}`}
+          return (
+            <div
+              key={`template-${template.id}`}
+              className={`${styles.masonryItem} ${styles[aspectRatioClass]}`}
+            >
+              <div className={styles.card}>
+                <div className={styles.imageContainer}>
+                  <img
+                    src={`${
+                      import.meta.env.VITE_SAAS_API_URL
+                    }/public/public-media/${
+                      template.template.previewUid
+                    }.jpeg?language=${metadata?.language || selectedLanguage}`}
+                    alt={template.promptStr}
+                    className={styles.image}
+                    loading="lazy"
+                  />
+                  <div className={styles.similarityBadge}>
+                    <span
+                      className={`${styles.similarity} ${getSimilarityColor(
+                        template.similarity,
+                      )}`}
+                    >
+                      {formatSimilarity(template.similarity)}
+                    </span>
+                  </div>
+
+                  <div className={styles.templateActionsHolder}>
+                    <div className={styles.buttonContainer}>
+                      <div>{/* Like/Dislike buttons if needed */}</div>
+                      <div style={{ flexGrow: "1" }}>
+                        <Button
+                          style={{ width: "100%" }}
+                          intent="primary"
+                          className={`${styles.templateButton} ${styles.useTemplateButton}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onUseTemplate(
+                              template.id,
+                              template.template.language || selectedLanguage,
+                              template.template.previewUid,
+                              template.template.documentTypeStr,
+                            );
+                          }}
                         >
-                          {formatSimilarity(template.similarity)}
-                        </span>
-                      </div>
-
-                      <div className={styles.templateActionsHolder}>
-                        <div className={styles.buttonContainer}>
-                          <div>{/* Like/Dislike buttons if needed */}</div>
-                          <div style={{ flexGrow: "1" }}>
-                            <Button
-                              style={{ width: "100%" }}
-                              intent="primary"
-                              className={`${styles.templateButton} ${styles.useTemplateButton}`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onUseTemplate(
-                                  template.id,
-                                  template.template.language ||
-                                    selectedLanguage,
-                                  template.template.previewUid,
-                                  template.template.documentTypeStr,
-                                );
-                              }}
-                            >
-                              Use Template
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className={styles.cardContent}>
-                      <p className={styles.prompt}>
-                        {template.promptStr ?? template.template?.promptStr}
-                      </p>
-
-                      <div className={styles.tags}>
-                        <span className={styles.tag}>
-                          <span className={styles.tagLabel}>Industry:</span>
-                          {template.industryStr}
-                        </span>
-                        <span className={styles.tag}>
-                          <span className={styles.tagLabel}>Format:</span>
-                          {template.documentTypeStr}
-                        </span>
+                          Use Template
+                        </Button>
                       </div>
                     </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        ))}
+
+                <div className={styles.cardContent}>
+                  <p className={styles.prompt}>
+                    {template.promptStr ?? template.template?.promptStr}
+                  </p>
+
+                  <div className={styles.tags}>
+                    <span className={styles.tag}>
+                      <span className={styles.tagLabel}>Industry:</span>
+                      {template.industryStr}
+                    </span>
+                    <span className={styles.tag}>
+                      <span className={styles.tagLabel}>Format:</span>
+                      {template.documentTypeStr}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {hasMore && templates.length > 0 && onLoadMore && (

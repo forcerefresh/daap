@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { Text } from "@blueprintjs/core";
 import css from "./SearchFooter.module.scss";
 
@@ -7,11 +6,12 @@ const SearchFooter = () => {
   return (
     <div
       style={{
-        position: "absolute",
-        bottom: "20px",
         display: "flex",
         flexDirection: "column",
         gap: "10px",
+        padding: "20px 0",
+        alignItems: "center",
+        width: "100%",
       }}
     >
       <div

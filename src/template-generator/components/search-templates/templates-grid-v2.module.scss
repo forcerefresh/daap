@@ -11,71 +11,17 @@
 }
 
 .masonryContainer {
-  display: flex;
-  gap: 20px;
+  column-width: 260px;
+  column-gap: 20px;
   width: 100%;
-  /* Prevent flex container from affecting measurements */
   min-width: 0;
 }
 
-.masonryColumn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  min-width: 0; /* Critical for proper flex behavior */
-  position: relative;
-}
-
 .masonryItem {
+  break-inside: avoid;
+  margin-bottom: 20px;
   width: 100%;
   transition: transform 0.3s ease;
-}
-
-/* Enhanced responsive breakpoints */
-@media (min-width: 1601px) {
-  .masonryContainer {
-    gap: 20px;
-  }
-}
-
-@media (min-width: 1401px) and (max-width: 1600px) {
-  .masonryContainer {
-    gap: 18px;
-  }
-}
-
-@media (min-width: 1201px) and (max-width: 1400px) {
-  .masonryContainer {
-    gap: 16px;
-  }
-}
-
-@media (min-width: 901px) and (max-width: 1200px) {
-  .masonryContainer {
-    gap: 16px;
-  }
-}
-
-@media (min-width: 601px) and (max-width: 900px) {
-  .masonryContainer {
-    gap: 16px;
-  }
-
-  .masonryColumn {
-    gap: 16px;
-  }
-}
-
-@media (max-width: 600px) {
-  .masonryContainer {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .masonryColumn {
-    gap: 12px;
-  }
 }
 
 /* Card styles */
@@ -318,33 +264,6 @@
   }
 }
 
-/* -------------------- */
-/* Selected item styling */
-/* -------------------- */
-
-.masonryItem.selected {
-  position: relative;
-  z-index: 100;
-}
-
-.masonryItem.selected .card {
-  width: 160%;
-  transform: translateX(-20%);
-  // position: absolute;
-  z-index: 101;
-  cursor: default;
-}
-
-/* Override hover effects for selected items */
-.masonryItem.selected .card:hover {
-  transform: translateX(-20%); /* Keep the selection transform */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); /* Keep hover shadow */
-}
-
-.masonryItem.selected .card:hover .image {
-  transform: scale(1.05); /* Keep image zoom on hover */
-}
-
 /* Button container */
 .buttonContainer {
   display: flex;
@@ -383,28 +302,6 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-// ------ addition
-// -------
-// -------
-
-/* Add this class to fade other items */
-.masonryContainer {
-  &.hasSelected {
-    .masonryItem:not(.selected) {
-      opacity: 0.4;
-      // filter: blur(1px);
-      filter: saturate(0.8);
-      pointer-events: none; /* Optional: prevent clicks on faded items */
-    }
-  }
-}
-/* Keep selected item fully visible */
-.masonryItem.selected {
-  opacity: 1 !important;
-  filter: none !important;
-  pointer-events: auto;
 }
 
 /* Add transition to all items */

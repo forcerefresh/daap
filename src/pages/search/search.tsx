@@ -397,6 +397,7 @@ const SearchPage = ({
     _loadUserData();
   }, []);
 
+  // probably some workaround. is needed?
   useLayoutEffect(() => {
     const root = document.getElementById("daap-forcerefresh-root");
     if (root) {
@@ -651,10 +652,10 @@ const SearchPage = ({
                   selectedLanguage={selectedLanguage}
                 />
               )}
+              <SearchFooter />
             </div>
           </>
         )}
-        {!isExpanded && <SearchFooter />}
       </div>
       {showRedirectMessage && renderSpinner()}
     </>
