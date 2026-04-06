@@ -95,6 +95,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
     "image-preview-popover",
     "color-picker-holder",
     "bp5-overlay-scroll-container", // alert
+    "media-modal", // WP media library dialog
   ]);
 
   //   const mSelectionType: MultiSelectionType =
