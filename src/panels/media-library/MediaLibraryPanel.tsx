@@ -460,8 +460,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               />
             )}
 
-          {import.meta.env.VITE_APP_INTEGRATION === "saas" &&
-            includes(panelsToShow, Panels.MySvgMask) && (
+          {includes(panelsToShow, Panels.MySvgMask) && (
               <Tab
                 id="my-svg-mask"
                 title="My Masks"

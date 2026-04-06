@@ -37,9 +37,10 @@ export const useExtensionsHook = () => {
     //   data: await Promise.resolve([]), //await res.json(),
     // }));
 
-    return axios.get(`/api/v1/available-extensions`).then((response) => {
-      return { data: response.data };
-    });
+    return Promise.resolve({ data: [] });
+    // return axios.get(`/api/v1/available-extensions`).then((response) => {
+    //   return { data: response.data };
+    // });
 
     // return new Promise((resolve) => {
     //   resolve({ data: extensions });

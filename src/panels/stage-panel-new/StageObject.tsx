@@ -620,7 +620,7 @@ const mapStateToProps = (state: IStore) => {
     activeLayerId: selection.activeLayerId,
     selectedObjectIds: selection.selectedObjectIds,
     selectionPath: selection.selectionPath,
-    currentScope: selection.currentScope,
+    currentScope: selection.currentScope ?? { type: "layer" },
     activeStageTool: state.stage.activeStageTool.tool,
     stageToolObjectType: state.stage.stageTool.objectType,
     breakpointConfig,

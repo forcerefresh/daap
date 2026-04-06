@@ -59,7 +59,7 @@ export const WpMyImageSelect_Upload: React.FC<getMyUploadComponentProps> = (
         ? "video/mp4"
         : type === "audio"
           ? "audio/mp3, audio/mpeg"
-          : type === "vector"
+          : type === "vector" || type === "svg-mask"
             ? "image/svg+xml"
             : type === "font"
               ? "font/otf, font/ttf, font/woff2"
@@ -221,7 +221,7 @@ export const WpMyImageSelect_Upload: React.FC<getMyUploadComponentProps> = (
               Drop <strong>audios</strong> here or click to open the selection
               dialog.
             </p>
-          ) : type === "vector" ? (
+          ) : type === "vector" || type === "svg-mask" ? (
             <p>
               Drop <strong>SVGs</strong> here or click to open the selection
               dialog.

@@ -12,7 +12,7 @@ async function uploadImages(images: any[], type: string) {
       headers: {
         "X-WP-Nonce": daapForcerefreshSettings.nonce,
       },
-    }
+    },
   );
 
   return response.data.data;
@@ -56,16 +56,16 @@ async function processImages(attachments: any[], type: string) {
 }
 
 export const WpMyImageSelect_WpDialog: React.FC<getMyUploadComponentProps> = (
-  props
+  props,
 ) => {
   const { onStop, onComplete, type } = props;
 
   const wpType =
     type === "image"
       ? ["image/jpeg", "image/png", "image/gif"]
-      : type === "vector"
-      ? ["image/svg+xml"]
-      : undefined;
+      : type === "vector" || type === "svg-mask"
+        ? ["image/svg+xml"]
+        : undefined;
 
   const onSelect = useCallback(
     async (attachments: any) => {
@@ -74,7 +74,7 @@ export const WpMyImageSelect_WpDialog: React.FC<getMyUploadComponentProps> = (
 
       onComplete();
     },
-    [type]
+    [type],
   );
 
   useEffect(() => {
