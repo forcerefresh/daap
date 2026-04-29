@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button, Spinner } from "@blueprintjs/core";
 import styles from "./templates-grid-v2.module.scss";
 
@@ -123,6 +123,15 @@ const getAspectRatioClass = (width: number, height: number): string => {
   return "square";
 };
 
+const calculateColumnCount = (width: number): number => {
+  if (width >= 1580) return 6;
+  if (width >= 1380) return 5;
+  if (width >= 1180) return 4;
+  if (width >= 880) return 3;
+  if (width >= 580) return 2;
+  return 1;
+};
+
 const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   templates,
   metadata,
@@ -136,6 +145,21 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   onUseTemplate,
   selectedLanguage = "en",
 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [columnCount, setColumnCount] = useState(4);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const observer = new ResizeObserver(() => {
+      setColumnCount(calculateColumnCount(container.offsetWidth));
+    });
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
+  const columns: TemplateItem[][] = Array.from({ length: columnCount }, () => []);
+  templates.forEach((template, i) => columns[i % columnCount].push(template));
 
   const getSimilarityColor = (similarity: number): string => {
     if (similarity > 0.7) return styles.highSimilarity;
@@ -147,113 +171,110 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
     return `${(similarity * 100).toFixed(1)}%`;
   };
 
-  if (isLoading && templates.length === 0) {
-    return (
-      <div className={styles.loadingContainer}>
-        <Spinner size={50} />
-        <p>Loading templates...</p>
-      </div>
+  const renderCard = (template: TemplateItem) => {
+    const aspectRatioClass = getAspectRatioClass(
+      template.template.documentType.widthPx,
+      template.template.documentType.heightPx,
     );
-  }
+    return (
+      <div
+        key={`template-${template.id}`}
+        className={`${styles.masonryItem} ${styles[aspectRatioClass]}`}
+      >
+        <div className={styles.card}>
+          <div className={styles.imageContainer}>
+            <img
+              src={`${import.meta.env.VITE_SAAS_API_URL}/public/public-media/${
+                template.template.previewUid
+              }.jpeg?language=${metadata?.language || selectedLanguage}`}
+              alt={template.promptStr}
+              className={styles.image}
+              loading="lazy"
+            />
+            <div className={styles.similarityBadge}>
+              <span
+                className={`${styles.similarity} ${getSimilarityColor(template.similarity)}`}
+              >
+                {formatSimilarity(template.similarity)}
+              </span>
+            </div>
 
-  if (error && templates.length === 0) {
-    return (
-      <div className={styles.errorContainer}>
-        <p className={styles.errorText}>{error}</p>
-        <Button intent="primary" onClick={() => window.location.reload()}>
-          Retry
-        </Button>
+            <div className={styles.templateActionsHolder}>
+              <div className={styles.buttonContainer}>
+                <div>{/* Like/Dislike buttons if needed */}</div>
+                <div style={{ flexGrow: "1" }}>
+                  <Button
+                    style={{ width: "100%" }}
+                    intent="primary"
+                    className={`${styles.templateButton} ${styles.useTemplateButton}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onUseTemplate(
+                        template.id,
+                        template.template.language || selectedLanguage,
+                        template.template.previewUid,
+                        template.template.documentTypeStr,
+                      );
+                    }}
+                  >
+                    Use Template
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.cardContent}>
+            <p className={styles.prompt}>
+              {template.promptStr ?? template.template?.promptStr}
+            </p>
+
+            <div className={styles.tags}>
+              <span className={styles.tag}>
+                <span className={styles.tagLabel}>Industry:</span>
+                {template.industryStr}
+              </span>
+              <span className={styles.tag}>
+                <span className={styles.tagLabel}>Format:</span>
+                {template.documentTypeStr}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     );
-  }
+  };
 
   return (
-    <div className={styles.container}>
-      {error && (
+    <div ref={containerRef} className={styles.container}>
+      {isLoading && templates.length === 0 && (
+        <div className={styles.loadingContainer}>
+          <Spinner size={50} />
+          <p>Loading templates...</p>
+        </div>
+      )}
+
+      {error && templates.length === 0 && (
+        <div className={styles.errorContainer}>
+          <p className={styles.errorText}>{error}</p>
+          <Button intent="primary" onClick={() => window.location.reload()}>
+            Retry
+          </Button>
+        </div>
+      )}
+
+      {error && templates.length > 0 && (
         <div className={styles.inlineError}>
           <p>{error}</p>
         </div>
       )}
 
       <div className={styles.masonryContainer}>
-        {templates.map((template) => {
-          const aspectRatioClass = getAspectRatioClass(
-            template.template.documentType.widthPx,
-            template.template.documentType.heightPx,
-          );
-
-          return (
-            <div
-              key={`template-${template.id}`}
-              className={`${styles.masonryItem} ${styles[aspectRatioClass]}`}
-            >
-              <div className={styles.card}>
-                <div className={styles.imageContainer}>
-                  <img
-                    src={`${
-                      import.meta.env.VITE_SAAS_API_URL
-                    }/public/public-media/${
-                      template.template.previewUid
-                    }.jpeg?language=${metadata?.language || selectedLanguage}`}
-                    alt={template.promptStr}
-                    className={styles.image}
-                    loading="lazy"
-                  />
-                  <div className={styles.similarityBadge}>
-                    <span
-                      className={`${styles.similarity} ${getSimilarityColor(
-                        template.similarity,
-                      )}`}
-                    >
-                      {formatSimilarity(template.similarity)}
-                    </span>
-                  </div>
-
-                  <div className={styles.templateActionsHolder}>
-                    <div className={styles.buttonContainer}>
-                      <div>{/* Like/Dislike buttons if needed */}</div>
-                      <div style={{ flexGrow: "1" }}>
-                        <Button
-                          style={{ width: "100%" }}
-                          intent="primary"
-                          className={`${styles.templateButton} ${styles.useTemplateButton}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onUseTemplate(
-                              template.id,
-                              template.template.language || selectedLanguage,
-                              template.template.previewUid,
-                              template.template.documentTypeStr,
-                            );
-                          }}
-                        >
-                          Use Template
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.cardContent}>
-                  <p className={styles.prompt}>
-                    {template.promptStr ?? template.template?.promptStr}
-                  </p>
-
-                  <div className={styles.tags}>
-                    <span className={styles.tag}>
-                      <span className={styles.tagLabel}>Industry:</span>
-                      {template.industryStr}
-                    </span>
-                    <span className={styles.tag}>
-                      <span className={styles.tagLabel}>Format:</span>
-                      {template.documentTypeStr}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+        {columns.map((columnTemplates, columnIndex) => (
+          <div key={`col-${columnIndex}`} className={styles.masonryColumn}>
+            {columnTemplates.map(renderCard)}
+          </div>
+        ))}
       </div>
 
       {hasMore && templates.length > 0 && onLoadMore && (

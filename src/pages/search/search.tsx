@@ -238,7 +238,6 @@ const SearchPage = ({
         stateRef.current.searchQuery,
         stateRef.current.selectedLanguage,
         stateRef.current.selectedDocumentType, // documentType ??
-        20,
       );
 
       setTemplates(response.data);
@@ -267,7 +266,6 @@ const SearchPage = ({
         searchQuery,
         selectedLanguage,
         selectedDocumentType,
-        12,
       );
 
       setTemplates((prev) => {

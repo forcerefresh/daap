@@ -7,7 +7,7 @@ export const usePublicTemplateSearch = () => {
     search: string,
     language = "en",
     documentType: string,
-    perPage = 10,
+    perPage = 20,
   ): Promise<any> => {
     return axios
       .get(

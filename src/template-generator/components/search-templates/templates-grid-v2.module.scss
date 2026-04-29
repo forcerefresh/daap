@@ -3,23 +3,27 @@
   padding: 20px;
   max-width: 1610px;
   margin: 0 auto;
-  // overflow: auto;
   width: 100%;
   box-sizing: border-box;
-  /* Ensure consistent sizing */
   position: relative;
 }
 
 .masonryContainer {
-  column-width: 260px;
-  column-gap: 20px;
+  display: flex;
+  gap: 20px;
   width: 100%;
   min-width: 0;
 }
 
+.masonryColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
 .masonryItem {
-  break-inside: avoid;
-  margin-bottom: 20px;
   width: 100%;
   transition: transform 0.3s ease;
 }
