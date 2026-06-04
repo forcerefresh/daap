@@ -1,8 +1,12 @@
 import axios from "axios";
+import type { components } from "../../../types/api";
 import { scaleApp } from "./utils";
 
+type Settings = components["schemas"]["Settings"];
+type PublishSettings = components["schemas"]["PublishSettings"];
+
 export const useSettingsHook = () => {
-  const getSettings = (id: string): Promise<any> => {
+  const getSettings = (_id?: string): Promise<Settings> => {
     return axios.get(`/api/v1/settings`).then((response) => response.data);
   };
 
@@ -11,10 +15,10 @@ export const useSettingsHook = () => {
     appSettings,
     publishSettings,
   }: {
-    textAISettings: any;
-    appSettings: any;
-    publishSettings: any;
-  }): Promise<any> => {
+    textAISettings?: Record<string, unknown>;
+    appSettings?: Record<string, unknown>;
+    publishSettings?: PublishSettings;
+  }): Promise<void> => {
     if (appSettings?.appZoom) {
       localStorage.setItem("appZoom", appSettings.appZoom);
     }

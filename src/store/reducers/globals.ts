@@ -28,6 +28,9 @@ export interface IAppSettings {
   homePage?: "search" | "editor" | string | undefined;
   // editor behaviour
   groupNesting?: "one" | "unlimited";
+  // user capabilities sourced from /api/v1/me — not a user-configurable setting
+  canUseAIGenerator?: boolean;
+  userRole?: "USER" | "ADMIN";
 }
 
 const appZoomFromLocalStorage = parseFloat(

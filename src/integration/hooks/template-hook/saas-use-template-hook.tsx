@@ -7,9 +7,13 @@ import {
 } from "webslider-sdk/lib/objects/objects-register";
 import axios from "axios";
 import { isEmpty } from "lodash-es";
+import type { components } from "../../../types/api";
+
+type Template = components["schemas"]["Template"];
+type Pagination = components["schemas"]["Pagination"];
 
 export const useTemplateHook = () => {
-  const getTemplate = (id: string): Promise<any> => {
+  const getTemplate = (id: string): Promise<Template> => {
     return axios
       .get(`/api/v1/templates/${id}`)
       .then((response) => response.data);
@@ -19,7 +23,7 @@ export const useTemplateHook = () => {
     from: number,
     search: string,
     perPage = 10
-  ): Promise<any> => {
+  ): Promise<{ data: Template[]; pagination: Pagination }> => {
     return axios
       .get(`/api/v1/templates`, {
         params: {
@@ -60,16 +64,7 @@ export const useTemplateHook = () => {
     assetsUrls: GetAssetsUrlFuncReturnType;
     fonts: GetFontsFuncReturnType;
     extensions: IExtensionItem[];
-  }): Promise<{
-    id: string;
-    name: string;
-    description: string;
-    documentTypeId?: string;
-    slides: number;
-    created: string;
-    modified: string;
-    saveRevision: number;
-  }> => {
+  }): Promise<Template> => {
     const json = {
       name,
       description,

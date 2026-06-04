@@ -10,6 +10,7 @@
   "homepage": "./",
   "main": "electron/main.js",
   "scripts": {
+    "generate:types": "openapi-typescript ../daap-server/schema/openApi-schema.json -o src/types/api.d.ts",
     "start:app:saas": "vite --mode saas",
     "build:app:saas": "NODE_OPTIONS=--max-old-space-size=4096 vite build --mode saas",
     "start:app:wp": "vite  --mode wp",
@@ -160,6 +161,7 @@
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-count": "^1.0.0",
+    "openapi-typescript": "^6.7.6",
     "rollup-plugin-visualizer": "^6.0.5",
     "sass-embedded": "^1.85.0",
     "webpack": "^5.70.0"

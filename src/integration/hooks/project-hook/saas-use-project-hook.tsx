@@ -7,6 +7,10 @@ import {
 } from "webslider-sdk/lib/objects/objects-register";
 import axios from "axios";
 import { isEmpty } from "lodash-es";
+import type { components } from "../../../types/api";
+
+type Project = components["schemas"]["Project"];
+type Pagination = components["schemas"]["Pagination"];
 
 export const useProjectHook = () => {
   // const getNextProjectId = (): Promise<number> => {
@@ -19,7 +23,7 @@ export const useProjectHook = () => {
   //   });
   // };
 
-  const getProject = (id: string): Promise<any> => {
+  const getProject = (id: string): Promise<Project> => {
     return axios
       .get(`/api/v1/projects/${id}`)
       .then((response) => response.data);
@@ -43,7 +47,7 @@ export const useProjectHook = () => {
     from: number,
     search: string,
     perPage = 10
-  ): Promise<any> => {
+  ): Promise<{ data: Project[]; pagination: Pagination }> => {
     return axios
       .get(`/api/v1/projects`, {
         params: {
@@ -100,16 +104,7 @@ export const useProjectHook = () => {
     assetsUrls: GetAssetsUrlFuncReturnType;
     fonts: GetFontsFuncReturnType;
     extensions: IExtensionItem[];
-  }): Promise<{
-    id: string;
-    name: string;
-    description: string;
-    documentTypeId?: string;
-    slides: number;
-    created: string;
-    modified: string;
-    saveRevision: number;
-  }> => {
+  }): Promise<Project> => {
     const json = {
       name,
       description,
@@ -160,16 +155,7 @@ export const useProjectHook = () => {
       fonts: GetFontsFuncReturnType;
       extensions: IExtensionItem[];
     }
-  ): Promise<{
-    id: string;
-    name: string;
-    description: string;
-    documentTypeId?: string;
-    slides: number;
-    created: string;
-    modified: string;
-    saveRevision: number;
-  }> => {
+  ): Promise<Project> => {
     const json = {
       name,
       description,

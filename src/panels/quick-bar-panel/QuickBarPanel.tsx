@@ -537,7 +537,7 @@ const mapStateToProps = (state: IStore) => {
 
   return {
     breakpointConfig,
-    layout2TemplateEnabled: globals.publishSettings?.enabled,
+    layout2TemplateEnabled: globals.canUseAIGenerator ?? false,
     activeLayerId,
     activeObject,
     objectById: objects.objectById,

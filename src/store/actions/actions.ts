@@ -3345,6 +3345,10 @@ export function loadUserData(): any {
           dispatch(updateUserDataError(response?.data));
         } else {
           dispatch(updateUserData(response?.data));
+          dispatch(updateGlobalConfiguration({
+            canUseAIGenerator: response?.data?.canUseAIGenerator ?? false,
+            userRole: response?.data?.role,
+          }));
         }
 
         const displayMessages = response?.data?.displayMessages;
