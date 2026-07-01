@@ -24,6 +24,7 @@ import {
   IExtraOptions,
   IInputMetadataValues,
   InputType,
+  OnChangeType,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import { UnitsNumberInputForm } from "./units-number-input/units-number-input";
 import { VideoInputForm } from "./video-input/video-input";
@@ -63,11 +64,11 @@ import { PasswordInputForm } from "./password-input/password-input";
 import { LinearGradientInputForm } from "./linear-gradient-input/linear-gradient-input";
 import { ColorGradientInputForm } from "./color-gradient-input/color-gradient-input";
 
-export function getInputFormWithOptions<T>(
+export function getInputFormWithOptions<T extends Record<string, unknown> & { propertyName?: string; id?: string }>(
   inputType: InputType,
-  inputProps: T | any,
-  onChange: (config: any) => void,
-  onInput?: (config: any) => void,
+  inputProps: T,
+  onChange: OnChangeType,
+  onInput?: OnChangeType,
   onMetadataChange?: (metadata: IInputMetadataValues) => void,
   data?: {
     layerData?: {
@@ -78,7 +79,7 @@ export function getInputFormWithOptions<T>(
     selectedDevice?: string;
     onChangeDevice?: (device: string) => void;
   },
-  onPreview?: (config: any) => void
+  onPreview?: OnChangeType
 ): React.ReactElement | undefined {
   // force DISABLED if metadata.disabled===true
   if (inputProps?.metadata?.disabled) {
@@ -118,11 +119,11 @@ export function getInputFormWithOptions<T>(
   }
   return input;
 }
-export function getInputForm<T>(
+export function getInputForm<T extends Record<string, unknown> & { propertyName?: string; id?: string }>(
   inputType: InputType,
-  inputProps: T | any,
-  onChange: (config: any) => void,
-  onInput?: (config: any) => void,
+  inputProps: T,
+  onChange: OnChangeType,
+  onInput?: OnChangeType,
   data?: {
     layerData?: {
       layer?: ILayer | null;
@@ -133,16 +134,21 @@ export function getInputForm<T>(
     onChangeDevice?: (device: string) => void;
     relativeToLayer?: boolean;
   },
-  onPreview?: (config: any) => void
+  onPreview?: OnChangeType
 ): React.ReactElement | undefined {
   const key = inputProps.propertyName || inputProps.id;
+  // This function is a runtime dispatcher — each case knows the real type but
+  // TypeScript cannot infer it from the generic T across a switch. One cast here
+  // is preferable to 50 per-case casts.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const p = inputProps as any;
 
   switch (inputType) {
     case InputType.NUMBER: {
       return (
         <NumberInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           onInput={onInput}
         />
@@ -152,7 +158,7 @@ export function getInputForm<T>(
       return (
         <UnitsNumberInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           onInput={onInput}
         />
@@ -162,7 +168,7 @@ export function getInputForm<T>(
       return (
         <NumericTimelineInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           onInput={onInput}
         />
@@ -172,7 +178,7 @@ export function getInputForm<T>(
       return (
         <BorderColorInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           onInput={onInput}
         />
@@ -182,7 +188,7 @@ export function getInputForm<T>(
       return (
         <BorderInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           onInput={onInput}
         />
@@ -192,7 +198,7 @@ export function getInputForm<T>(
       return (
         <ColorArrayInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           onInput={onInput}
         />
@@ -202,7 +208,7 @@ export function getInputForm<T>(
       return (
         <LinearGradientInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           onInput={onInput}
           onPreview={onPreview}
@@ -213,7 +219,7 @@ export function getInputForm<T>(
       return (
         <ColorGradientInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           onInput={onInput}
           onPreview={onPreview}
@@ -224,7 +230,7 @@ export function getInputForm<T>(
       return (
         <TimelinesInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           onInput={onInput}
         />
@@ -234,7 +240,7 @@ export function getInputForm<T>(
       return (
         <RelativePositionInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           onInput={onInput}
         />
@@ -244,7 +250,7 @@ export function getInputForm<T>(
       return (
         <RelativeRotationInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           onInput={onInput}
         />
@@ -254,7 +260,7 @@ export function getInputForm<T>(
       return (
         <SliderInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           onPreview={onPreview}
           onInput={onInput}
@@ -265,7 +271,7 @@ export function getInputForm<T>(
       return (
         <RangeSliderInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           onInput={onInput}
         />
@@ -275,7 +281,7 @@ export function getInputForm<T>(
       return (
         <ButtonGroupInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           onInput={onInput}
         />
@@ -285,68 +291,68 @@ export function getInputForm<T>(
     //   return (
     //     <ColorArrayInputPresetForm
     //       key={key}
-    //       {...inputProps}
+    //       {...p}
     //       onChange={onChange}
     //       onInput={onInput}
     //     />
     //   );
     // }
     case InputType.TEXT: {
-      return <TextInputForm key={key} {...inputProps} onInput={onChange} />;
+      return <TextInputForm key={key} {...p} onInput={onChange} />;
     }
 
     case InputType.PASSWORD: {
-      return <PasswordInputForm key={key} {...inputProps} onInput={onChange} />;
+      return <PasswordInputForm key={key} {...p} onInput={onChange} />;
     }
     case InputType.TEXTAREA: {
-      return <TextAreaInputForm key={key} {...inputProps} onInput={onChange} />;
+      return <TextAreaInputForm key={key} {...p} onInput={onChange} />;
     }
     case InputType.SVG_TEXTAREA: {
       return (
-        <SVGTextAreaInputForm key={key} {...inputProps} onInput={onChange} />
+        <SVGTextAreaInputForm key={key} {...p} onInput={onChange} />
       );
     }
     case InputType.SVG_INPUT: {
-      return <SVGInputForm key={key} {...inputProps} onInput={onChange} />;
+      return <SVGInputForm key={key} {...p} onInput={onChange} />;
     }
     case InputType.HTML_INPUT: {
-      return <HTMLInputForm key={key} {...inputProps} onInput={onChange} />;
+      return <HTMLInputForm key={key} {...p} onInput={onChange} />;
     }
     case InputType.SVG_CUSTOM_COLORS: {
       return (
-        <SVGCustomColorsForm key={key} {...inputProps} onChange={onChange} />
+        <SVGCustomColorsForm key={key} {...p} onChange={onChange} />
       );
     }
     case InputType.INFO: {
-      return <InfoInputForm key={key} {...inputProps} onInput={onChange} />;
+      return <InfoInputForm key={key} {...p} onInput={onChange} />;
     }
     case InputType.RICH_TEXTAREA: {
       return (
-        <RichTextAreaInputForm key={key} {...inputProps} onInput={onChange} />
+        <RichTextAreaInputForm key={key} {...p} onInput={onChange} />
       );
     }
     case InputType.IMAGE: {
-      return <ImageInputForm key={key} {...inputProps} onChange={onChange} />;
+      return <ImageInputForm key={key} {...p} onChange={onChange} />;
     }
     case InputType.SVG_MASK_INPUT: {
-      return <SvgMaskInputForm key={key} {...inputProps} onChange={onChange} />;
+      return <SvgMaskInputForm key={key} {...p} onChange={onChange} />;
     }
     case InputType.MULTI_IMAGE: {
       return (
-        <MultiImageInputForm key={key} {...inputProps} onChange={onChange} />
+        <MultiImageInputForm key={key} {...p} onChange={onChange} />
       );
     }
     case InputType.VIDEO: {
-      return <VideoInputForm key={key} {...inputProps} onChange={onChange} />;
+      return <VideoInputForm key={key} {...p} onChange={onChange} />;
     }
     case InputType.AUDIO: {
-      return <AudioInputForm key={key} {...inputProps} onChange={onChange} />;
+      return <AudioInputForm key={key} {...p} onChange={onChange} />;
     }
     case InputType.TRANSFORM_ORIGIN: {
       return (
         <TransformOriginInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
         />
       );
@@ -355,28 +361,28 @@ export function getInputForm<T>(
       return (
         <ColorInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           onPreview={onPreview}
         />
       );
     }
     case InputType.SELECT: {
-      return <SelectInputForm key={key} {...inputProps} onChange={onChange} />;
+      return <SelectInputForm key={key} {...p} onChange={onChange} />;
     }
     case InputType.TAGS: {
-      return <TagsInputForm key={key} {...inputProps} onChange={onChange} />;
+      return <TagsInputForm key={key} {...p} onChange={onChange} />;
     }
     case InputType.FONT_SELECT: {
       return (
-        <FontSelectInputForm key={key} {...inputProps} onChange={onChange} />
+        <FontSelectInputForm key={key} {...p} onChange={onChange} />
       );
     }
     case InputType.ABSOLUTE_LAYOUT: {
       return (
         <AbsolutePlacementForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           breakpoints={data?.breakpoints}
           selectedDevice={data?.selectedDevice}
@@ -389,38 +395,38 @@ export function getInputForm<T>(
       return (
         <LayoutChildrenInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           layerData={data?.layerData}
         />
       );
     }
     case InputType.SIZE: {
-      return <SizeInputForm key={key} {...inputProps} onChange={onChange} />;
+      return <SizeInputForm key={key} {...p} onChange={onChange} />;
     }
 
     case InputType.CLIP_MASK: {
       return (
-        <ClipMaskInputForm key={key} {...inputProps} onChange={onChange} />
+        <ClipMaskInputForm key={key} {...p} onChange={onChange} />
       );
     }
 
     case InputType.SIZE_UNIT: {
       return (
-        <SizeUnitInputForm key={key} {...inputProps} onChange={onChange} />
+        <SizeUnitInputForm key={key} {...p} onChange={onChange} />
       );
     }
     case InputType.SIZE_POS: {
-      return <SizePosInputForm key={key} {...inputProps} onChange={onChange} />;
+      return <SizePosInputForm key={key} {...p} onChange={onChange} />;
     }
     case InputType.P1_P2: {
-      return <P1P2InputForm key={key} {...inputProps} onChange={onChange} />;
+      return <P1P2InputForm key={key} {...p} onChange={onChange} />;
     }
     case InputType.SNAP: {
       return (
         <SnapInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           breakpoints={data?.breakpoints}
           selectedDevice={data?.selectedDevice}
@@ -433,7 +439,7 @@ export function getInputForm<T>(
       return (
         <FitInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           breakpoints={data?.breakpoints}
           selectedDevice={data?.selectedDevice}
@@ -446,7 +452,7 @@ export function getInputForm<T>(
       return (
         <InsetLayoutInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           breakpoints={data?.breakpoints}
           selectedDevice={data?.selectedDevice}
@@ -459,7 +465,7 @@ export function getInputForm<T>(
       return (
         <CoverPlacementInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
         />
       );
@@ -468,7 +474,7 @@ export function getInputForm<T>(
       return (
         <GridPlacementInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           breakpoints={data?.breakpoints}
           selectedDevice={data?.selectedDevice}
@@ -478,17 +484,17 @@ export function getInputForm<T>(
     }
     case InputType.CHECKBOX: {
       return (
-        <CheckboxInputForm key={key} {...inputProps} onChange={onChange} />
+        <CheckboxInputForm key={key} {...p} onChange={onChange} />
       );
     }
     case InputType.SPLIT: {
-      return <SplitInputForm key={key} {...inputProps} onChange={onChange} />;
+      return <SplitInputForm key={key} {...p} onChange={onChange} />;
     }
     case InputType.PARALLAX: {
       return (
         <ParallaxInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
           layerData={data?.layerData}
         />
@@ -498,24 +504,24 @@ export function getInputForm<T>(
       return (
         <TextStartPositionInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
         />
       );
     }
     case InputType.CORNER_RADIUS: {
       return (
-        <CornerRadiusInputForm key={key} {...inputProps} onChange={onChange} />
+        <CornerRadiusInputForm key={key} {...p} onChange={onChange} />
       );
     }
     case InputType.BOX: {
-      return <BoxInputForm key={key} {...inputProps} onChange={onChange} />;
+      return <BoxInputForm key={key} {...p} onChange={onChange} />;
     }
     case InputType.INHERIT_TIME: {
       return (
         <InheritableTimeInputForm
           key={key}
-          {...inputProps}
+          {...p}
           onChange={onChange}
         />
       );

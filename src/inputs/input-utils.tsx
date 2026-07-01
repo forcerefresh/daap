@@ -2,7 +2,7 @@ import React from "react";
 import { noop } from "lodash-es";
 import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { getInputForm } from "./input-factory";
-import { InputType, Units } from "webslider-sdk/lib/inputs/i-inputs";
+import { InputType, OnChangeType, Units } from "webslider-sdk/lib/inputs/i-inputs";
 
 export function getUnitNumericFiled<T>(
   label: string,
@@ -51,8 +51,8 @@ export function getNumericFiled<T>(
     inputProps,
   };
 
-  const onInput = (value: any) => {
-    onChange(value);
+  const onInput: OnChangeType = (value) => {
+    onChange(value as T);
   };
 
   return getInputForm(InputType.NUMBER, objectDef, noop, onInput);
@@ -64,7 +64,7 @@ export function getColorField<T>(
   onChange: (value: T) => void,
   helperText?: string,
   inputProps: { disabled?: boolean; style?: React.CSSProperties } = {},
-  onPreview?: any
+  onPreview?: OnChangeType
 ) {
   const objectDef = {
     displayName: label,
@@ -91,7 +91,7 @@ export function getLinearGradientField<T>(
   onChange: (value: T) => void,
   helperText?: string,
   inputProps: { disabled?: boolean; style?: React.CSSProperties } = {},
-  onPreview?: any
+  onPreview?: OnChangeType
 ) {
   const objectDef = {
     displayName: label,
@@ -223,7 +223,7 @@ export function getCheckboxField<T>(
   value: T,
   onChange: (value: T) => void,
   helperText?: string,
-  inputProps: { disabled?: boolean } & { [key: string]: any } = {}
+  inputProps: { disabled?: boolean } & Record<string, unknown> = {}
 ) {
   const objectDef = {
     displayName: label,
