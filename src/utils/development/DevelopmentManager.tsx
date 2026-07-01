@@ -6,6 +6,7 @@ import { forceRefresh } from "../../store/actions/actions";
 import { IStore, store } from "../../store/store";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { DevelopmentContext } from "./DevelopmentProvider";
+import { getGlobals } from "../../globals";
 
 export type IDevelopmentManagerProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -85,18 +86,9 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
       hasUpdate = true;
 
       try {
-        await import(
-          /* @ts-ignore */
-          /* webpackIgnore: true */
-          /* @vite-ignore */
-          devItem.appDevUrl + "?" + Math.random()
-        );
-        await import(
-          /* @ts-ignore */
-          /* @vite-ignore */ /* webpackIgnore: true */
-          /* @vite-ignore */
-          devItem.playerDevUrl + "?" + Math.random()
-        );
+        // @vite-ignore and webpackIgnore needed for dynamic external URL imports
+        await import(/* webpackIgnore: true */ /* @vite-ignore */ devItem.appDevUrl + "?" + Math.random());
+        await import(/* webpackIgnore: true */ /* @vite-ignore */ devItem.playerDevUrl + "?" + Math.random());
 
         const devItemUpdate: Partial<DevelopmentItem> = {
           id: devItem.id,
@@ -105,7 +97,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
         };
         await updateDevelopmentItem(devItemUpdate);
 
-        const global = (window as any).WebSlider_GlobalScope;
+        const global = getGlobals();
 
         if (devItem.extensionType === "object") {
           logger.app.debug(`Register external object (${devItem.type})`);

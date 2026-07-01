@@ -48,8 +48,8 @@ export class ScaleTool extends EventTarget implements IStageTool {
 
     //this.startAngle = this.getAngle(this.initialMousePosition);
 
-    (window as any).addEventListener("mousemove", this.mouseMove);
-    (window as any).addEventListener("mouseup", this.mouseUp);
+    window.addEventListener("mousemove", this.mouseMove);
+    window.addEventListener("mouseup", this.mouseUp);
 
     updateHandleVisibility("rotation-handle", false);
     // TODO this.prevBoxShadow = updateBoxShadow(this.objectId, "none");
@@ -116,8 +116,8 @@ export class ScaleTool extends EventTarget implements IStageTool {
       })
     );
 
-    (window as any).removeEventListener("mousemove", this.mouseMove);
-    (window as any).removeEventListener("mouseup", this.mouseUp);
+    window.removeEventListener("mousemove", this.mouseMove);
+    window.removeEventListener("mouseup", this.mouseUp);
 
     updateHandleVisibility("rotation-handle", true);
     // updateBoxShadow(this.objectId, this.prevBoxShadow);

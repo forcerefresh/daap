@@ -131,8 +131,8 @@ const mapStateToProps = (state: IStore) => {
 
   const breakpointConfig: BreakpointConfiguration | undefined =
     settings.breakpoints.breakpointsConfiguration.find(
-      (breakpointConfig: any) =>
-        breakpointConfig.type === state.stage.selectedDevice
+      (bp: BreakpointConfiguration) =>
+        bp.type === state.stage.selectedDevice
     );
 
   const zoom = getZoom(stage, settings);

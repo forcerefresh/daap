@@ -40,8 +40,8 @@ export class RotateTool extends EventTarget implements IStageTool {
 
     this.startAngle = this.getAngle(this.initialMousePosition);
 
-    (window as any).addEventListener("mousemove", this.mouseMove);
-    (window as any).addEventListener("mouseup", this.mouseUp, true);
+    window.addEventListener("mousemove", this.mouseMove);
+    window.addEventListener("mouseup", this.mouseUp, true);
 
     updateHandleVisibility("resize-handle", false);
     this.prevBoxShadow = updateBoxShadow(this.objectId, "none");
@@ -88,8 +88,8 @@ export class RotateTool extends EventTarget implements IStageTool {
     this.startAngle = 0;
     this.center = { x: 0, y: 0 };
 
-    (window as any).removeEventListener("mousemove", this.mouseMove);
-    (window as any).removeEventListener("mouseup", this.mouseUp, true);
+    window.removeEventListener("mousemove", this.mouseMove);
+    window.removeEventListener("mouseup", this.mouseUp, true);
 
     updateHandleVisibility("resize-handle", true);
     updateBoxShadow(this.objectId, this.prevBoxShadow);

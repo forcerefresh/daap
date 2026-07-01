@@ -48,7 +48,7 @@ import { useWPPublicTemplate } from "./template-generator/hooks/useWPPublicTempl
 import { useFullscreen } from "./integration/hooks/fullscreen-hook/fullscreen-hook";
 
 // gsap.install(window);
-(window as any).animejs = animejs;
+window.animejs = animejs;
 
 type IAppProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & { className?: string };

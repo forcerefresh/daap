@@ -200,8 +200,8 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   useEffect(() => {
     if (stagePanelElementRef.current) {
       _setViewPortSize({
-        w: (stagePanelElementRef.current as any).clientWidth,
-        h: (stagePanelElementRef.current as any).clientHeight,
+        w: stagePanelElementRef.current.clientWidth,
+        h: stagePanelElementRef.current.clientHeight,
       });
     }
   }, [stagePanelElementRef, windowWidth, windowHeight]);
@@ -374,8 +374,8 @@ const mapStateToProps = (state: IStore) => {
 
   const breakpointConfig: BreakpointConfiguration | undefined =
     settings.breakpoints.breakpointsConfiguration.find(
-      (breakpointConfig: any) =>
-        breakpointConfig.type === state.stage.selectedDevice,
+      (bp: BreakpointConfiguration) =>
+        bp.type === state.stage.selectedDevice,
     );
 
   const zoom = stage.zoom;
@@ -454,16 +454,16 @@ const mapDispatchToProps = {
   _setStagePan: (p: Point) => setStagePan(p),
   _ungroupObject: (groupId: string) => ungroupObject(groupId),
   _groupObjects: (objectIds: string[]) => groupObjects(objectIds),
-  _duplicateObjects: (ids: string[]): any => duplicateObjects(ids),
-  _deleteObjects: (ids: string[]): any => deleteObjects(ids),
+  _duplicateObjects: (ids: string[]) => duplicateObjects(ids),
+  _deleteObjects: (ids: string[]) => deleteObjects(ids),
   _cutToClipboard: (
     payload: Pick<IClipboard, "entityType" | "entityIds">,
-  ): any => cutToClipboard(payload),
+  ) => cutToClipboard(payload),
   _copyToClipboard: (
     payload: Pick<IClipboard, "entityType" | "entityIds">,
-  ): any => copyToClipboard(payload),
+  ) => copyToClipboard(payload),
 
-  _pasteObjectsFromClipboard: (toLayerId: string): any =>
+  _pasteObjectsFromClipboard: (toLayerId: string) =>
     pasteObjectsFromClipboard(toLayerId),
 
   _clearClipboard: () => clearClipboard(),

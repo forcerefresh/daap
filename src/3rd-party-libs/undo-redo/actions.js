@@ -1,3 +1,7 @@
+// Based on redux-deep-diff (MIT) — https://github.com/wwilsman/redux-deep-diff
+// Copyright (c) 2017 Wil Wilsman
+// SPDX-License-Identifier: MIT
+
 export const UNDO = '@@redux-deep-diff/UNDO';
 export const REDO = '@@redux-deep-diff/REDO';
 export const JUMP = '@@redux-deep-diff/JUMP';

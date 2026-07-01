@@ -124,7 +124,7 @@ export class FontPreloader {
   }
 }
 
-(window as any).WSFontPreloader = new FontPreloader();
+window.WSFontPreloader = new FontPreloader();
 
 // function ab2str(ab: ArrayBuffer) {
 //   return String.fromCharCode.apply(null, new Uint16Array(ab));

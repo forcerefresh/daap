@@ -7,5 +7,5 @@ export const useExitHook = () => {
   );
 
   // NOTE: sets global DAAP_isDirty which will be used in WP plugin
-  (window as any)["DAAP_isDirty"] = sliderChanged;
+  window.DAAP_isDirty = sliderChanged;
 };

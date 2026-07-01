@@ -9,6 +9,7 @@ import {
   registerExternalObject,
 } from "webslider-sdk/lib/objects/objects-register";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { getGlobals } from "../globals";
 
 export async function loadAndRegisterExternalComponent(
   extension: IExtensionItem
@@ -36,23 +37,19 @@ export async function loadAndRegisterExternalComponent(
 }
 
 function registerExternalExtension(extension: IExtensionItem) {
+  const scope = getGlobals();
   if (extension.extensionType === "object") {
-    const playerObj = (window as any).WebSlider_GlobalScope.playerObjects[
-      extension.type + "-" + extension.version
-    ];
-    const appObj = (window as any).WebSlider_GlobalScope.appObjects[
-      extension.type + "-" + extension.version
-    ];
+    const key = extension.type + "-" + extension.version;
+    const playerObj = scope.playerObjects?.[key];
+    const appObj = scope.appObjects?.[key];
 
     registerExternalObject(appObj, playerObj);
-    logger.object.info(`Object '${appObj.type}' has been registered`);
+    if (appObj) {
+      logger.object.info(`Object '${appObj.type}' has been registered`);
+    }
   } else if (extension.extensionType === "animation") {
-    const playerObj = (window as any).WebSlider_GlobalScope.playerAnimations[
-      extension.type
-    ];
-    const appObj = (window as any).WebSlider_GlobalScope.appAnimations[
-      extension.type
-    ];
+    const playerObj = scope.playerAnimations?.[extension.type];
+    const appObj = scope.appAnimations?.[extension.type];
 
     registerExternalAnimation(appObj, playerObj, true);
   } else {

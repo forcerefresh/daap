@@ -41,8 +41,8 @@ export class MoveTool extends EventTarget implements IStageTool {
 
     //this.startAngle = this.getAngle(this.initialMousePosition);
 
-    (window as any).addEventListener("mousemove", this.mouseMove);
-    (window as any).addEventListener("mouseup", this.mouseUp);
+    window.addEventListener("mousemove", this.mouseMove);
+    window.addEventListener("mouseup", this.mouseUp);
   }
 
   handleMouseMove(e: MouseEvent) {
@@ -104,8 +104,8 @@ export class MoveTool extends EventTarget implements IStageTool {
       })
     );
 
-    (window as any).removeEventListener("mousemove", this.mouseMove);
-    (window as any).removeEventListener("mouseup", this.mouseUp);
+    window.removeEventListener("mousemove", this.mouseMove);
+    window.removeEventListener("mouseup", this.mouseUp);
   }
 
   stop() {}

@@ -32,8 +32,9 @@ import SearchPage from "./pages/search/search";
 
 import "./AppNew.scss";
 import MobileRestriction from "./integration/components/mobile-restriction/MobileRestriction";
+import { IGlobals } from "./globals";
 
-const global = window as any;
+const global = window as unknown as IGlobals;
 
 const Editor = (props: ReturnType<typeof mapStateToProps>) => {
   const overlayRef = useRef<HTMLDivElement | null>(null);

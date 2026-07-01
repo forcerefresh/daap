@@ -1,6 +1,7 @@
 import React, { CSSProperties } from "react";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
+import { ICalculatedObjectSize } from "webslider-sdk/lib/objects/objects-register";
 import { getObjectHtml } from "../../export/export-html";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 
@@ -8,7 +9,7 @@ interface StageLeafObjectProps {
   object: IObject;
   objectStyle: CSSProperties;
   maskStyle: CSSProperties;
-  calculatedObjectSizeForObject: any;
+  calculatedObjectSizeForObject: ICalculatedObjectSize;
   breakpointConfig?: BreakpointConfiguration;
 }
 

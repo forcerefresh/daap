@@ -1,3 +1,7 @@
+// Based on redux-deep-diff (MIT) — https://github.com/wwilsman/redux-deep-diff
+// Copyright (c) 2017 Wil Wilsman
+// SPDX-License-Identifier: MIT
+
 import clone from "clone-deep";
 import DiffAccumulator from "./accumulator";
 import { UNDO, REDO, JUMP, CLEAR } from "./actions";

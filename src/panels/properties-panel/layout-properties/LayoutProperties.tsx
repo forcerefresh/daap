@@ -78,30 +78,8 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     objects,
   } = props;
 
-  const renderLayerProperties = (lay: ILayer) => {
+  const renderLayerProperties = (_lay: ILayer) => {
     return null;
-    // return (
-    // <>
-    //     {renderLayoutOptions(lay, _updateLayer)}
-    //     {renderLayoutOptionProperties(lay, _updateLayer)}
-    //     {renderNamedProperties(
-    //       "definition",
-    //       layerDefinition,
-    //       lay.definition.values,
-    //       lay.definition.valuesMetadata,
-    //       lay,
-    //       _updateLayer
-    //     )}
-    //     {renderNamedProperties(
-    //       "layoutAdvance",
-    //       layoutAdvancedDefinition,
-    //       lay.layoutAdvance?.values ?? {},
-    //       lay.layoutAdvance?.valuesMetadata ?? {},
-    //       lay,
-    //       _updateLayer
-    //     )}
-    //   </>
-    // );
   };
 
   const renderObjectProperties = (obj: IObject, objectLayer: ILayer | null) => {

@@ -9,7 +9,7 @@ let absEl: Record<string, HTMLDivElement> = {};
 
 export function getAbsEl(
   id: string,
-  { x, y }: { x: any; y: any } = { x: 0, y: 0 },
+  { x, y }: { x: number; y: number } = { x: 0, y: 0 },
   append = true
 ): HTMLDivElement {
   if (absEl[id]) {

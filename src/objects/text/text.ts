@@ -427,7 +427,7 @@ export async function preloadText(props: {
     return Promise.resolve(textValues.font.fontFamily);
   }
 
-  const p = (window as any).WSFontPreloader.subscribe(
+  const p = window.WSFontPreloader?.subscribe(
     textValues.font.fontFamily,
   );
 

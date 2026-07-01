@@ -3,4 +3,4 @@ import "./objects/register-object";
 // import "./animations/register-animation";
 import "./objects/font-preloader";
 
-(window as any).WebSliderPlayer = Player;
+window.WebSliderPlayer = Player;

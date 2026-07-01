@@ -4,7 +4,7 @@ import {
   EXTERNAL_FONT_LOADED,
   SET_MY_FONTS,
 } from "../actions/actions";
-import { IGlobals } from "../../globals";
+import { getGlobals } from "../../globals";
 
 export interface IFonts {
   loadedFontFamilies: string[];
@@ -28,9 +28,9 @@ export function fonts(
 
     case SET_MY_FONTS: {
       const myFonts = action.payload;
-      const globals = window as any as IGlobals;
-      if (globals.WebSlider_GlobalScope) {
-        globals.WebSlider_GlobalScope.getMyFonts = () => myFonts;
+      const scope = getGlobals();
+      if (scope) {
+        scope.getMyFonts = () => myFonts;
       }
 
       return {

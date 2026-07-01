@@ -2,6 +2,7 @@ import { registerExternalAnimation } from "webslider-sdk/lib/animations/animatio
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import { registerExternalObject } from "webslider-sdk/lib/objects/objects-register";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { getGlobals } from "../globals";
 
 export async function loadAndRegisterExternalComponentForPlayer(
   extension: IExtensionItem
@@ -17,12 +18,8 @@ export async function loadAndRegisterExternalComponentForPlayer(
       : "./extensions/" + extensionFileName;
 
   try {
-    await import(
-      /* @ts-ignore */
-      /* webpackIgnore: true */
-      /* @vite-ignore */
-      extensionUrl
-    );
+    // @vite-ignore and webpackIgnore needed for dynamic external URL imports
+    await import(/* webpackIgnore: true */ /* @vite-ignore */ extensionUrl);
   } catch (ex) {
     console.error(
       `Cannot load external component type: ${extension.extensionType}; version: ${extension.version}; name: ${extension.name}. Exception: ${ex}`
@@ -33,18 +30,15 @@ export async function loadAndRegisterExternalComponentForPlayer(
 }
 
 function registerExternalExtensionForPlayer(extension: IExtensionItem) {
+  const scope = getGlobals();
   if (extension.extensionType === "object") {
-    const playerObj = (window as any).WebSlider_GlobalScope.playerObjects[
-      extension.type
-    ];
+    const playerObj = scope.playerObjects?.[extension.type];
 
     registerExternalObject(undefined, playerObj);
 
     logger.object.info(`Object '${extension.type}' has been registered`);
   } else if (extension.extensionType === "animation") {
-    const playerObj = (window as any).WebSlider_GlobalScope.playerAnimations[
-      extension.type
-    ];
+    const playerObj = scope.playerAnimations?.[extension.type];
 
     registerExternalAnimation(undefined, playerObj, true);
 

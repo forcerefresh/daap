@@ -594,8 +594,8 @@ const mapStateToProps = (state: IStore) => {
 
   const breakpointConfig: BreakpointConfiguration | undefined =
     settings.breakpoints.breakpointsConfiguration.find(
-      (breakpointConfig: any) =>
-        breakpointConfig.type === state.stage.selectedDevice,
+      (bp: BreakpointConfiguration) =>
+        bp.type === state.stage.selectedDevice,
     );
 
   const zoom = getZoom(stage, settings);
@@ -658,7 +658,7 @@ const StageObject = withErrorBoundary(
 export default StageObject;
 
 function calculateBounds(
-  objectById: any,
+  objectById: Record<string, IObject>,
   changedObj: IObject,
   useChangeObject: boolean,
 ): Rect | undefined {
@@ -709,7 +709,7 @@ const styleStringToObject = (styleString: string) => {
       const camelCaseKey = trimmedKey.replace(/-([a-z])/g, (g) =>
         g[1].toUpperCase(),
       );
-      (styleObject as any)[camelCaseKey] = value.trim();
+      (styleObject as Record<string, string>)[camelCaseKey] = value.trim();
     }
   });
   return styleObject;

@@ -1,4 +1,5 @@
 import { SaaSMediaData } from "webslider-sdk/lib/common/i-media-types";
+import { IGlobals } from "../../../globals";
 
 let localMedia: {
   getMediaSrc: (
@@ -26,8 +27,8 @@ if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
 
 export const getMediaSrc = localMedia.getMediaSrc;
 
-// NOTE has to be on global scope in order to be  available in external extensions
-const global = window as any;
+// NOTE has to be on global scope in order to be available in external extensions
+const global = window as unknown as IGlobals;
 if (!global.WebSlider_GlobalScope) {
   global.WebSlider_GlobalScope = {};
 }

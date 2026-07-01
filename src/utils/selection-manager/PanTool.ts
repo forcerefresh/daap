@@ -20,8 +20,8 @@ export class PanTool extends EventTarget implements IStageTool {
     this.mouseMove = this.handleMouseMove.bind(this);
     this.mouseUp = this.handleMouseUp.bind(this);
 
-    (window as any).addEventListener("mousemove", this.mouseMove);
-    (window as any).addEventListener("mouseup", this.mouseUp);
+    window.addEventListener("mousemove", this.mouseMove);
+    window.addEventListener("mouseup", this.mouseUp);
   }
 
   handleMouseMove(e: MouseEvent) {
@@ -61,8 +61,8 @@ export class PanTool extends EventTarget implements IStageTool {
       })
     );
 
-    (window as any).removeEventListener("mousemove", this.mouseMove);
-    (window as any).removeEventListener("mouseup", this.mouseUp);
+    window.removeEventListener("mousemove", this.mouseMove);
+    window.removeEventListener("mouseup", this.mouseUp);
   }
 
   stop() {}

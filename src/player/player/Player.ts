@@ -52,7 +52,7 @@ import {
 
 // gsap.defaults(); // in order to bundle gsap
 // gsap.install(window);
-(window as any).animejs = animejs;
+window.animejs = animejs;
 
 export enum InTransitionEnum {
   NO = 0,

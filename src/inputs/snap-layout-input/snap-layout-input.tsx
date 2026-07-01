@@ -83,8 +83,7 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
           EDGE_OPTIONS,
           (newEdge) => {
             onChange(
-              { ...value, common: { ...value.common, edge: newEdge } },
-              { disabled: inputProps.disablePosition } // TODO << this is probably not needed
+              { ...value, common: { ...value.common, edge: newEdge } }
             );
           },
           { disabled: inputProps.disablePosition }
@@ -136,21 +135,6 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
           "",
           { disabled: inputProps.disablePosition }
         )}
-        {/* {getNumericFiled(
-          "Offset",
-          value.common.gap,
-          (newGap) => {
-            onChange({
-              ...value,
-              common: {
-                ...value.common,
-                gap: newGap,
-              },
-            });
-          },
-          "Offset is deprecated",
-          { disabled: true }
-        )} */}
       </>
     );
   };
@@ -314,40 +298,6 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
           { disabled: t !== selectedDevice }
         )}
 
-        {/*getNumericFiled(
-          "",
-          oneValue?.[propertyName],
-          (v: any) => {
-            const newValue = cloneDeep(value);
-            const oneV = newValue.perDevice.find(
-              (item) => item.deviceType === t
-            );
-            if (oneV) {
-              if (keepAspectRatio) {
-                const oldValue = perDevice.find(
-                  (item) => item.deviceType === t
-                );
-                const mult = getMultiplier(oldValue!);
-
-                if (propertyName === "width") {
-                  oneV.height = roundNumber(mult.hMultiplier * v, 1);
-                  if (isNaN(oneV.height)) oneV.height = 0;
-                }
-                if (propertyName === "height") {
-                  oneV.width = roundNumber(mult.vMultiplier * v, 1);
-                  if (isNaN(oneV.width)) oneV.width = 0;
-                }
-              }
-              oneV[propertyName] = roundNumber(v, 1);
-            }
-            onChange(newValue);
-          },
-          "",
-          {
-            disabled: t !== selectedDevice,
-            className: css.perDeviceInput,
-          }
-        )*/}
       </td>
     );
   };

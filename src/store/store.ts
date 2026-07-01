@@ -2,6 +2,9 @@ import {
   combineReducers,
   createStore,
   applyMiddleware,
+  Middleware,
+  AnyAction,
+  Reducer,
 } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
 import diff from "../3rd-party-libs/undo-redo/reducer";
@@ -42,8 +45,8 @@ export interface IStore {
     // document: IDocument;
     settings: ISettings;
     diff: {
-      prev: any[];
-      next: any[];
+      prev: unknown[];
+      next: unknown[];
     };
   };
   account: IAccount;
@@ -79,7 +82,7 @@ const project = diff(
       );
     },
   }
-) as any;
+) as Reducer<IStore["project"], AnyAction>;
 
 const rootReducer = combineReducers({
   meta,
@@ -91,20 +94,19 @@ const rootReducer = combineReducers({
   account,
   uiforms,
   ai,
-}) as any;
+}) as Reducer<IStore, AnyAction>;
 
-const logger = (store: any) => (next: any) => (action: any) => {
-  let result = next(action);
-  return result;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const logger: Middleware = (_store) => (next) => (action) => {
+  return next(action);
 };
 
-const documentChange = (store: any) => (next: any) => (action: any) => {
-  if (action.isUndoable && !action.skipHistory) {
+const documentChange: Middleware = (store) => (next) => (action) => {
+  const a = action as AnyAction;
+  if (a.isUndoable && !a.skipHistory) {
     store.dispatch(updateEditor({ sliderChanged: true }));
   }
-
-  let result = next(action);
-  return result;
+  return next(action);
 };
 
 export const store = createStore(
