@@ -1,0 +1,57 @@
+// DAAP Design Tokens
+//
+// Use $daap-* variables in all new code.
+// The $pt-* aliases in theme.scss exist only for backwards compatibility
+// with existing panel and component files.
+
+// ─── Backgrounds ──────────────────────────────────────────────────
+
+$daap-bg-primary:             #e5e5e5;
+$daap-bg-primary-dark:        rgb(51, 51, 51);
+$daap-bg-secondary:           rgb(251, 251, 251);
+$daap-bg-secondary-dark:      rgb(41, 41, 41);
+$daap-bg-card-dark:           #363636;
+$daap-bg-select-dark:         #282828;
+$daap-bg-popover-dark:        #333333;
+
+// ─── Text ─────────────────────────────────────────────────────────
+
+$daap-text-primary-dark:      #e3e5e9;
+$daap-text-muted:             #555555;
+$daap-text-heading-dark:      #f6f7f9;
+
+// ─── Interactive / State ──────────────────────────────────────────
+
+$daap-color-active:           #4a90c5;
+$daap-color-device-all:       #24ac23;
+$daap-color-device-all-dark:  #34ec43;
+$daap-color-device-none:      #ff4555;
+$daap-color-device-none-dark: #ff5f6d;
+
+// ─── Layer / Row ──────────────────────────────────────────────────
+
+$daap-layer-header:           #dddddd;
+$daap-layer-header-dark:      #2b2b2b;
+$daap-row-selection:          #d2d2d2;
+$daap-row-selection-dark:     #444444;
+
+// ─── Borders ──────────────────────────────────────────────────────
+
+$daap-border:                 #bdbdbd;
+$daap-border-dark:            #0e0e0e;
+
+// ─── Stage guidelines ─────────────────────────────────────────────
+
+$daap-guide-page:             1px solid #ff2121;
+$daap-guide-stage:            1px solid #45c750;
+$daap-guide-box:              1px solid #00d6ff;
+$daap-guide-page-dark:        1px dotted #ff2121;
+$daap-guide-stage-dark:       1px dotted #45c750;
+$daap-guide-box-dark:         1px dotted #00d6ff;
+
+// ─── Toolbar ──────────────────────────────────────────────────────
+
+$daap-toolbar-btn-size-lg:    54px;
+$daap-toolbar-btn-svg-lg:     32px;
+$daap-toolbar-btn-size-sm:    27px;
+$daap-toolbar-btn-svg-sm:     18px;
