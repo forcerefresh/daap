@@ -37,15 +37,12 @@ These still wrap a plain text node in `<RightPanelHeader>`. Safe to change to `t
 
 ---
 
-### 🔲 Pending — complex: title + action buttons (use PanelShell)
+### ✅ Migrated — complex: title + action buttons (PanelShell)
 
-These panels have both a title and action buttons. They should migrate to `<PanelShell title="..." actions={...}>` rather than `PanelHeader`.
-
-| Panel | File | Notes |
-|-------|------|-------|
-| SlidesPanel | `src/panels/slides-panel/SlidesPanel.tsx` | Title "PAGES" + add-page button + more-menu button |
-| LayersPanel | `src/panels/layers-panel/LayersPanel.tsx` | Title + layer add/options buttons |
-| ActionPanel | `src/panels/action-panel/ActionPanel.tsx` | Custom header with multiple regions |
+| Panel | File |
+|-------|------|
+| SlidesPanel | `src/panels/slides-panel/SlidesPanel.tsx` |
+| LayersPanel | `src/panels/layers-panel/LayersPanel.tsx` |
 
 ---
 
@@ -54,6 +51,7 @@ These panels have both a title and action buttons. They should migrate to `<Pane
 | Panel | File | Reason |
 |-------|------|--------|
 | PropertiesPanelAll | `src/panels/properties-panel-all/PropertiesPanelAll.tsx` | Header commented out intentionally |
+| ActionPanel | `src/panels/action-panel/ActionPanel.tsx` | Not in use in MainLayout |
 
 ---
 
