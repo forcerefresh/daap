@@ -8,6 +8,7 @@ import {
   Popover,
   Switch,
 } from "@blueprintjs/core";
+import { ICON_COLORS } from "../input-icon-colors";
 import { cloneDeep, includes, remove } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
@@ -65,8 +66,8 @@ const ExtraOptionsInput: React.FC<IExtraOptionsInput> = (props) => {
         const tickColor =
           !metadataValues.disabled &&
           includes(metadataValues?.devices ?? [], bpConfig.type)
-            ? "#34ec43"
-            : "#666";
+            ? ICON_COLORS.enabled
+            : ICON_COLORS.disabled;
 
         return (
           <MenuItem
@@ -117,7 +118,7 @@ const ExtraOptionsInput: React.FC<IExtraOptionsInput> = (props) => {
           icon={
             <Icon
               icon="tick-circle"
-              color={metadataValues.disabled ? "#666" : "#34ec43"}
+              color={metadataValues.disabled ? ICON_COLORS.disabled : ICON_COLORS.enabled}
             />
           }
           text="Enabled"
@@ -163,11 +164,11 @@ const ExtraOptionsInput: React.FC<IExtraOptionsInput> = (props) => {
   };
 
   const getIcon = () => {
-    let color = "#bbb";
+    let color: string = ICON_COLORS.neutral;
     if (metadataValues.disabled) {
-      color = "#ff5151";
+      color = ICON_COLORS.danger;
     } else if ((metadataValues?.devices ?? []).length > 0) {
-      color = "#34ec43";
+      color = ICON_COLORS.enabled;
     }
     return <Icon color={color} icon="more" intent="danger" size={16} />;
   };

@@ -51,14 +51,12 @@ The daap project is a web-based design editor (rich interactive presentations/sl
 - `src/theme.scss` — kept for Blueprint variable overrides only; all SCSS modules now import `tokens.scss` directly
 - All 42 SCSS module files migrated from `$pt-*` → `$daap-*`; zero remaining `$pt-*` usages outside `theme.scss`
 
-### 3B: Input Component Standardization
+### 3B: Input Component Standardization ✅ COMPLETE
 
-Current state: 58+ input component directories in `src/inputs/`, many with duplicated patterns.
-
-- Define a standard `IInputProps<T>` interface that all inputs implement
-- Audit `src/inputs/input-utils.tsx` and `src/inputs/input-factory.tsx` — document what each factory function produces
-- Identify and merge duplicate inputs (e.g., multiple numeric input variants)
-- Ensure every input uses the token system from 3A
+- **Contract** — all 58 inputs already follow `React.FC<I<Type>Input & IUpdateInput>` from `webslider-sdk`; no new interface needed
+- **Factory & utils** — documented in `src/inputs/i-base-input-props.ts` (contract, callback semantics, factory entry points, known duplicate groups)
+- **Token adoption** — `src/inputs/input-icon-colors.ts` created; all hardcoded hex color strings in active input code replaced with named `ICON_COLORS.*` constants; 4 new icon-state tokens added to `tokens.scss`
+- **Duplicate assessment** — Numeric/Size/Text/Color groups have distinct value shapes and are justified separate components; documented in `i-base-input-props.ts` as known duplicates (do not add more)
 
 ### 3C: Panel Layout Pattern
 
@@ -202,7 +200,7 @@ daap-plugin-ai-generator/
 |-------|------|--------|--------------|
 | 1 | TypeScript error resolution + dead code removal + ESLint | ✅ Done | — |
 | 2 | Library license audit | ✅ Done | — |
-| 3 | Style guide + UI unification | 🔄 In progress (3A ✅, 3C ✅, 3B pending) | Phase 1 |
+| 3 | Style guide + UI unification | ✅ Done (3A ✅, 3B ✅, 3C ✅) | Phase 1 |
 | 4 | Snap to guideline rewrite | Pending | Phase 1 |
 | 5 | Player extraction | Pending | Phase 1 + 2 |
 | 6 | AI plugin system | Pending | Phase 5 |

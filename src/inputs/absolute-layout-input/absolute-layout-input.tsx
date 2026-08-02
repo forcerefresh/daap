@@ -20,6 +20,7 @@ import {
   IAbsoluteLayoutInput,
   IUpdateInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
+import { ICON_COLORS } from "../input-icon-colors";
 import css from "./absolute-layout-input.module.scss";
 
 // const RELATIVE_TO_OPTIONS = [
@@ -315,7 +316,7 @@ export const AbsolutePlacementForm: React.FC<
             }}
             active={keepAspectRatio}
           >
-            <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={"gray"} />
+            <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={ICON_COLORS.inactive} />
           </Button>
           <div className={css.linkBottom} />
         </div>

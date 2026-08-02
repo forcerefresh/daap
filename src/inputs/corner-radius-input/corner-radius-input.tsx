@@ -8,6 +8,7 @@ import {
   ICornerRadiusValue,
   IUpdateInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
+import { ICON_COLORS } from "../input-icon-colors";
 import css from "./corner-radius-input.module.scss";
 import { createInputLabel } from "../input-helpers";
 
@@ -73,7 +74,7 @@ export const CornerRadiusInputForm: React.FC<
           }
         }}
       >
-        <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={"gray"} />
+        <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={ICON_COLORS.inactive} />
       </Button>
     );
   }, [inputProps?.disabled, isLinked, onChange, internalValue]);

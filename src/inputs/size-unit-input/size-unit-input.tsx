@@ -7,6 +7,7 @@ import {
   IUpdateInput,
   Units,
 } from "webslider-sdk/lib/inputs/i-inputs";
+import { ICON_COLORS } from "../input-icon-colors";
 import css from "./size-unit-input.module.scss";
 
 const SMALL_ICON_SIZE = 18;
@@ -182,7 +183,7 @@ export const SizeUnitInputForm: React.FC<ISizeInput & IUpdateInput> = (
           }}
           active={keepAspectRatio}
         >
-          <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={"gray"} />
+          <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={ICON_COLORS.inactive} />
         </Button>
         <div className={css.linkBottom} />
       </div>*/}

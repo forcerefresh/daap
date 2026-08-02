@@ -4,6 +4,7 @@ import { cloneDeep } from "lodash-es";
 import { Button, Icon, Label } from "@blueprintjs/core";
 import { getUnitNumericFiled } from "../input-utils";
 import { IBoxInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
+import { ICON_COLORS } from "../input-icon-colors";
 import css from "./box-input.module.scss";
 
 const SMALL_ICON_SIZE = 18;
@@ -49,7 +50,7 @@ export const BoxInputForm: React.FC<IBoxInput & IUpdateInput> = (props) => {
           }
         }}
       >
-        <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={"gray"} />
+        <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={ICON_COLORS.inactive} />
       </Button>
     );
   };

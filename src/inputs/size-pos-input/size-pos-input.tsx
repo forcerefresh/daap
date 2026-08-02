@@ -3,6 +3,7 @@ import { isEqual, noop, pick } from "lodash-es";
 import React, { useEffect, useRef, useState } from "react";
 import { ISizePosInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
 import { getUnitNumericFiled } from "../input-utils";
+import { ICON_COLORS } from "../input-icon-colors";
 import css from "./size-pos-input.module.scss";
 
 const SMALL_ICON_SIZE = 18;
@@ -244,7 +245,7 @@ export const SizePosInputForm: React.FC<ISizePosInput & IUpdateInput> = (
           }}
           active={keepAspectRatio}
         >
-          <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={"gray"} />
+          <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={ICON_COLORS.inactive} />
         </Button>
         <div className={css.linkBottom} />
       </div>
@@ -269,7 +270,7 @@ export const SizePosInputForm: React.FC<ISizePosInput & IUpdateInput> = (
           }}
           active={keepAspectRatio}
         >
-          <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={"gray"} />
+          <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={ICON_COLORS.inactive} />
         </Button>
       </div> */}
     </div>

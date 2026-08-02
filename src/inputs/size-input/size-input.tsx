@@ -2,6 +2,7 @@ import { Button, FormGroup, Icon, InputGroup, Intent } from "@blueprintjs/core";
 import { isEqual, noop, pick } from "lodash-es";
 import React, { useEffect, useRef, useState } from "react";
 import { ISizeInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
+import { ICON_COLORS } from "../input-icon-colors";
 import css from "./size-input.module.scss";
 
 const SMALL_ICON_SIZE = 18;
@@ -149,7 +150,7 @@ export const SizeInputForm: React.FC<ISizeInput & IUpdateInput> = (props) => {
           }}
           active={keepAspectRatio}
         >
-          <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={"gray"} />
+          <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={ICON_COLORS.inactive} />
         </Button>
         <div className={css.linkBottom} />
       </div>
