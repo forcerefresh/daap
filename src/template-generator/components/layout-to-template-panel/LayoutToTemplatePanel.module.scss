@@ -1,6 +1,6 @@
-@import "/src/theme";
+@import "/src/tokens";
 
-@import "/src/theme";
+@import "/src/tokens";
 
 .red {
   color: red;
@@ -14,8 +14,8 @@
   width: calc(100% - 68px);
   height: calc(var(--daap-forcerefresh-app-height) - 52px);
 
-  background: $pt-app-background-color;
-  box-shadow: $pt-elevation-shadow-0;
+  background: $daap-bg-primary;
+  box-shadow: $daap-shadow-0;
 
   padding: 0 30px 30px 30px;
   overflow: auto;
@@ -121,8 +121,8 @@
 
 :global(.bp5-dark) {
   &.layout2TemplatePanel {
-    background: $pt-dark-app-background-color !important;
-    // box-shadow: $pt-dark-elevation-shadow-1 !important;
+    background: $daap-bg-primary-dark !important;
+    // box-shadow: $daap-shadow-dark-1 !important;
     border-right: 1px solid #555;
     border-left: 1px solid #111;
   }

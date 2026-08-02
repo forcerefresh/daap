@@ -1,4 +1,4 @@
-@import "../../../../theme"; // Adjust path to your theme file
+@import "../../../../tokens";
 @import "@blueprintjs/core/lib/scss/variables";
 .languageSelector {
   display: flex;
@@ -9,31 +9,31 @@
   display: inline-flex;
   border-radius: 4px; // Reduced from 6px
   overflow: hidden;
-  // border: 1px solid $pt-panel-border-color;
+  // border: 1px solid $daap-border;
   background-color: white;
   height: 24px; // Reduced from 32px
 
   :global(.bp5-dark) & {
-    border-color: $pt-dark-panel-border-color;
-    background-color: $pt-dark-app-background-color;
+    border-color: $daap-border-dark;
+    background-color: $daap-bg-primary-dark;
   }
 }
 
 .badgeLeft {
   padding: 0.25rem 0.5rem; // Reduced from 0.5rem 0.75rem
-  background-color: $pt-layer-header-color;
-  color: $pt-text-color-muted;
+  background-color: $daap-layer-header;
+  color: $daap-text-muted;
   font-weight: 500;
   font-size: 0.75rem; // Reduced from 0.85rem
   display: flex;
   align-items: center;
-  // border-right: 1px solid $pt-panel-border-color;
+  // border-right: 1px solid $daap-border;
   white-space: nowrap;
 
   :global(.bp5-dark) & {
-    background-color: $pt-dark-layer-header-color;
-    color: $pt-dark-text-color-disabled;
-    // border-right-color: $pt-dark-panel-border-color;
+    background-color: $daap-layer-header-dark;
+    color: $daap-text-disabled-dark;
+    // border-right-color: $daap-border-dark;
   }
 }
 
@@ -51,12 +51,12 @@
       min-width: 120px; // Reduced from 140px
 
       :global(.bp5-dark) & {
-        color: $pt-dark-text-color;
-        background-color: $pt-dark-app-background-color;
+        color: $daap-text-primary-dark;
+        background-color: $daap-bg-primary-dark;
       }
 
       &:focus {
-        background-color: rgba($pt-active-color, 0.1);
+        background-color: rgba($daap-color-active, 0.1);
       }
       // Target the caret icon
     }

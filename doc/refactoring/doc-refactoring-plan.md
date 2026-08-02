@@ -45,10 +45,11 @@ The daap project is a web-based design editor (rich interactive presentations/sl
 
 **Goal:** Consistent visual language and component patterns across all panels and inputs.
 
-### 3A: Design Token Formalization
+### 3A: Design Token Formalization ✅ COMPLETE
 
-- `src/theme.scss` has DAAP-specific variables and Blueprint.js overrides — extract into a formal token file (`src/tokens.scss`) with documented categories: color, spacing, typography, borders
-- Establish naming convention: `--daap-color-primary`, `--daap-spacing-md`, etc.
+- `src/tokens.scss` — all tokens defined under `$daap-*` naming convention: backgrounds, text, interactive states, layer/row, borders, stage guidelines, shadows, icons, toolbar
+- `src/theme.scss` — kept for Blueprint variable overrides only; all SCSS modules now import `tokens.scss` directly
+- All 42 SCSS module files migrated from `$pt-*` → `$daap-*`; zero remaining `$pt-*` usages outside `theme.scss`
 
 ### 3B: Input Component Standardization
 
@@ -201,7 +202,7 @@ daap-plugin-ai-generator/
 |-------|------|--------|--------------|
 | 1 | TypeScript error resolution + dead code removal + ESLint | ✅ Done | — |
 | 2 | Library license audit | ✅ Done | — |
-| 3 | Style guide + UI unification | 🔄 In progress | Phase 1 |
+| 3 | Style guide + UI unification | 🔄 In progress (3A ✅, 3C ✅, 3B pending) | Phase 1 |
 | 4 | Snap to guideline rewrite | Pending | Phase 1 |
 | 5 | Player extraction | Pending | Phase 1 + 2 |
 | 6 | AI plugin system | Pending | Phase 5 |

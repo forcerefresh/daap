@@ -1,4 +1,4 @@
-@import "/src/theme";
+@import "/src/tokens";
 
 .stagePanel {
   :global {
@@ -14,7 +14,7 @@
     // $bg-color: red !important;
     // $dot-color: blue !important;
 
-    // $bg-color: #1e1e1e; //$pt-dark-app-background-color-secondary;
+    // $bg-color: #1e1e1e; //$daap-bg-secondary-dark;
     // $dot-color: $gray3;
 
     // // Dimensions
@@ -47,7 +47,7 @@
     user-select: none;
   }
 
-  // $bg-color: #eeeeee; //$pt-app-background-color-secondary;
+  // $bg-color: #eeeeee; //$daap-bg-secondary;
   // $dot-color: $gray3;
 
   // Dimensions
@@ -220,25 +220,25 @@
 
 .guidelinesBorder {
   position: absolute;
-  border: $pt-stage-guidebox-guidelines-border;
+  border: $daap-guide-box;
   pointer-events: none;
 }
 
 .pageBorder {
   position: absolute;
-  border: $pt-stage-page-guidelines-border;
+  border: $daap-guide-page;
   pointer-events: none;
 }
 
 .stageBorder {
   position: absolute;
-  border: $pt-stage-stage-guidelines-border;
+  border: $daap-guide-stage;
   pointer-events: none;
 }
 
 .marginBorder {
   position: absolute;
-  border: $pt-stage-stage-guidelines-border;
+  border: $daap-guide-stage;
   pointer-events: none;
 
   transform-origin: top left;
@@ -248,19 +248,19 @@
 
 :global(.bp5-dark) {
   .guidelinesBorder {
-    border: 1px dotted $pt-dark-stage-guidebox-guidelines-border;
+    border: 1px dotted $daap-guide-box-dark;
   }
 
   .pageBorder {
-    border: $pt-dark-stage-page-guidelines-border;
+    border: $daap-guide-page-dark;
   }
 
   .stageBorder {
-    border: $pt-dark-stage-stage-guidelines-border;
+    border: $daap-guide-stage-dark;
   }
 
   .marginBorder {
-    border: $pt-dark-stage-stage-guidelines-border;
+    border: $daap-guide-stage-dark;
   }
 }
 

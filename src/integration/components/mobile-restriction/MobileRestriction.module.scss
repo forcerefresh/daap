@@ -1,4 +1,4 @@
-@import "../../../theme"; // Adjust path to your theme file
+@import "../../../tokens";
 
 .mobileContainer {
   position: absolute;
@@ -9,10 +9,10 @@
   justify-content: center;
   padding: 20px;
 
-  background-color: $pt-app-background-color;
+  background-color: $daap-bg-primary;
 
   :global(.bp5-dark) & {
-    background-color: $pt-dark-app-background-color;
+    background-color: $daap-bg-primary-dark;
   }
 }
 

@@ -1,8 +1,8 @@
-@import "/src/theme";
+@import "/src/tokens";
 
 :global(.bp5-dark) {
   .propertiesSections {
-    background: $pt-dark-app-background-color;
+    background: $daap-bg-primary-dark;
   }
 }
 
@@ -11,7 +11,7 @@
   text-align: center;
   padding: 0px; //8px 0px 4px 0px;
   color: gray;
-  background: $pt-app-background-color;
+  background: $daap-bg-primary;
 
   :global {
     *,

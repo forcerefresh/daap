@@ -17,33 +17,33 @@
 
 .suggestionsLabel {
   font-size: 0.9rem;
-  color: $pt-text-color-muted;
+  color: $daap-text-muted;
   margin-bottom: 0.5rem;
   align-items: center;
   // margin-left: 0.5rem;
 
   :global(.bp5-dark) & {
-    color: $pt-dark-text-color-muted;
+    color: $daap-text-muted-dark;
   }
 }
 
 .suggestionButton {
   font-size: 0.85rem;
-  color: $pt-text-color-muted;
+  color: $daap-text-muted;
   // font-style: italic;
 
   font-weight: 100;
   &:hover {
-    background: rgba($pt-text-color-muted, 0.1);
-    color: $pt-text-color;
+    background: rgba($daap-text-muted, 0.1);
+    color: $daap-text-primary;
   }
 
   :global(.bp5-dark) & {
-    color: $pt-dark-text-color-muted !important;
+    color: $daap-text-muted-dark !important;
 
     &:hover {
-      background: rgba($pt-dark-text-color-muted, 0.1);
-      color: $pt-dark-text-color-muted;
+      background: rgba($daap-text-muted-dark, 0.1);
+      color: $daap-text-muted-dark;
     }
   }
 }

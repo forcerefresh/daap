@@ -1,5 +1,5 @@
 // SearchPage.module.scss
-@import "../../theme"; // Adjust path to your theme file
+@import "../../tokens";
 
 $dark-border-color: #4f4f4f;
 
@@ -12,11 +12,11 @@ $dark-border-color: #4f4f4f;
   justify-content: center;
   min-height: 100vh;
 
-  background-color: $pt-app-background-color;
+  background-color: $daap-bg-primary;
   overflow: auto;
 
   :global(.bp5-dark) & {
-    background-color: $pt-dark-app-background-color;
+    background-color: $daap-bg-primary-dark;
   }
 
   &.expanded {
@@ -84,8 +84,8 @@ $dark-border-color: #4f4f4f;
     z-index: 1000;
     background: linear-gradient(
       to bottom,
-      $pt-app-background-color 0%,
-      $pt-app-background-color 80%,
+      $daap-bg-primary 0%,
+      $daap-bg-primary 80%,
       transparent 100%
     );
     padding: 1rem 0;
@@ -102,8 +102,8 @@ $dark-border-color: #4f4f4f;
     :global(.bp5-dark) & {
       background: linear-gradient(
         to bottom,
-        $pt-dark-app-background-color 0%,
-        $pt-dark-app-background-color 80%,
+        $daap-bg-primary-dark 0%,
+        $daap-bg-primary-dark 80%,
         transparent 100%
       );
     }
@@ -113,22 +113,22 @@ $dark-border-color: #4f4f4f;
 .searchInputContainer {
   width: 100%;
   max-width: 800px;
-  border: 1px solid $pt-panel-border-color;
+  border: 1px solid $daap-border;
   border-radius: 16px;
-  background-color: $pt-app-background-color-secondary;
+  background-color: $daap-bg-secondary;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   z-index: 100;
 
   :global(.bp5-dark) & {
-    background-color: $pt-dark-app-background-color-secondary;
+    background-color: $daap-bg-secondary-dark;
     border-color: $dark-border-color;
   }
 
   &.focused {
-    border-color: $pt-active-color;
-    box-shadow: 0 4px 12px -1px rgba($pt-active-color, 0.15);
+    border-color: $daap-color-active;
+    box-shadow: 0 4px 12px -1px rgba($daap-color-active, 0.15);
   }
 
   // Expanded state - now handled by sticky container
@@ -157,14 +157,14 @@ $dark-border-color: #4f4f4f;
   box-shadow: none !important;
 
   :global(.bp5-dark) & {
-    color: $pt-dark-text-color;
+    color: $daap-text-primary-dark;
   }
 
   &::placeholder {
-    color: $pt-text-color-muted;
+    color: $daap-text-muted;
 
     :global(.bp5-dark) & {
-      color: lighten($pt-dark-app-background-color, 40%);
+      color: lighten($daap-bg-primary-dark, 40%);
     }
   }
 
@@ -186,11 +186,11 @@ $dark-border-color: #4f4f4f;
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0.5rem;
-  background-color: rgba($pt-layer-header-color, 0.5);
+  background-color: rgba($daap-layer-header, 0.5);
   transition: all 0.3s ease;
 
   :global(.bp5-dark) & {
-    background-color: rgba($pt-dark-layer-header-color, 0.5);
+    background-color: rgba($daap-layer-header-dark, 0.5);
   }
 }
 
@@ -200,19 +200,19 @@ $dark-border-color: #4f4f4f;
 
 .badgeLeft {
   padding: 0.5rem 0.75rem;
-  background-color: $pt-layer-header-color;
-  color: $pt-text-color-muted;
+  background-color: $daap-layer-header;
+  color: $daap-text-muted;
   font-weight: 500;
   font-size: 0.85rem;
   display: flex;
   align-items: center;
-  border-right: 1px solid $pt-panel-border-color;
+  border-right: 1px solid $daap-border;
   white-space: nowrap;
 
   :global(.bp5-dark) & {
-    background-color: $pt-dark-layer-header-color;
-    color: $pt-dark-text-color;
-    border-right-color: $pt-dark-panel-border-color;
+    background-color: $daap-layer-header-dark;
+    color: $daap-text-primary-dark;
+    border-right-color: $daap-border-dark;
   }
 }
 
@@ -231,12 +231,12 @@ $dark-border-color: #4f4f4f;
       min-height: 20px !important;
 
       :global(.bp5-dark) & {
-        color: $pt-dark-text-color;
-        background-color: $pt-dark-app-background-color;
+        color: $daap-text-primary-dark;
+        background-color: $daap-bg-primary-dark;
       }
 
       &:focus {
-        background-color: rgba($pt-active-color, 0.1);
+        background-color: rgba($daap-color-active, 0.1);
       }
     }
   }
@@ -265,10 +265,10 @@ $dark-border-color: #4f4f4f;
   gap: 0.5rem;
 
   &:not(:disabled) {
-    // background-color: $pt-active-color;
+    // background-color: $daap-color-active;
 
     &:hover {
-      // background-color: darken($pt-active-color, 10%);
+      // background-color: darken($daap-color-active, 10%);
     }
   }
 
@@ -285,10 +285,10 @@ $dark-border-color: #4f4f4f;
   p {
     margin: 0;
     font-size: 0.9rem;
-    color: $pt-text-color-muted;
+    color: $daap-text-muted;
 
     :global(.bp5-dark) & {
-      color: lighten($pt-dark-app-background-color, 40%);
+      color: lighten($daap-bg-primary-dark, 40%);
     }
   }
 }

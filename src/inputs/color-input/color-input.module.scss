@@ -1,4 +1,4 @@
-@import "/src/theme";
+@import "/src/tokens";
 
 .colorInput {
   height: 25px;
@@ -44,7 +44,7 @@
     //box-shadow: none !important;
     height: fit-content;
 
-    background-color: $pt-app-background-color !important;
+    background-color: $daap-bg-primary !important;
 
     *,
     *:hover,
@@ -54,20 +54,20 @@
   }
 
   .bp5-dark .color-picker-popover .bp5-popover-content {
-    background-color: $pt-dark-app-background-color !important;
+    background-color: $daap-bg-primary-dark !important;
   }
 
   // color picker
   .sketch-picker {
     width: 300px !important;
 
-    background-color: $pt-app-background-color !important;
+    background-color: $daap-bg-primary !important;
     box-shadow: none !important;
     color: black !important;
   }
 
   .bp5-dark .sketch-picker {
-    background-color: $pt-dark-app-background-color !important;
+    background-color: $daap-bg-primary-dark !important;
   }
 
   .bp5-dark .sketch-picker label {

@@ -1,11 +1,11 @@
-@import "/src/theme";
+@import "/src/tokens";
 
 :global(.bp5-dark) {
   .floatingPointer {
-    // color: $pt-dark-text-color-muted;
+    // color: $daap-text-muted-dark;
   }
   .floatingPointerInner {
-    background: $pt-dark-app-background-color;
+    background: $daap-bg-primary-dark;
   }
 }
 
@@ -32,7 +32,7 @@
 .floatingPointerInner {
   padding: 4px;
   // padding: 4px;
-  background: $pt-app-background-color;
+  background: $daap-bg-primary;
   display: inline-flex;
   max-width: fit-content;
   margin: 0 auto;

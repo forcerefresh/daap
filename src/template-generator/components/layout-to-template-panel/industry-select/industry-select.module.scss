@@ -1,13 +1,13 @@
-@import "/src/theme";
+@import "/src/tokens";
 
 .selectPopover {
   max-height: 400px;
   overflow: auto;
-  background-color: $pt-app-background-color;
+  background-color: $daap-bg-primary;
 }
 
 :global(.bp5-dark) {
   .selectPopover {
-    background: $pt-dark-app-background-color !important;
+    background: $daap-bg-primary-dark !important;
   }
 }

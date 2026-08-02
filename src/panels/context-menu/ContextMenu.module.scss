@@ -1,8 +1,8 @@
-@import "/src/theme";
+@import "/src/tokens";
 
 :global(.bp5-dark) {
   .contextMenu {
-    background: $pt-dark-app-background-color;
+    background: $daap-bg-primary-dark;
   }
 }
 
@@ -11,5 +11,5 @@
     color: inherit !important;
   }
 
-  background: $pt-app-background-color;
+  background: $daap-bg-primary;
 }

@@ -1,4 +1,4 @@
-@import "/src/theme";
+@import "/src/tokens";
 
 // COMMON STYLE
 .mainLayout {
@@ -35,12 +35,12 @@
 
   .right {
     z-index: 95;
-    background: $pt-app-background-color;
+    background: $daap-bg-primary;
   }
 }
 :global(.bp5-dark) {
   .right {
-    background: #252526; //$pt-dark-app-background-color;
+    background: #252526; //$daap-bg-primary-dark;
   }
 }
 
@@ -91,7 +91,7 @@
       display: flex;
       flex-direction: column;
       //box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
-      border-left: 1px solid $pt-panel-border-color;
+      border-left: 1px solid $daap-border;
 
       width: 352px;
 
@@ -127,7 +127,7 @@
         // height: 70vh !important;
         //THEME background: rgb(37, 37, 38);
         //box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
-        //  border-left: 1px solid $pt-panel-border-color
+        //  border-left: 1px solid $daap-border
         z-index: 100;
       }
     }
@@ -176,7 +176,7 @@
   .defaultLayersStyle {
     .right {
       > div {
-        border-left: 1px solid $pt-dark-panel-border-color;
+        border-left: 1px solid $daap-border-dark;
       }
     }
   }

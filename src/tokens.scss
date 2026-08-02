@@ -16,9 +16,17 @@ $daap-bg-popover-dark:        #333333;
 
 // ─── Text ─────────────────────────────────────────────────────────
 
+$daap-text-primary:           #1c2127;
 $daap-text-primary-dark:      #e3e5e9;
 $daap-text-muted:             #555555;
+$daap-text-muted-dark:        #abb3bf;
 $daap-text-heading-dark:      #f6f7f9;
+$daap-text-disabled:          rgba(95, 107, 124, 0.6);
+$daap-text-disabled-dark:     rgba(171, 179, 191, 0.6);
+
+// ─── Icons ────────────────────────────────────────────────────────
+
+$daap-icon-dark:              #abb3bf;
 
 // ─── Interactive / State ──────────────────────────────────────────
 
@@ -48,6 +56,12 @@ $daap-guide-box:              1px solid #00d6ff;
 $daap-guide-page-dark:        1px dotted #ff2121;
 $daap-guide-stage-dark:       1px dotted #45c750;
 $daap-guide-box-dark:         1px dotted #00d6ff;
+
+// ─── Shadows ──────────────────────────────────────────────────────
+
+$daap-shadow-0:               0 0 0 1px rgba(17, 20, 24, 0.15);
+$daap-shadow-dark-1:          inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+                              0 1px 1px 0 rgba(17, 20, 24, 0.4);
 
 // ─── Toolbar ──────────────────────────────────────────────────────
 

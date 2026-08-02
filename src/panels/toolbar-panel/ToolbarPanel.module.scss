@@ -1,9 +1,9 @@
-@import "/src/theme";
+@import "/src/tokens";
 
 :global(.bp5-dark) {
   .toolbar {
-    color: $pt-dark-text-color-muted;
-    background: $pt-dark-app-background-color;
+    color: $daap-text-muted-dark;
+    background: $daap-bg-primary-dark;
     border-right: none; // 1px solid $dark-gray5;
 
     padding-bottom: 30px;
@@ -12,7 +12,7 @@
   .smallButton {
     :global {
       svg {
-        color: $pt-dark-text-color-muted !important;
+        color: $daap-text-muted-dark !important;
       }
     }
   }
@@ -22,7 +22,7 @@
     &.smallButton {
       :global {
         svg {
-          color: $pt-dark-text-color-disabled !important;
+          color: $daap-text-disabled-dark !important;
         }
       }
     }
@@ -37,8 +37,8 @@
   text-align: center;
   padding: 0px 0px;
 
-  background: $pt-app-background-color;
-  color: $pt-text-color-muted;
+  background: $daap-bg-primary;
+  color: $daap-text-muted;
   border-right: 1px solid $light-gray1;
 
   :global {
@@ -54,7 +54,7 @@
     &.smallButton {
       :global {
         svg {
-          color: $pt-text-color-disabled;
+          color: $daap-text-disabled;
         }
       }
     }
@@ -74,28 +74,28 @@
 
 .largeButton {
   position: relative;
-  width: $pt-toolbar-large-button-size;
-  height: $pt-toolbar-large-button-size;
+  width: $daap-toolbar-btn-size-lg;
+  height: $daap-toolbar-btn-size-lg;
 
   :global {
     svg {
-      width: $pt-toolbar-large-button-svg-size;
-      height: $pt-toolbar-large-button-svg-size;
-      color: $pt-text-color-muted;
+      width: $daap-toolbar-btn-svg-lg;
+      height: $daap-toolbar-btn-svg-lg;
+      color: $daap-text-muted;
     }
   }
 }
 
 .smallButton {
   position: relative;
-  width: $pt-toolbar-small-button-size;
-  height: $pt-toolbar-small-button-size;
+  width: $daap-toolbar-btn-size-sm;
+  height: $daap-toolbar-btn-size-sm;
 
   :global {
     svg {
-      width: $pt-toolbar-small-button-svg-size;
-      height: $pt-toolbar-small-button-svg-size;
-      color: $pt-text-color-muted;
+      width: $daap-toolbar-btn-svg-sm;
+      height: $daap-toolbar-btn-svg-sm;
+      color: $daap-text-muted;
     }
   }
 }
@@ -109,12 +109,12 @@
 }
 
 .helpMenu {
-  background: $pt-app-background-color !important;
+  background: $daap-bg-primary !important;
   // margin-bottom: 10px;
 }
 
 :global(.bp5-dark) {
   .helpMenu {
-    background: $pt-dark-app-background-color !important;
+    background: $daap-bg-primary-dark !important;
   }
 }

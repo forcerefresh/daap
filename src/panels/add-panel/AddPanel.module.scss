@@ -1,4 +1,4 @@
-@import "/src/theme";
+@import "/src/tokens";
 
 .addPanel {
   z-index: 100;
@@ -11,8 +11,8 @@
   width: 730px;
   // height: var(--daap-forcerefresh-app-height);// NOTE: update 3
 
-  background: $pt-app-background-color;
-  box-shadow: $pt-elevation-shadow-0;
+  background: $daap-bg-primary;
+  box-shadow: $daap-shadow-0;
 
   padding: 0 30px 30px 30px;
   display: flex;
@@ -125,7 +125,7 @@
 
 :global(.bp5-dark) {
   &.addPanel {
-    background: $pt-dark-app-background-color !important;
-    // box-shadow: $pt-dark-elevation-shadow-1 !important; // NOTE: update 3
+    background: $daap-bg-primary-dark !important;
+    // box-shadow: $daap-shadow-dark-1 !important; // NOTE: update 3
   }
 }

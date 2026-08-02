@@ -1,4 +1,4 @@
-@import "/src/theme";
+@import "/src/tokens";
 
 .layerPanel {
   display: flex;
@@ -58,8 +58,8 @@
 .layerInner {
   padding: 2px 0px 2px 4px;
   //border: 1px solid #252526;
-  border-bottom: 1px solid $pt-panel-border-color;
-  background: $pt-layer-header-color;
+  border-bottom: 1px solid $daap-border;
+  background: $daap-layer-header;
 
   display: flex;
   align-items: center;
@@ -126,18 +126,18 @@
     color: lightgray;
 
     .layerResponseVisibilityAll {
-      color: $pt-all-devices-color;
+      color: $daap-color-device-all;
       font-weight: bold;
     }
     .layerResponseVisibilityNone {
-      color: $pt-none-devices-color;
+      color: $daap-color-device-none;
       font-weight: bold;
     }
 
-    //     $pt-all-devices-color: #24ac23;
-    // $pt-dark-all-devices-color:  #34ec43;
+    //     $daap-color-device-all: #24ac23;
+    // $daap-color-device-all-dark:  #34ec43;
     // : #ff5f6d;
-    // $pt-dark-none-devices-color:  #ff5f6d;
+    // $daap-color-device-none-dark:  #ff5f6d;
 
     :global {
       .bp5-popover-target {
@@ -188,7 +188,7 @@
 
 .objectHolder {
   border: 1px solid rgba(0, 0, 0, 0);
-  border-bottom: 1px solid $pt-panel-border-color;
+  border-bottom: 1px solid $daap-border;
   cursor: default;
 
   .locked svg {
@@ -272,7 +272,7 @@
 }
 
 .propertiesActive {
-  color: $pt-active-color;
+  color: $daap-color-active;
   font-weight: bold;
 }
 
@@ -302,16 +302,16 @@
 
 .selected {
   //border: 1px solid #1f82c0;
-  background: $pt-row-selection;
+  background: $daap-row-selection;
 }
 :global(.bp5-dark) {
   .selected {
     //border: 1px solid #1f82c0;
-    background: $pt-dark-row-selection;
+    background: $daap-row-selection-dark;
   }
 
   .layerInner:not(.selected) {
-    background: $pt-dark-layer-header-color;
+    background: $daap-layer-header-dark;
   }
 }
 
@@ -329,13 +329,13 @@
   display: block;
   color: #858181;
   padding-left: 40px;
-  border-bottom: 1px solid $pt-panel-border-color;
+  border-bottom: 1px solid $daap-border;
   cursor: pointer;
 }
 
 .devicePopup {
   padding: 10px;
-  background-color: $pt-app-background-color; // #282828;
+  background-color: $daap-bg-primary; // #282828;
 
   hr {
     display: block;
@@ -444,7 +444,7 @@
   // vertical-align: middle;
   margin-right: 8px;
   svg {
-    color: $pt-dark-icon-color;
+    color: $daap-icon-dark;
     width: 100%;
     height: 100%;
   }
@@ -452,16 +452,16 @@
 
 :global(.bp5-dark) {
   .devicePopup {
-    background-color: $pt-dark-app-background-color; // #282828;
+    background-color: $daap-bg-primary-dark; // #282828;
   }
   .objectCountClosed {
-    border-bottom: 1px solid $pt-dark-panel-border-color;
+    border-bottom: 1px solid $daap-border-dark;
   }
   .objectHolder {
-    border-bottom: 1px solid $pt-dark-panel-border-color;
+    border-bottom: 1px solid $daap-border-dark;
   }
   .layerInner {
-    border-bottom: 1px solid $pt-dark-panel-border-color;
+    border-bottom: 1px solid $daap-border-dark;
   }
 }
 

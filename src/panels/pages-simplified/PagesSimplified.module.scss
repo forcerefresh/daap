@@ -1,8 +1,8 @@
-@import "/src/theme";
+@import "/src/tokens";
 
 .pagePanel {
   padding: 6px 0 6px 6px;
-  background: $pt-app-background-color;
+  background: $daap-bg-primary;
 
   display: flex;
   flex-direction: column;
@@ -32,7 +32,7 @@
 
 :global(.bp5-dark) {
   .pagePanel {
-    background: $pt-dark-app-background-color !important;
+    background: $daap-bg-primary-dark !important;
   }
 }
 

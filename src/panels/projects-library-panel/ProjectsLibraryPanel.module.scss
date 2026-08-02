@@ -1,4 +1,4 @@
-@import "/src/theme";
+@import "/src/tokens";
 
 .projectsLibraryPanel {
   z-index: 170;
@@ -73,8 +73,8 @@
 
 :global(.bp5-dark) {
   &.projectsLibraryPanel {
-    background: $pt-dark-app-background-color !important;
-    // box-shadow: $pt-dark-elevation-shadow-1 !important;
+    background: $daap-bg-primary-dark !important;
+    // box-shadow: $daap-shadow-dark-1 !important;
     border-right: 1px solid #555;
   }
 }
