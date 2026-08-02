@@ -1,24 +1,8 @@
 @import "/src/theme";
 
+/* DrawerShell handles the outer container — only overrides here */
 .extensionsPanel {
-  z-index: 100;
-  position: absolute;
-  top: 0px;
-  left: 68px;
-  width: 830px;
-  height: calc(var(--daap-forcerefresh-app-height) - 52px);
-
-  background: $pt-app-background-color;
-  box-shadow: $pt-elevation-shadow-0;
-
-  padding: 0 30px 30px 30px;
-  overflow: auto;
-
-  :global {
-    .bp5-popover-target {
-      display: block;
-    }
-  }
+  width: 950px;
 }
 
 .headerSection {
@@ -162,11 +146,3 @@
   border: 1px solid #555;
 }
 
-:global(.bp5-dark) {
-  &.extensionsPanel {
-    background: $pt-dark-app-background-color !important;
-    // box-shadow: $pt-dark-elevation-shadow-1 !important;
-    border-right: 1px solid #555;
-    border-left: 1px solid #111;
-  }
-}

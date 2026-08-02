@@ -23,7 +23,6 @@ import {
   updateProjectWithNewIds,
 } from "../../utils/project/project-utils";
 import {
-  PanelHeader,
   RightPanelHeader,
 } from "../common/panel-header/PanelHeader";
 import { resizeProportionally } from "../../utils/common-calculation/common-calculation";
@@ -416,8 +415,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           }}
         ></div>
       </div>
-      <RightPanelHeader>
-        <div>SAVE DOCUMENT</div>
+      <RightPanelHeader title="SAVE DOCUMENT">
         <div className={css.saving}>
           {meta.inSaving && (
             <>

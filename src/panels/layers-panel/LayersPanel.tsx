@@ -39,7 +39,7 @@ import { LayerRow } from "./LayerRow";
 import { convertTimeUnitToMs } from "../../utils/utils";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
-import { PanelHeader } from "../common/panel-header/PanelHeader";
+import { PanelShell } from "../common/panel-shell/PanelShell";
 //import { DragLayerComponent } from "./CustomDragLayer";
 
 type ISlidesPanel = typeof mapDispatchToProps &
@@ -243,13 +243,14 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
 
   return (
     <>
-      <div className={css.layerPanel}>
-        <PanelHeader>
-          <div style={{ display: "flex" }}>
-            <span>OBJECTS</span>
-            <span className={css.slideName}>{slide?.name}</span>
-          </div>
-          <div>
+      <PanelShell
+        title="OBJECTS"
+        bodyRef={layersHolderRef}
+        actions={
+          <>
+            {slide?.name && (
+              <span className={css.slideName}>{slide.name}</span>
+            )}
             <Button
               minimal
               disabled={!activeSlideId}
@@ -260,7 +261,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
               className={css.addNewLayer}
               small={true}
               icon="add"
-            ></Button>
+            />
             <Popover2
               content={moreMenu}
               placement="left-end"
@@ -269,16 +270,11 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
               hoverCloseDelay={100}
               hoverOpenDelay={150}
             >
-              <Button
-                minimal
-                className={css.moreBtn}
-                small={true}
-                icon="more"
-              ></Button>
+              <Button minimal className={css.moreBtn} small={true} icon="more" />
             </Popover2>
-          </div>
-        </PanelHeader>
-        <div className={css.layersHolder} ref={layersHolderRef}>
+          </>
+        }
+      >
           {layerArr?.map((layer, idx) => {
             if (!layer) return null; // TODO: IMPORTANT ko kopiranja slajda
 
@@ -446,8 +442,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
               }}
             />
           )}
-        </div>
-      </div>
+      </PanelShell>
     </>
   );
 };

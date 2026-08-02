@@ -55,6 +55,7 @@ const MainHeader = (props: IMainHeader) => {
     breakpointConfig,
     theme,
     account,
+    canUseLayouts,
     appZoom,
     missingExtensions,
     outdatedExtensions,
@@ -166,7 +167,7 @@ const MainHeader = (props: IMainHeader) => {
                   Templates
                 </Button>
 
-                {account.userData?.enableLayouts && (
+                {canUseLayouts && (
                   <>
                     <Divider dir="horizontal" />
                     <Button
@@ -191,7 +192,7 @@ const MainHeader = (props: IMainHeader) => {
                 )}
 
                 {import.meta.env.VITE_APP_INTEGRATION === "saas" &&
-                  account.userData?.enableLayouts && (
+                  canUseLayouts && (
                     <>
                       <Divider dir="horizontal" />
 
@@ -387,6 +388,7 @@ const mapStateToProps = (state: IStore) => {
     meta: state.meta,
     theme: state.project.settings.theme,
     account: state.account,
+    canUseLayouts: state.globals.canUseLayouts ?? false,
     breakpointConfig,
 
     fullScreen: state.editor.fullScreen,

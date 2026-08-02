@@ -3347,6 +3347,7 @@ export function loadUserData(): any {
           dispatch(updateUserData(response?.data));
           dispatch(updateGlobalConfiguration({
             canUseAIGenerator: response?.data?.canUseAIGenerator ?? false,
+            canUseLayouts: response?.data?.canUseLayouts ?? false,
             userRole: response?.data?.role,
           }));
         }

@@ -119,8 +119,7 @@ const ExportPanel: React.FC<IExportPanelMergedProps> = (props) => {
           }}
         ></div>
       </div>
-      <RightPanelHeader>
-        <div>EXPORT DOCUMENT</div>
+      <RightPanelHeader title="EXPORT DOCUMENT">
         <div className={css.saving}>
           {meta.inSaving && (
             <>

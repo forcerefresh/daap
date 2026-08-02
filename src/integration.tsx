@@ -41,7 +41,7 @@ export interface getMyUploadComponentProps {
   type: MediaType;
   onComplete: () => void;
   onStop: () => void;
-  inputs: {
+  inputs?: {
     name?: { label?: string; hide?: boolean };
     tags?: { label?: string; hide?: boolean };
     filename?: { label?: string; hide?: boolean };

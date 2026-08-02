@@ -1,0 +1,46 @@
+@import "/src/tokens";
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 3px 10px;
+  min-height: 54px;
+  background: $daap-bg-primary;
+  color: gray;
+  font-weight: bold;
+  border-bottom: 1px solid $daap-border;
+
+  .title {
+    flex: 1;
+    font-size: 0.85em;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+:global(.bp5-dark) {
+  .header {
+    background: $daap-bg-primary-dark;
+    border-bottom-color: $daap-border-dark;
+  }
+}

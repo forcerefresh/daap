@@ -39,7 +39,6 @@ import {
   setupNewProjectFromExisting,
 } from "../../store/actions/multi-actions";
 import {
-  PanelHeader,
   RightPanelHeader,
 } from "../common/panel-header/PanelHeader";
 import e from "express";
@@ -269,9 +268,7 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
 
   return (
     <div className={cx(themeClass, css.createPanel)}>
-      <RightPanelHeader>
-        <div>CREATE DOCUMENT</div>
-      </RightPanelHeader>
+      <RightPanelHeader title="CREATE DOCUMENT" />
 
       {/* <section>
         <div>

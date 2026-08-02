@@ -30,6 +30,7 @@ export interface IAppSettings {
   groupNesting?: "one" | "unlimited";
   // user capabilities sourced from /api/v1/me — not a user-configurable setting
   canUseAIGenerator?: boolean;
+  canUseLayouts?: boolean;
   userRole?: "USER" | "ADMIN";
 }
 

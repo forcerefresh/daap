@@ -43,7 +43,7 @@ import { DropHandle, IDropItem } from "../layers-panel/DropHandle";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
 import { IntegrationContext } from "../../integration";
-import { PanelHeader } from "../common/panel-header/PanelHeader";
+import { PanelShell } from "../common/panel-shell/PanelShell";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -253,87 +253,21 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
 
   return (
     <>
-      <div className={css.panel}>
-        <PanelHeader className={css.withoutTopBorder}>
-          <div>PAGES</div>
-          <div>
-            {/* <div
-              ref={loadDropRef}
-              className={cx(css.frontBackHolder, {
-                [css.frontBackHolderDropOver]: isLayerOverLoad,
-              })}
-            >
-              <Button
-                small
-                minimal
-                active={activeSlideId === loadSlideId}
-                onClick={() => {
-                  _activateSlide(loadSlideId);
-                  _selectSlides([loadSlideId]);
-                  _selectForProperties({ id: loadSlideId, type: "slide" });
-                }}
-              >
-                Load
-              </Button>
-            </div> */}
-            {/* <div
-              ref={frontDropRef}
-              className={cx(css.frontBackHolder, {
-                [css.frontBackHolderDropOver]: isLayerOverFront,
-              })}
-            >
-              <Button
-                small
-                minimal
-                active={activeSlideId === frontSlideId}
-                onClick={() => {
-                  _activateSlide(frontSlideId);
-                  _selectSlides([frontSlideId]);
-                  _selectForProperties({ id: frontSlideId, type: "slide" });
-                }}
-              >
-                Front
-              </Button>
-            </div> */}
-            {/* <div
-              ref={backDropRef}
-              className={cx(css.frontBackHolder, {
-                [css.frontBackHolderDropOver]: isLayerOverBack,
-              })}
-            >
-              <Button
-                small
-                minimal
-                active={activeSlideId === backSlideId}
-                onClick={() => {
-                  _activateSlide(backSlideId);
-                  _selectSlides([backSlideId]);
-                  _selectForProperties({ id: backSlideId, type: "slide" });
-                }}
-              >
-                Back
-              </Button>
-            </div> */}
-          </div>
-          <div>
+      <PanelShell
+        title="PAGES"
+        bodyRef={slidesHolderRef}
+        actions={
+          <>
             <Button
               minimal
               onClick={() => {
-                // if (!hasLicense && pages.length >= 3) {
-                //   AppToaster.show({
-                //     intent: "warning",
-                //     message:
-                //       "You have reached the maximum number of slides in the FREE version.",
-                //   });
-                // } else {
                 _addNewPage(PageType.Normal, true);
                 scrollToBottomDelayed();
-                // }
               }}
               className={css.addNewPage}
               small={true}
               icon="add"
-            ></Button>
+            />
             <Popover2
               content={moreMenu}
               placement="left-end"
@@ -342,17 +276,12 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
               hoverCloseDelay={100}
               hoverOpenDelay={150}
             >
-              <Button
-                minimal
-                className={css.moreBtn}
-                small={true}
-                icon="more"
-              ></Button>
+              <Button minimal className={css.moreBtn} small={true} icon="more" />
             </Popover2>
-          </div>
-        </PanelHeader>
-        <div className={css.slidesHolder} ref={slidesHolderRef}>
-          {pages.map((pageId: string, idx) => {
+          </>
+        }
+      >
+        {pages.map((pageId: string, idx) => {
             const slide = pageById[pageId];
             const isLastSlide = idx === pages.length - 1;
             return (
@@ -418,9 +347,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
               </div>
             );
           })}
-        </div>
-        {/* {renderPanels()} */}
-      </div>
+      </PanelShell>
     </>
   );
 };

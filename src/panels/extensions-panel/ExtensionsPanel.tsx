@@ -25,7 +25,7 @@ import { unregisterAnimation } from "webslider-sdk/lib/animations/animations-reg
 import { IEditor } from "../../store/reducers/editor";
 import { updateEditor } from "../../store/actions/actions";
 import { removeExtensionFromMissing } from "../../utils/extensions/extensions-utils";
-import { RightPanelHeader } from "../common/panel-header/PanelHeader";
+import { DrawerShell } from "../common/drawer-shell/DrawerShell";
 import { ExternalSVG } from "./external-svg";
 import { getLatestVersionsMap } from "../../objects/objectToolFactory";
 import { getCheckboxField } from "../../inputs/input-utils";
@@ -249,10 +249,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   }, [extensions, installedExtensions, filter, searchValue]);
 
   return (
-    <div className={cx("bp5-dark", css.extensionsPanel)}>
-      <RightPanelHeader>
-        <div>EXTENSIONS</div>
-      </RightPanelHeader>
+    <DrawerShell title="EXTENSIONS" className={css.extensionsPanel}>
 
       <div className={css.headerSection}>
         <InputGroup
@@ -457,7 +454,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
           <b>{uninstallIdRef?.current?.name}</b> object?
         </p>
       </Alert>
-    </div>
+    </DrawerShell>
   );
 };
 
