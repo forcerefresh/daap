@@ -69,11 +69,12 @@ export function processResizeChangeEvent(
     selectedObjectIdsRef: React.MutableRefObject<string[]>;
     zoom: number;
     snapBounds: SnapTarget[];
+    altKeyRef: React.MutableRefObject<boolean>;
   },
 ) {
   if (!isResizeHandle(eData.handle)) return;
 
-  const { selectedObjectIdsRef, zoom, snapBounds } = storeProps;
+  const { selectedObjectIdsRef, zoom, snapBounds, altKeyRef } = storeProps;
   const selectedObjectIds = selectedObjectIdsRef.current;
 
   selectedObjectIds.forEach((objectId) => {
@@ -128,49 +129,51 @@ export function processResizeChangeEvent(
       if (resizeHolderEl) resizeHolderEl.style.width = newWidth;
 
       // Snap: check both corners of the moving edge
-      const modObj = { ...object, left: numLeft, width: numWidth };
-      const edgeX = eData.handle === "width" ? numWidth : 0;
-      const p1 = objectPointToStageSpace_New([modObj], { x: edgeX, y: 0 }, 1);
-      const p2 = objectPointToStageSpace_New([modObj], { x: edgeX, y: object.height! }, 1);
-      const side = eData.handle === "width" ? "right" : "left";
-      const sr1 = computeSnap(
-        { left: side === "left" ? p1.x : LARGE, right: side === "right" ? p1.x : LARGE, top: p1.y, bottom: LARGE, vcenter: LARGE, hcenter: LARGE } as unknown as Bounds,
-        snapBounds, selectedObjectIds, zoom,
-      );
-      const sr2 = computeSnap(
-        { left: side === "left" ? p2.x : LARGE, right: side === "right" ? p2.x : LARGE, top: LARGE, bottom: p2.y, vcenter: LARGE, hcenter: LARGE } as unknown as Bounds,
-        snapBounds, selectedObjectIds, zoom,
-      );
-      const sr = mergeSnap(sr1, sr2, "x");
       clearSnapGuides();
-      renderSnapGuides(sr.guides, sr.snappedObjectIds, zoom, objScaleVal);
-      if (eData.handle === "left") {
-        if (sr.deltaX !== 0) {
-          const localDelta = sr.deltaX / objScaleVal;
-          objectHolder.style.left = (numLeft + sr.deltaX) + "px";
-          newWidth = (numWidth - localDelta) + "px";
-          objectHolder.style.width = newWidth;
-          if (contentEl) contentEl.style.width = newWidth;
-          if (resizeHolderEl) resizeHolderEl.style.width = newWidth;
-        }
-      } else {
-        // WIDTH handle — rotation-aware: d(right_edge.x)/d(w) = S*cos(R), d(right_edge.y)/d(w) = S*sin(R)
-        const S = objScaleVal;
-        const R_rad = getObjectRotation(object) * Math.PI / 180;
-        const cosR = Math.cos(R_rad);
-        const sinR = Math.sin(R_rad);
-        const EPS = 1e-6;
-        const wCands: number[] = [];
-        if (sr1.deltaX !== 0 && Math.abs(cosR) > EPS) wCands.push(numWidth + sr1.deltaX / (S * cosR));
-        if (sr1.deltaY !== 0 && Math.abs(sinR) > EPS) wCands.push(numWidth + sr1.deltaY / (S * sinR));
-        if (sr2.deltaX !== 0 && Math.abs(cosR) > EPS) wCands.push(numWidth + sr2.deltaX / (S * cosR));
-        if (sr2.deltaY !== 0 && Math.abs(sinR) > EPS) wCands.push(numWidth + sr2.deltaY / (S * sinR));
-        if (wCands.length > 0) {
-          const snapW = wCands.reduce((best, c) => Math.abs(c - numWidth) < Math.abs(best - numWidth) ? c : best);
-          newWidth = snapW + "px";
-          objectHolder.style.width = newWidth;
-          if (contentEl) contentEl.style.width = newWidth;
-          if (resizeHolderEl) resizeHolderEl.style.width = newWidth;
+      if (!altKeyRef.current) {
+        const modObj = { ...object, left: numLeft, width: numWidth };
+        const edgeX = eData.handle === "width" ? numWidth : 0;
+        const p1 = objectPointToStageSpace_New([modObj], { x: edgeX, y: 0 }, 1);
+        const p2 = objectPointToStageSpace_New([modObj], { x: edgeX, y: object.height! }, 1);
+        const side = eData.handle === "width" ? "right" : "left";
+        const sr1 = computeSnap(
+          { left: side === "left" ? p1.x : LARGE, right: side === "right" ? p1.x : LARGE, top: p1.y, bottom: LARGE, vcenter: LARGE, hcenter: LARGE } as unknown as Bounds,
+          snapBounds, selectedObjectIds, zoom,
+        );
+        const sr2 = computeSnap(
+          { left: side === "left" ? p2.x : LARGE, right: side === "right" ? p2.x : LARGE, top: LARGE, bottom: p2.y, vcenter: LARGE, hcenter: LARGE } as unknown as Bounds,
+          snapBounds, selectedObjectIds, zoom,
+        );
+        const sr = mergeSnap(sr1, sr2, "x");
+        renderSnapGuides(sr.guides, sr.snappedObjectIds, zoom, objScaleVal);
+        if (eData.handle === "left") {
+          if (sr.deltaX !== 0) {
+            const localDelta = sr.deltaX / objScaleVal;
+            objectHolder.style.left = (numLeft + sr.deltaX) + "px";
+            newWidth = (numWidth - localDelta) + "px";
+            objectHolder.style.width = newWidth;
+            if (contentEl) contentEl.style.width = newWidth;
+            if (resizeHolderEl) resizeHolderEl.style.width = newWidth;
+          }
+        } else {
+          // WIDTH handle — rotation-aware: d(right_edge.x)/d(w) = S*cos(R), d(right_edge.y)/d(w) = S*sin(R)
+          const S = objScaleVal;
+          const R_rad = getObjectRotation(object) * Math.PI / 180;
+          const cosR = Math.cos(R_rad);
+          const sinR = Math.sin(R_rad);
+          const EPS = 1e-6;
+          const wCands: number[] = [];
+          if (sr1.deltaX !== 0 && Math.abs(cosR) > EPS) wCands.push(numWidth + sr1.deltaX / (S * cosR));
+          if (sr1.deltaY !== 0 && Math.abs(sinR) > EPS) wCands.push(numWidth + sr1.deltaY / (S * sinR));
+          if (sr2.deltaX !== 0 && Math.abs(cosR) > EPS) wCands.push(numWidth + sr2.deltaX / (S * cosR));
+          if (sr2.deltaY !== 0 && Math.abs(sinR) > EPS) wCands.push(numWidth + sr2.deltaY / (S * sinR));
+          if (wCands.length > 0) {
+            const snapW = wCands.reduce((best, c) => Math.abs(c - numWidth) < Math.abs(best - numWidth) ? c : best);
+            newWidth = snapW + "px";
+            objectHolder.style.width = newWidth;
+            if (contentEl) contentEl.style.width = newWidth;
+            if (resizeHolderEl) resizeHolderEl.style.width = newWidth;
+          }
         }
       }
     } else {
@@ -193,49 +196,51 @@ export function processResizeChangeEvent(
       if (resizeHolderEl) resizeHolderEl.style.height = newHeight;
 
       // Snap: check both corners of the moving edge
-      const modObj = { ...object, top: numTop, height: numHeight };
-      const edgeY = eData.handle === "height" ? numHeight : 0;
-      const p1 = objectPointToStageSpace_New([modObj], { x: 0, y: edgeY }, 1);
-      const p2 = objectPointToStageSpace_New([modObj], { x: object.width!, y: edgeY }, 1);
-      const side = eData.handle === "height" ? "bottom" : "top";
-      const sr1 = computeSnap(
-        { left: p1.x, right: LARGE, vcenter: LARGE, top: side === "top" ? p1.y : LARGE, bottom: side === "bottom" ? p1.y : LARGE, hcenter: LARGE } as unknown as Bounds,
-        snapBounds, selectedObjectIds, zoom,
-      );
-      const sr2 = computeSnap(
-        { left: LARGE, right: p2.x, vcenter: LARGE, top: side === "top" ? p2.y : LARGE, bottom: side === "bottom" ? p2.y : LARGE, hcenter: LARGE } as unknown as Bounds,
-        snapBounds, selectedObjectIds, zoom,
-      );
-      const sr = mergeSnap(sr1, sr2, "y");
       clearSnapGuides();
-      renderSnapGuides(sr.guides, sr.snappedObjectIds, zoom, objScaleVal);
-      if (eData.handle === "top") {
-        if (sr.deltaY !== 0) {
-          const localDelta = sr.deltaY / objScaleVal;
-          objectHolder.style.top = (numTop + sr.deltaY) + "px";
-          newHeight = (numHeight - localDelta) + "px";
-          objectHolder.style.height = newHeight;
-          if (contentEl) contentEl.style.height = newHeight;
-          if (resizeHolderEl) resizeHolderEl.style.height = newHeight;
-        }
-      } else {
-        // HEIGHT handle — rotation-aware: d(bottom_edge.x)/d(h) = -S*sin(R), d(bottom_edge.y)/d(h) = S*cos(R)
-        const S = objScaleVal;
-        const R_rad = getObjectRotation(object) * Math.PI / 180;
-        const cosR = Math.cos(R_rad);
-        const sinR = Math.sin(R_rad);
-        const EPS = 1e-6;
-        const hCands: number[] = [];
-        if (sr1.deltaX !== 0 && Math.abs(sinR) > EPS) hCands.push(numHeight + sr1.deltaX / (-S * sinR));
-        if (sr1.deltaY !== 0 && Math.abs(cosR) > EPS) hCands.push(numHeight + sr1.deltaY / (S * cosR));
-        if (sr2.deltaX !== 0 && Math.abs(sinR) > EPS) hCands.push(numHeight + sr2.deltaX / (-S * sinR));
-        if (sr2.deltaY !== 0 && Math.abs(cosR) > EPS) hCands.push(numHeight + sr2.deltaY / (S * cosR));
-        if (hCands.length > 0) {
-          const snapH = hCands.reduce((best, c) => Math.abs(c - numHeight) < Math.abs(best - numHeight) ? c : best);
-          newHeight = snapH + "px";
-          objectHolder.style.height = newHeight;
-          if (contentEl) contentEl.style.height = newHeight;
-          if (resizeHolderEl) resizeHolderEl.style.height = newHeight;
+      if (!altKeyRef.current) {
+        const modObj = { ...object, top: numTop, height: numHeight };
+        const edgeY = eData.handle === "height" ? numHeight : 0;
+        const p1 = objectPointToStageSpace_New([modObj], { x: 0, y: edgeY }, 1);
+        const p2 = objectPointToStageSpace_New([modObj], { x: object.width!, y: edgeY }, 1);
+        const side = eData.handle === "height" ? "bottom" : "top";
+        const sr1 = computeSnap(
+          { left: p1.x, right: LARGE, vcenter: LARGE, top: side === "top" ? p1.y : LARGE, bottom: side === "bottom" ? p1.y : LARGE, hcenter: LARGE } as unknown as Bounds,
+          snapBounds, selectedObjectIds, zoom,
+        );
+        const sr2 = computeSnap(
+          { left: LARGE, right: p2.x, vcenter: LARGE, top: side === "top" ? p2.y : LARGE, bottom: side === "bottom" ? p2.y : LARGE, hcenter: LARGE } as unknown as Bounds,
+          snapBounds, selectedObjectIds, zoom,
+        );
+        const sr = mergeSnap(sr1, sr2, "y");
+        renderSnapGuides(sr.guides, sr.snappedObjectIds, zoom, objScaleVal);
+        if (eData.handle === "top") {
+          if (sr.deltaY !== 0) {
+            const localDelta = sr.deltaY / objScaleVal;
+            objectHolder.style.top = (numTop + sr.deltaY) + "px";
+            newHeight = (numHeight - localDelta) + "px";
+            objectHolder.style.height = newHeight;
+            if (contentEl) contentEl.style.height = newHeight;
+            if (resizeHolderEl) resizeHolderEl.style.height = newHeight;
+          }
+        } else {
+          // HEIGHT handle — rotation-aware: d(bottom_edge.x)/d(h) = -S*sin(R), d(bottom_edge.y)/d(h) = S*cos(R)
+          const S = objScaleVal;
+          const R_rad = getObjectRotation(object) * Math.PI / 180;
+          const cosR = Math.cos(R_rad);
+          const sinR = Math.sin(R_rad);
+          const EPS = 1e-6;
+          const hCands: number[] = [];
+          if (sr1.deltaX !== 0 && Math.abs(sinR) > EPS) hCands.push(numHeight + sr1.deltaX / (-S * sinR));
+          if (sr1.deltaY !== 0 && Math.abs(cosR) > EPS) hCands.push(numHeight + sr1.deltaY / (S * cosR));
+          if (sr2.deltaX !== 0 && Math.abs(sinR) > EPS) hCands.push(numHeight + sr2.deltaX / (-S * sinR));
+          if (sr2.deltaY !== 0 && Math.abs(cosR) > EPS) hCands.push(numHeight + sr2.deltaY / (S * cosR));
+          if (hCands.length > 0) {
+            const snapH = hCands.reduce((best, c) => Math.abs(c - numHeight) < Math.abs(best - numHeight) ? c : best);
+            newHeight = snapH + "px";
+            objectHolder.style.height = newHeight;
+            if (contentEl) contentEl.style.height = newHeight;
+            if (resizeHolderEl) resizeHolderEl.style.height = newHeight;
+          }
         }
       }
     }
@@ -281,6 +286,7 @@ export function processResizeStopEvent(
     selectedObjectIdsRef: React.MutableRefObject<string[]>;
     zoom: number;
     snapBounds: SnapTarget[];
+    altKeyRef: React.MutableRefObject<boolean>;
   },
   storeActions: {
     _updateObject: any;
@@ -288,7 +294,7 @@ export function processResizeStopEvent(
 ) {
   if (!isResizeHandle(eData.handle)) return;
 
-  const { selectedObjectIdsRef, zoom, snapBounds } = storeProps;
+  const { selectedObjectIdsRef, zoom, snapBounds, altKeyRef } = storeProps;
   const { _updateObject } = storeActions;
   const selectedObjectIds = selectedObjectIdsRef.current;
 
@@ -338,42 +344,44 @@ export function processResizeStopEvent(
       }
       objectClone.width = objectSize.width + widthDirection * (realMove.x / objScale);
 
-      const cl = objectClone.left ?? objectSize.x;
-      const cw = objectClone.width!;
-      const modObj = { ...object, left: cl, width: cw };
-      const edgeX = eData.handle === "width" ? cw : 0;
-      const p1 = objectPointToStageSpace_New([modObj], { x: edgeX, y: 0 }, 1);
-      const p2 = objectPointToStageSpace_New([modObj], { x: edgeX, y: object.height! }, 1);
-      const side = eData.handle === "width" ? "right" : "left";
-      const sr1 = computeSnap(
-        { left: side === "left" ? p1.x : LARGE, right: side === "right" ? p1.x : LARGE, top: p1.y, bottom: LARGE, vcenter: LARGE, hcenter: LARGE } as unknown as Bounds,
-        snapBounds, selectedObjectIds, zoom,
-      );
-      const sr2 = computeSnap(
-        { left: side === "left" ? p2.x : LARGE, right: side === "right" ? p2.x : LARGE, top: LARGE, bottom: p2.y, vcenter: LARGE, hcenter: LARGE } as unknown as Bounds,
-        snapBounds, selectedObjectIds, zoom,
-      );
-      if (eData.handle === "left") {
-        const snapResult = mergeSnapStop(sr1, sr2, "x");
-        if (snapResult.deltaX !== 0) {
-          const localDelta = snapResult.deltaX / objScale;
-          objectClone.left = cl + snapResult.deltaX;
-          objectClone.width = cw - localDelta;
-        }
-      } else {
-        // WIDTH handle — rotation-aware: d(right_edge.x)/d(w) = S*cos(R), d(right_edge.y)/d(w) = S*sin(R)
-        const S = objScale;
-        const R_rad = getObjectRotation(object) * Math.PI / 180;
-        const cosR = Math.cos(R_rad);
-        const sinR = Math.sin(R_rad);
-        const EPS = 1e-6;
-        const wCands: number[] = [];
-        if (sr1.deltaX !== 0 && Math.abs(cosR) > EPS) wCands.push(cw + sr1.deltaX / (S * cosR));
-        if (sr1.deltaY !== 0 && Math.abs(sinR) > EPS) wCands.push(cw + sr1.deltaY / (S * sinR));
-        if (sr2.deltaX !== 0 && Math.abs(cosR) > EPS) wCands.push(cw + sr2.deltaX / (S * cosR));
-        if (sr2.deltaY !== 0 && Math.abs(sinR) > EPS) wCands.push(cw + sr2.deltaY / (S * sinR));
-        if (wCands.length > 0) {
-          objectClone.width = wCands.reduce((best, c) => Math.abs(c - cw) < Math.abs(best - cw) ? c : best);
+      if (!altKeyRef.current) {
+        const cl = objectClone.left ?? objectSize.x;
+        const cw = objectClone.width!;
+        const modObj = { ...object, left: cl, width: cw };
+        const edgeX = eData.handle === "width" ? cw : 0;
+        const p1 = objectPointToStageSpace_New([modObj], { x: edgeX, y: 0 }, 1);
+        const p2 = objectPointToStageSpace_New([modObj], { x: edgeX, y: object.height! }, 1);
+        const side = eData.handle === "width" ? "right" : "left";
+        const sr1 = computeSnap(
+          { left: side === "left" ? p1.x : LARGE, right: side === "right" ? p1.x : LARGE, top: p1.y, bottom: LARGE, vcenter: LARGE, hcenter: LARGE } as unknown as Bounds,
+          snapBounds, selectedObjectIds, zoom,
+        );
+        const sr2 = computeSnap(
+          { left: side === "left" ? p2.x : LARGE, right: side === "right" ? p2.x : LARGE, top: LARGE, bottom: p2.y, vcenter: LARGE, hcenter: LARGE } as unknown as Bounds,
+          snapBounds, selectedObjectIds, zoom,
+        );
+        if (eData.handle === "left") {
+          const snapResult = mergeSnapStop(sr1, sr2, "x");
+          if (snapResult.deltaX !== 0) {
+            const localDelta = snapResult.deltaX / objScale;
+            objectClone.left = cl + snapResult.deltaX;
+            objectClone.width = cw - localDelta;
+          }
+        } else {
+          // WIDTH handle — rotation-aware: d(right_edge.x)/d(w) = S*cos(R), d(right_edge.y)/d(w) = S*sin(R)
+          const S = objScale;
+          const R_rad = getObjectRotation(object) * Math.PI / 180;
+          const cosR = Math.cos(R_rad);
+          const sinR = Math.sin(R_rad);
+          const EPS = 1e-6;
+          const wCands: number[] = [];
+          if (sr1.deltaX !== 0 && Math.abs(cosR) > EPS) wCands.push(cw + sr1.deltaX / (S * cosR));
+          if (sr1.deltaY !== 0 && Math.abs(sinR) > EPS) wCands.push(cw + sr1.deltaY / (S * sinR));
+          if (sr2.deltaX !== 0 && Math.abs(cosR) > EPS) wCands.push(cw + sr2.deltaX / (S * cosR));
+          if (sr2.deltaY !== 0 && Math.abs(sinR) > EPS) wCands.push(cw + sr2.deltaY / (S * sinR));
+          if (wCands.length > 0) {
+            objectClone.width = wCands.reduce((best, c) => Math.abs(c - cw) < Math.abs(best - cw) ? c : best);
+          }
         }
       }
     } else {
@@ -385,42 +393,44 @@ export function processResizeStopEvent(
       }
       objectClone.height = objectSize.height + heightDirection * (realMove.y / objScale);
 
-      const ct = objectClone.top ?? objectSize.y;
-      const ch = objectClone.height!;
-      const modObj = { ...object, top: ct, height: ch };
-      const edgeY = eData.handle === "height" ? ch : 0;
-      const p1 = objectPointToStageSpace_New([modObj], { x: 0, y: edgeY }, 1);
-      const p2 = objectPointToStageSpace_New([modObj], { x: object.width!, y: edgeY }, 1);
-      const side = eData.handle === "height" ? "bottom" : "top";
-      const sr1 = computeSnap(
-        { left: p1.x, right: LARGE, vcenter: LARGE, top: side === "top" ? p1.y : LARGE, bottom: side === "bottom" ? p1.y : LARGE, hcenter: LARGE } as unknown as Bounds,
-        snapBounds, selectedObjectIds, zoom,
-      );
-      const sr2 = computeSnap(
-        { left: LARGE, right: p2.x, vcenter: LARGE, top: side === "top" ? p2.y : LARGE, bottom: side === "bottom" ? p2.y : LARGE, hcenter: LARGE } as unknown as Bounds,
-        snapBounds, selectedObjectIds, zoom,
-      );
-      if (eData.handle === "top") {
-        const snapResult = mergeSnapStop(sr1, sr2, "y");
-        if (snapResult.deltaY !== 0) {
-          const localDelta = snapResult.deltaY / objScale;
-          objectClone.top = ct + snapResult.deltaY;
-          objectClone.height = ch - localDelta;
-        }
-      } else {
-        // HEIGHT handle — rotation-aware: d(bottom_edge.x)/d(h) = -S*sin(R), d(bottom_edge.y)/d(h) = S*cos(R)
-        const S = objScale;
-        const R_rad = getObjectRotation(object) * Math.PI / 180;
-        const cosR = Math.cos(R_rad);
-        const sinR = Math.sin(R_rad);
-        const EPS = 1e-6;
-        const hCands: number[] = [];
-        if (sr1.deltaX !== 0 && Math.abs(sinR) > EPS) hCands.push(ch + sr1.deltaX / (-S * sinR));
-        if (sr1.deltaY !== 0 && Math.abs(cosR) > EPS) hCands.push(ch + sr1.deltaY / (S * cosR));
-        if (sr2.deltaX !== 0 && Math.abs(sinR) > EPS) hCands.push(ch + sr2.deltaX / (-S * sinR));
-        if (sr2.deltaY !== 0 && Math.abs(cosR) > EPS) hCands.push(ch + sr2.deltaY / (S * cosR));
-        if (hCands.length > 0) {
-          objectClone.height = hCands.reduce((best, c) => Math.abs(c - ch) < Math.abs(best - ch) ? c : best);
+      if (!altKeyRef.current) {
+        const ct = objectClone.top ?? objectSize.y;
+        const ch = objectClone.height!;
+        const modObj = { ...object, top: ct, height: ch };
+        const edgeY = eData.handle === "height" ? ch : 0;
+        const p1 = objectPointToStageSpace_New([modObj], { x: 0, y: edgeY }, 1);
+        const p2 = objectPointToStageSpace_New([modObj], { x: object.width!, y: edgeY }, 1);
+        const side = eData.handle === "height" ? "bottom" : "top";
+        const sr1 = computeSnap(
+          { left: p1.x, right: LARGE, vcenter: LARGE, top: side === "top" ? p1.y : LARGE, bottom: side === "bottom" ? p1.y : LARGE, hcenter: LARGE } as unknown as Bounds,
+          snapBounds, selectedObjectIds, zoom,
+        );
+        const sr2 = computeSnap(
+          { left: LARGE, right: p2.x, vcenter: LARGE, top: side === "top" ? p2.y : LARGE, bottom: side === "bottom" ? p2.y : LARGE, hcenter: LARGE } as unknown as Bounds,
+          snapBounds, selectedObjectIds, zoom,
+        );
+        if (eData.handle === "top") {
+          const snapResult = mergeSnapStop(sr1, sr2, "y");
+          if (snapResult.deltaY !== 0) {
+            const localDelta = snapResult.deltaY / objScale;
+            objectClone.top = ct + snapResult.deltaY;
+            objectClone.height = ch - localDelta;
+          }
+        } else {
+          // HEIGHT handle — rotation-aware: d(bottom_edge.x)/d(h) = -S*sin(R), d(bottom_edge.y)/d(h) = S*cos(R)
+          const S = objScale;
+          const R_rad = getObjectRotation(object) * Math.PI / 180;
+          const cosR = Math.cos(R_rad);
+          const sinR = Math.sin(R_rad);
+          const EPS = 1e-6;
+          const hCands: number[] = [];
+          if (sr1.deltaX !== 0 && Math.abs(sinR) > EPS) hCands.push(ch + sr1.deltaX / (-S * sinR));
+          if (sr1.deltaY !== 0 && Math.abs(cosR) > EPS) hCands.push(ch + sr1.deltaY / (S * cosR));
+          if (sr2.deltaX !== 0 && Math.abs(sinR) > EPS) hCands.push(ch + sr2.deltaX / (-S * sinR));
+          if (sr2.deltaY !== 0 && Math.abs(cosR) > EPS) hCands.push(ch + sr2.deltaY / (S * cosR));
+          if (hCands.length > 0) {
+            objectClone.height = hCands.reduce((best, c) => Math.abs(c - ch) < Math.abs(best - ch) ? c : best);
+          }
         }
       }
     }

@@ -119,11 +119,12 @@ export function processMoveChangeEvent(
       bounds: Bounds;
       objectId: string;
     }[];
+    altKeyRef: React.MutableRefObject<boolean>;
   },
 ) {
   setFloatingActionPanelVisibility(false);
 
-  const { selectedObjectIdsRef, zoom, snapBounds } = storeProps;
+  const { selectedObjectIdsRef, zoom, snapBounds, altKeyRef } = storeProps;
   const selectedObjectIds = selectedObjectIdsRef.current;
 
   const x = eData.x! / zoom;
@@ -167,11 +168,12 @@ export function processMoveChangeEvent(
     if (objectId === eData.objectId) {
       if (snapDeltaGlobal.x === 0 && snapDeltaGlobal.y === 0) {
         clearSnapGuides();
-        const snapResult = computeSnap(newObjectBounds, snapBounds, selectedObjectIds, zoom);
-        renderSnapGuides(snapResult.guides, snapResult.snappedObjectIds, zoom, object.scale ?? 1);
-
-        if (snapResult.deltaX !== 0 || snapResult.deltaY !== 0) {
-          snapDeltaGlobal = { x: snapResult.deltaX, y: snapResult.deltaY };
+        if (!altKeyRef.current) {
+          const snapResult = computeSnap(newObjectBounds, snapBounds, selectedObjectIds, zoom);
+          renderSnapGuides(snapResult.guides, snapResult.snappedObjectIds, zoom, object.scale ?? 1);
+          if (snapResult.deltaX !== 0 || snapResult.deltaY !== 0) {
+            snapDeltaGlobal = { x: snapResult.deltaX, y: snapResult.deltaY };
+          }
         }
       }
     }
@@ -215,6 +217,7 @@ export function processMoveStopEvent(
       bounds: Bounds;
       objectId: string;
     }[];
+    altKeyRef: React.MutableRefObject<boolean>;
   },
   storeActions: {
     _updateObject: any;
@@ -236,7 +239,9 @@ export function processMoveStopEvent(
     breakpointConfig,
     recentlySelectedRef,
     snapBounds,
+    altKeyRef,
   } = storeProps;
+
   const selectedObjectIds = selectedObjectIdsRef.current;
 
   const {
@@ -311,7 +316,7 @@ export function processMoveStopEvent(
     const newObjectBounds = getObjectBounds([objectClone]);
 
     if (objectId === eData.objectId) {
-      if (snapDeltaGlobal.x === 0 && snapDeltaGlobal.y === 0) {
+      if (snapDeltaGlobal.x === 0 && snapDeltaGlobal.y === 0 && !altKeyRef.current) {
         const snapResult = computeSnap(newObjectBounds, snapBounds, selectedObjectIds, zoom);
 
         if (snapResult.deltaX !== 0 || snapResult.deltaY !== 0) {

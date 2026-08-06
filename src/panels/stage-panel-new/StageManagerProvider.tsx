@@ -11,6 +11,7 @@ import {
   selectObjects,
   setStagePan,
   updateObject,
+  setSnapHint,
 } from "../../store/actions/actions";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { connect } from "react-redux";
@@ -98,9 +99,33 @@ export const StageManagerProviderInternal = (
     _deactivateObject,
     _setStagePan,
     _selectForProperties,
+    _setSnapHint,
   } = props;
 
   const { activateTool, snapBounds } = useContext(ToolsContext);
+
+  const altKeyRef = useRef(false);
+  const snapDragActiveRef = useRef(false);
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Alt") {
+        altKeyRef.current = true;
+        if (snapDragActiveRef.current) _setSnapHint("Snapping disabled");
+      }
+    };
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.key === "Alt") {
+        altKeyRef.current = false;
+        if (snapDragActiveRef.current) _setSnapHint("Hold ⌥ Alt to disable snapping");
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+    };
+  }, [_setSnapHint]);
 
   const selectedObjectIdsRef = useRef(selectedObjectIds);
   selectedObjectIdsRef.current = selectedObjectIds;
@@ -120,6 +145,8 @@ export const StageManagerProviderInternal = (
           processRotateStartEvent(eData, objectById, _updateObject);
           break;
         case StageToolEnum.MOVE:
+          snapDragActiveRef.current = true;
+          _setSnapHint(altKeyRef.current ? "Snapping disabled" : "Hold ⌥ Alt to disable snapping");
           processMoveStartEvent(
             eData,
             objectById,
@@ -142,6 +169,8 @@ export const StageManagerProviderInternal = (
           );
           break;
         case StageToolEnum.SCALE:
+          snapDragActiveRef.current = true;
+          _setSnapHint(altKeyRef.current ? "Snapping disabled" : "Hold ⌥ Alt to disable snapping");
           if (["left", "width", "top", "height"].includes(eData.handle)) {
             processResizeStartEvent(eData, objectById, { activeObjectId, selectedObjectIdsRef, zoom, selectionPath }, { _updateObject, _activateObject, _selectObjects, _addObjectsToSelection, _removeObjectsFromSelection, _deactivateObject });
           } else {
@@ -165,13 +194,14 @@ export const StageManagerProviderInternal = (
             selectedObjectIdsRef,
             zoom,
             snapBounds,
+            altKeyRef,
           });
           break;
         case StageToolEnum.SCALE:
           if (["left", "width", "top", "height"].includes(eData.handle)) {
-            processResizeChangeEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds });
+            processResizeChangeEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds, altKeyRef });
           } else {
-            processScaleChangeEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds });
+            processScaleChangeEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds, altKeyRef });
           }
           break;
         case StageToolEnum.PAN:
@@ -218,6 +248,8 @@ export const StageManagerProviderInternal = (
           );
           break;
         case StageToolEnum.MOVE:
+          snapDragActiveRef.current = false;
+          _setSnapHint(null);
           processMoveStopEvent(
             eData,
             objectById,
@@ -228,6 +260,7 @@ export const StageManagerProviderInternal = (
               breakpointConfig,
               recentlySelectedRef,
               snapBounds,
+              altKeyRef,
             },
             {
               _updateObject,
@@ -239,10 +272,12 @@ export const StageManagerProviderInternal = (
           );
           break;
         case StageToolEnum.SCALE:
+          snapDragActiveRef.current = false;
+          _setSnapHint(null);
           if (["left", "width", "top", "height"].includes(eData.handle)) {
-            processResizeStopEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds }, { _updateObject });
+            processResizeStopEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds, altKeyRef }, { _updateObject });
           } else {
-            processScaleStopEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds }, { _updateObject });
+            processScaleStopEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds, altKeyRef }, { _updateObject });
           }
           break;
         case StageToolEnum.PAN:
@@ -343,6 +378,7 @@ const mapDispatchToProps = {
   _setStagePan: (p: Point) => setStagePan(p),
   _selectForProperties: (payload: selectForPropertiesProps) =>
     selectForProperties(payload),
+  _setSnapHint: (hint: string | null) => setSnapHint(hint),
 };
 
 const StageManagerProvider = connect(

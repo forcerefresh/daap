@@ -117,9 +117,10 @@ export function processScaleChangeEvent(
     selectedObjectIdsRef: React.MutableRefObject<string[]>;
     zoom: number;
     snapBounds: SnapTarget[];
+    altKeyRef: React.MutableRefObject<boolean>;
   },
 ) {
-  const { selectedObjectIdsRef, zoom, snapBounds } = storeProps;
+  const { selectedObjectIdsRef, zoom, snapBounds, altKeyRef } = storeProps;
   const selectedObjectIds = selectedObjectIdsRef.current;
 
   selectedObjectIds.forEach((objectId) => {
@@ -178,6 +179,10 @@ export function processScaleChangeEvent(
     }
 
     // Corner snap: check both corners of each moving edge
+    if (altKeyRef.current) {
+      clearSnapGuides();
+      return;
+    }
     const LARGE = 1e9;
     const movingRight = eData.handle === "br" || eData.handle === "tr";
     const movingBottom = eData.handle === "br" || eData.handle === "bl";
@@ -273,12 +278,13 @@ export function processScaleStopEvent(
     selectedObjectIdsRef: React.MutableRefObject<string[]>;
     zoom: number;
     snapBounds: SnapTarget[];
+    altKeyRef: React.MutableRefObject<boolean>;
   },
   storeActions: {
     _updateObject: any;
   },
 ) {
-  const { selectedObjectIdsRef, zoom, snapBounds } = storeProps;
+  const { selectedObjectIdsRef, zoom, snapBounds, altKeyRef } = storeProps;
   const { _updateObject } = storeActions;
   const selectedObjectIds = selectedObjectIdsRef.current;
 
@@ -317,6 +323,16 @@ export function processScaleStopEvent(
     const { dLeft, dTop } = fixedCornerDelta(oldScale, scale, getObjectRotation(object), px, py);
     left += dLeft;
     top += dTop;
+
+    clearSnapGuides();
+
+    if (altKeyRef.current) {
+      objectClone.left = left;
+      objectClone.top = top;
+      objectClone.scale = scale;
+      _updateObject(objectClone);
+      return;
+    }
 
     const LARGE = 1e9;
     const movingRight = eData.handle === "br" || eData.handle === "tr";
@@ -391,6 +407,4 @@ export function processScaleStopEvent(
 
     _updateObject(objectClone);
   });
-
-  clearSnapGuides();
 }

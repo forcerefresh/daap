@@ -41,6 +41,7 @@ function MainLayout(props: IMainLayoutMergedProps) {
     showSimplifiedLayerPanel,
     pagesSimplified,
     showSimplifiedPagesPanel,
+    snapHint,
   } = props;
 
   return (
@@ -52,6 +53,9 @@ function MainLayout(props: IMainLayoutMergedProps) {
           {content}
           {floatingActions}
           {floatingPointer}
+          {snapHint && (
+            <div className={css.snapHint}>{snapHint}</div>
+          )}
           <div className={css.simplifiedFloatingPanelHolder}>
             {showSimplifiedLayerPanel && (
               <div
@@ -182,6 +186,7 @@ const mapStateToProps = (state: IStore) => ({
   // layoutType: state.globals.layoutType,
   showSimplifiedLayerPanel: state.stage.showSimplifiedLayerPanel,
   showSimplifiedPagesPanel: state.stage.showSimplifiedPagesPanel,
+  snapHint: state.stage.snapHint,
 });
 
 const mapDispatchToProps = {};

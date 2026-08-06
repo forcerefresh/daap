@@ -16,6 +16,7 @@ import {
   CANCEL_OVERRIDE_STAGE_TOOL,
   SHOW_SIMPLIFIED_LAYERS,
   SHOW_SIMPLIFIED_PAGES,
+  SET_SNAP_HINT,
   CREATE_NEW_PROJECT_FROM_EXISTING,
 } from "../actions/actions";
 
@@ -54,6 +55,7 @@ export interface IStage {
   nextTextPositionY: number;
   showSimplifiedLayerPanel: boolean;
   showSimplifiedPagesPanel: boolean;
+  snapHint: string | null;
 }
 
 const getStageDefault = (): IStage => ({
@@ -75,6 +77,7 @@ const getStageDefault = (): IStage => ({
   nextTextPositionY: 100,
   showSimplifiedLayerPanel: true,
   showSimplifiedPagesPanel: true,
+  snapHint: null,
 });
 
 export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
@@ -152,6 +155,9 @@ export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
     }
     case SHOW_SIMPLIFIED_PAGES: {
       return { ...state, showSimplifiedPagesPanel: action.payload };
+    }
+    case SET_SNAP_HINT: {
+      return { ...state, snapHint: action.payload };
     }
     default:
       return state;

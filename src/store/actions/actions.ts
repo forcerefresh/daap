@@ -2502,6 +2502,23 @@ export function showSimplifiedPages(show: boolean): ShowSimplifiedPagesAction {
 // ******
 
 // ******
+export const SET_SNAP_HINT = "Set snap hint";
+
+export interface SetSnapHintAction extends IUndoableAction<false> {
+  type: typeof SET_SNAP_HINT;
+  payload: string | null;
+}
+
+export function setSnapHint(hint: string | null): SetSnapHintAction {
+  return {
+    type: SET_SNAP_HINT,
+    payload: hint,
+    isUndoable: false,
+  };
+}
+// ******
+
+// ******
 export const VIEWPORT_SIZE = "Set viewport size";
 
 export interface SetViewportSizeAction extends IUndoableAction<false> {
@@ -3486,5 +3503,6 @@ export type ActionTypes =
   | UpdateUserDataAction
   | ShowSimplifiedLayersAction
   | ShowSimplifiedPagesAction
+  | SetSnapHintAction
   | AIRequestLoadingAction
   | AIEnableAction;
