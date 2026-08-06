@@ -1,26 +1,26 @@
 import React from "react";
 import { cloneDeep } from "lodash-es";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
-import { Rect } from "../../../webslider-sdk/object/i-tool-class";
+import { Bounds, Rect } from "../../../webslider-sdk/object/i-tool-class";
 import { ILayer } from "../../../store/reducers/i-layers";
 import {
   StageToolScaleEventData,
 } from "../../../utils/selection-manager/events/StageToolEvent";
 import { populateObjectThreeIds, computeGroupChildrenBounds } from "../../../store/actions/actions-utils";
 import {
-  getElementBySelector,
   getGroupMatrixFromSelectionPath,
   getObjectTransform,
   screenPointToLocal,
 } from "../stage-panel-utils";
 import { getObjectRotation, getObjectScale } from "../../../objects/object-utils";
-import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
+import { objectPointToStageSpace_New } from "../../../utils/transform/transform-utils";
+import { computeSnap, SnapTarget } from "../../../utils/snap/snap-engine";
+import { clearSnapGuides, renderSnapGuides } from "../../../utils/snap/snap-renderer";
 
 /**
  * For corner scale handles, returns the fixed corner (in object LOCAL coords)
- * and the reference width/height to use in the scale formula.
+ * and the reference width to use in the scale formula.
  * For groups, uses children bounds so the visual opposite corner stays fixed.
- * For non-groups, falls back to stored bounds (identical to previous behaviour).
  */
 function getCornerScaleParams(
   handle: string,
@@ -52,8 +52,8 @@ function getCornerScaleParams(
 }
 
 /**
- * Given the old scale, new scale, rotation, and the fixed-corner local coords,
- * returns the Δleft / Δtop required to keep that corner stationary in parent space.
+ * Given old/new scale, rotation, and fixed-corner local coords,
+ * returns the Δleft/Δtop needed to keep that corner stationary in parent space.
  */
 function fixedCornerDelta(
   oldScale: number,
@@ -72,16 +72,32 @@ function fixedCornerDelta(
   };
 }
 
+function mergeSnap(
+  a: ReturnType<typeof computeSnap>,
+  b: ReturnType<typeof computeSnap>,
+  axis: "x" | "y",
+) {
+  const da = axis === "x" ? a.deltaX : a.deltaY;
+  const db = axis === "x" ? b.deltaX : b.deltaY;
+  const winner = (da !== 0 && (db === 0 || Math.abs(da) <= Math.abs(db))) ? a : b;
+  return {
+    deltaX: winner.deltaX,
+    deltaY: winner.deltaY,
+    guides: [...a.guides, ...b.guides],
+    snappedObjectIds: [...new Set([...a.snappedObjectIds, ...b.snappedObjectIds])],
+  };
+}
+
 export function processScaleStartEvent(
-  eData: StageToolScaleEventData,
-  objectById: { [key: string]: IObject },
-  storeProps: {
+  _eData: StageToolScaleEventData,
+  _objectById: { [key: string]: IObject },
+  _storeProps: {
     activeObjectId: string | null;
     selectedObjectIdsRef: React.MutableRefObject<string[]>;
     zoom: number;
     selectionPath: string[];
   },
-  storeActions: {
+  _storeActions: {
     _updateObject: any;
     _activateObject: any;
     _selectObjects: (objectIds: string[]) => any;
@@ -100,9 +116,10 @@ export function processScaleChangeEvent(
   storeProps: {
     selectedObjectIdsRef: React.MutableRefObject<string[]>;
     zoom: number;
+    snapBounds: SnapTarget[];
   },
 ) {
-  const { selectedObjectIdsRef, zoom } = storeProps;
+  const { selectedObjectIdsRef, zoom, snapBounds } = storeProps;
   const selectedObjectIds = selectedObjectIdsRef.current;
 
   selectedObjectIds.forEach((objectId) => {
@@ -110,16 +127,10 @@ export function processScaleChangeEvent(
 
     const objectPath: string[] = [];
     populateObjectThreeIds(objectPath, objectId, objectById, layerById);
-    const parentGroupsMatrix = getGroupMatrixFromSelectionPath(
-      objectPath,
-      objectById,
-    );
+    const parentGroupsMatrix = getGroupMatrixFromSelectionPath(objectPath, objectById);
     parentGroupsMatrix.e = parentGroupsMatrix.f = 0;
     const objectOwnMatrix = new DOMMatrix(getObjectTransform(object));
     const fullContextMatrix = parentGroupsMatrix.multiply(objectOwnMatrix);
-
-    const mouseMoveX = eData.mouseMove.x / zoom;
-    const mouseMoveY = eData.mouseMove.y / zoom;
 
     const realMove = screenPointToLocal(
       { x: eData.mouseMove.x / zoom, y: eData.mouseMove.y / zoom },
@@ -128,154 +139,128 @@ export function processScaleChangeEvent(
       getObjectScale(object),
     );
 
-    const objectHolder = document.getElementsByClassName(
-      `object-holder-${objectId}`,
-    )[0] as HTMLDivElement;
+    const objectHolder = document.getElementsByClassName(`object-holder-${objectId}`)[0] as HTMLDivElement;
+    if (!objectHolder) return;
 
-    if (objectHolder) {
-      let newWidth: string | undefined = undefined;
-      let newLeft: string | undefined = undefined;
-      let newTop: string | undefined = undefined;
+    const objectSize: Rect = {
+      x: object.left!,
+      y: object.top!,
+      width: object.width!,
+      height: object.height!,
+    };
 
-      let newHeight: string | undefined = undefined;
+    let left = objectSize.x;
+    let top = objectSize.y;
 
-      const realMoveXY = realMove.x;
+    const oldScale = getObjectScale(object) ?? 1;
+    const { px, py, refW } = getCornerScaleParams(eData.handle, object, objectById);
+    const dir = eData.handle === "br" || eData.handle === "tr" ? -1 : 1;
+    const scale = (oldScale * refW - dir * realMove.x) / refW;
 
-      const objectSize: Rect = {
-        x: object.left!,
-        y: object.top!,
-        width: object.width!,
-        height: object.height!,
-      };
+    const { dLeft, dTop } = fixedCornerDelta(oldScale, scale, getObjectRotation(object), px, py);
+    left += dLeft;
+    top += dTop;
 
-      let left = objectSize.x;
-      let top = objectSize.y;
+    objectHolder.style.left = left + "px";
+    objectHolder.style.top = top + "px";
+    objectHolder.style.transform = `rotate(${getObjectRotation(object)}deg) scale(${scale})`;
 
-      const oldScale = getObjectScale(object) ?? 1;
-      const { px, py, refW } = getCornerScaleParams(eData.handle, object, objectById);
-      const dir = eData.handle === "br" || eData.handle === "tr" ? -1 : 1;
+    const handlesEls = Array.from(
+      document.getElementsByClassName(`resize-handle-${objectId}`),
+    ) as HTMLDivElement[];
+    handlesEls.forEach((handleEl) => {
+      handleEl.style.scale = `${oldScale / scale}`;
+    });
 
-      const scale = (oldScale * refW - dir * realMoveXY) / refW;
+    const selEl = objectHolder.getElementsByClassName("object-selection")?.[0] as HTMLDivElement | undefined;
+    if (selEl) {
+      selEl.style.boxShadow = `0 0 0 ${1 / scale / zoom}px ${object.objectIds ? "#444444" : "#48aff0"}`;
+    }
 
-      let transform = "";
+    // Corner snap: check both corners of each moving edge
+    const LARGE = 1e9;
+    const movingRight = eData.handle === "br" || eData.handle === "tr";
+    const movingBottom = eData.handle === "br" || eData.handle === "bl";
 
-      if (["tr", "bl", "tl", "br"].includes(eData.handle)) {
-        const { dLeft, dTop } = fixedCornerDelta(
-          oldScale,
-          scale,
-          getObjectRotation(object),
-          px,
-          py,
-        );
-        left += dLeft;
-        top += dTop;
-        transform =
-          "rotate(" + getObjectRotation(object) + "deg) scale(" + scale + ")";
-      }
+    const modObj = { ...object, left, top, scale };
+    const tlPos = objectPointToStageSpace_New([modObj], { x: 0, y: 0 }, 1);
+    const trPos = objectPointToStageSpace_New([modObj], { x: object.width!, y: 0 }, 1);
+    const blPos = objectPointToStageSpace_New([modObj], { x: 0, y: object.height! }, 1);
+    const brPos = objectPointToStageSpace_New([modObj], { x: object.width!, y: object.height! }, 1);
 
-      // WIDTH
-      if (eData.handle === "left" || eData.handle === "width") {
-        if (eData.handle === "left") {
-          newLeft =
-            objectSize.x + realMove.x / (getObjectScale(object) ?? 1) + "px";
-          objectHolder.style.left = newLeft;
-        }
+    const [xC1, xC2] = movingRight ? [trPos, brPos] : [tlPos, blPos];
+    const xSide = movingRight ? "right" : "left";
+    const srX1 = computeSnap({
+      left: xSide === "left" ? xC1.x : LARGE, right: xSide === "right" ? xC1.x : LARGE,
+      top: LARGE, bottom: LARGE, vcenter: LARGE, hcenter: LARGE,
+    } as unknown as Bounds, snapBounds, selectedObjectIds, zoom);
+    const srX2 = computeSnap({
+      left: xSide === "left" ? xC2.x : LARGE, right: xSide === "right" ? xC2.x : LARGE,
+      top: LARGE, bottom: LARGE, vcenter: LARGE, hcenter: LARGE,
+    } as unknown as Bounds, snapBounds, selectedObjectIds, zoom);
+    const srX = mergeSnap(srX1, srX2, "x");
 
-        const widthDirection = eData.handle === "left" ? -1 : 1;
+    const [yC1, yC2] = movingBottom ? [blPos, brPos] : [tlPos, trPos];
+    const ySide = movingBottom ? "bottom" : "top";
+    const srY1 = computeSnap({
+      left: LARGE, right: LARGE, vcenter: LARGE, hcenter: LARGE,
+      top: ySide === "top" ? yC1.y : LARGE, bottom: ySide === "bottom" ? yC1.y : LARGE,
+    } as unknown as Bounds, snapBounds, selectedObjectIds, zoom);
+    const srY2 = computeSnap({
+      left: LARGE, right: LARGE, vcenter: LARGE, hcenter: LARGE,
+      top: ySide === "top" ? yC2.y : LARGE, bottom: ySide === "bottom" ? yC2.y : LARGE,
+    } as unknown as Bounds, snapBounds, selectedObjectIds, zoom);
+    const srY = mergeSnap(srY1, srY2, "y");
 
-        newWidth =
-          objectSize.width +
-          widthDirection * (realMove.x / (getObjectScale(object) ?? 1)) +
-          "px";
-        objectHolder.style.width = newWidth;
+    clearSnapGuides();
+    renderSnapGuides(
+      [...srX.guides, ...srY.guides],
+      [...new Set([...srX.snappedObjectIds, ...srY.snappedObjectIds])],
+      zoom, scale,
+    );
 
-        const contentEl = objectHolder.getElementsByClassName(
-          "object-content",
-        )[0] as HTMLElement;
-        if (contentEl) contentEl.style.width = newWidth;
+    // Rotation-aware snap: sensitivity of each corner's stage position to scale change
+    // = (localX - fixedPx)*cos(R) - (localY - fixedPy)*sin(R)  [X axis]
+    // = (localX - fixedPx)*sin(R) + (localY - fixedPy)*cos(R)  [Y axis]
+    const R_rad = (getObjectRotation(object) * Math.PI) / 180;
+    const cosR = Math.cos(R_rad);
+    const sinR = Math.sin(R_rad);
+    const EPS = 1e-6;
+    const w = object.width!;
+    const h = object.height!;
+    const xLX = movingRight ? w : 0;   // local X of both X-snap corners
+    const yLY = movingBottom ? h : 0;  // local Y of both Y-snap corners
 
-        const resizeHolderEl = objectHolder.getElementsByClassName(
-          "resize-handle-holder-" + objectId,
-        )[0] as HTMLElement;
-        if (resizeHolderEl) resizeHolderEl.style.width = newWidth;
-      } else if (eData.handle === "top" || eData.handle === "height") {
-        if (eData.handle === "top") {
-          newTop =
-            objectSize.y + realMove.y / (getObjectScale(object) ?? 1) + "px";
-          objectHolder.style.top = newTop;
-        }
+    const snapCandidates: number[] = [];
 
-        const widthDirection = eData.handle === "top" ? -1 : 1;
+    // X snap — corners at (xLX, 0) and (xLX, h)
+    if (srX1.deltaX !== 0) {
+      const s = (xLX - px) * cosR - (0 - py) * sinR;
+      if (Math.abs(s) > EPS) snapCandidates.push(scale + srX1.deltaX / s);
+    }
+    if (srX2.deltaX !== 0) {
+      const s = (xLX - px) * cosR - (h - py) * sinR;
+      if (Math.abs(s) > EPS) snapCandidates.push(scale + srX2.deltaX / s);
+    }
 
-        newHeight =
-          objectSize.height +
-          widthDirection * (realMove.y / (getObjectScale(object) ?? 1)) +
-          "px";
-        objectHolder.style.height = newHeight;
+    // Y snap — corners at (0, yLY) and (w, yLY)
+    if (srY1.deltaY !== 0) {
+      const s = (0 - px) * sinR + (yLY - py) * cosR;
+      if (Math.abs(s) > EPS) snapCandidates.push(scale + srY1.deltaY / s);
+    }
+    if (srY2.deltaY !== 0) {
+      const s = (w - px) * sinR + (yLY - py) * cosR;
+      if (Math.abs(s) > EPS) snapCandidates.push(scale + srY2.deltaY / s);
+    }
 
-        const contentEl = objectHolder.getElementsByClassName(
-          "object-content",
-        )[0] as HTMLElement;
-        if (contentEl) contentEl.style.height = newHeight;
-
-        const resizeHolderEl = objectHolder.getElementsByClassName(
-          "resize-handle-holder-" + objectId,
-        )[0] as HTMLElement;
-        if (resizeHolderEl) resizeHolderEl.style.height = newHeight;
-      } else {
-        objectHolder.style.left = left + "px";
-        objectHolder.style.top = top + "px";
-        objectHolder.style.transform = transform;
-
-        // HANDLES
-        const handlesEls = Array.from(
-          document.getElementsByClassName(`resize-handle-${objectId}`),
-        ) as HTMLDivElement[];
-
-        handlesEls.forEach((handleEL) => {
-          handleEL.style.scale = `${(getObjectScale(object) ?? 1) / scale}`;
-        });
-
-        const selEl = objectHolder.getElementsByClassName(
-          "object-selection",
-        )?.[0] as HTMLDivElement | undefined;
-        if (selEl) {
-          selEl.style.boxShadow = `0 0 0 ${1 / scale / zoom}px ${
-            object.objectIds ? "#444444" : "#48aff0"
-          }`;
-        }
-      }
-
-      const html = getAppObjectDefinition(object.type, "latest")?.getHtml?.({
-        calculatedObjectSize: {
-          width: newWidth ?? object.width,
-          height: newHeight ?? object.height,
-        },
-        object: {
-          ...object,
-          width: newWidth ? parseInt(newWidth) : object.width,
-          height: newHeight ? parseInt(newHeight) : object.height,
-        },
-        deviceType: "device-independent",
-      });
-
-      const el = objectHolder.querySelector(`.object-content-${object.id}`);
-
-      if (el?.parentElement && html) {
-        el.parentElement.style.height = newHeight ?? object.height + "px";
-        el.parentElement.style.width = newWidth ?? object.width + "px";
-
-        el.parentElement.innerHTML = html;
-
-        const objectSelectorEl = getElementBySelector(
-          ".object-holder-" + object.id + " > .object-selection",
-        ) as HTMLElement;
-
-        if (objectSelectorEl) {
-          objectSelectorEl.style.width = newWidth ?? object.width + "px";
-          objectSelectorEl.style.height = newHeight ?? object.height + "px";
-        }
-      }
+    if (snapCandidates.length > 0) {
+      const snapScale = snapCandidates.reduce((best, c) =>
+        Math.abs(c - scale) < Math.abs(best - scale) ? c : best
+      );
+      const { dLeft: sdL, dTop: sdT } = fixedCornerDelta(oldScale, snapScale, getObjectRotation(object), px, py);
+      objectHolder.style.left = (objectSize.x + sdL) + "px";
+      objectHolder.style.top = (objectSize.y + sdT) + "px";
+      objectHolder.style.transform = `rotate(${getObjectRotation(object)}deg) scale(${snapScale})`;
     }
   });
 }
@@ -287,18 +272,15 @@ export function processScaleStopEvent(
   storeProps: {
     selectedObjectIdsRef: React.MutableRefObject<string[]>;
     zoom: number;
+    snapBounds: SnapTarget[];
   },
   storeActions: {
     _updateObject: any;
   },
 ) {
-  const { selectedObjectIdsRef, zoom } = storeProps;
+  const { selectedObjectIdsRef, zoom, snapBounds } = storeProps;
   const { _updateObject } = storeActions;
-
   const selectedObjectIds = selectedObjectIdsRef.current;
-
-  const x = eData.x! / zoom;
-  const y = eData.y! / zoom;
 
   selectedObjectIds.forEach((objectId) => {
     const object = objectById[objectId];
@@ -306,10 +288,7 @@ export function processScaleStopEvent(
 
     const objectPath: string[] = [];
     populateObjectThreeIds(objectPath, objectId, objectById, layerById);
-    const parentGroupsMatrix = getGroupMatrixFromSelectionPath(
-      objectPath,
-      objectById,
-    );
+    const parentGroupsMatrix = getGroupMatrixFromSelectionPath(objectPath, objectById);
     parentGroupsMatrix.e = parentGroupsMatrix.f = 0;
     const objectOwnMatrix = new DOMMatrix(getObjectTransform(object));
     const fullContextMatrix = parentGroupsMatrix.multiply(objectOwnMatrix);
@@ -321,9 +300,6 @@ export function processScaleStopEvent(
       getObjectScale(object),
     );
 
-    const realMoveX = realMove.x;
-    const realMoveY = realMove.y;
-
     const objectSize: Rect = {
       x: object.left!,
       y: object.top!,
@@ -334,55 +310,87 @@ export function processScaleStopEvent(
     const oldScale = getObjectScale(object) ?? 1;
     const { px, py, refW } = getCornerScaleParams(eData.handle, object, objectById);
     const dir = eData.handle === "br" || eData.handle === "tr" ? -1 : 1;
-
-    const scale = (oldScale * refW - dir * realMoveX) / refW;
+    const scale = (oldScale * refW - dir * realMove.x) / refW;
 
     let left = objectSize.x;
     let top = objectSize.y;
-    let transform = "";
+    const { dLeft, dTop } = fixedCornerDelta(oldScale, scale, getObjectRotation(object), px, py);
+    left += dLeft;
+    top += dTop;
 
-    if (["tr", "bl", "tl", "br"].includes(eData.handle)) {
-      const { dLeft, dTop } = fixedCornerDelta(
-        oldScale,
-        scale,
-        getObjectRotation(object),
-        px,
-        py,
+    const LARGE = 1e9;
+    const movingRight = eData.handle === "br" || eData.handle === "tr";
+    const movingBottom = eData.handle === "br" || eData.handle === "bl";
+
+    const modObj = { ...object, left, top, scale };
+    const tlPos = objectPointToStageSpace_New([modObj], { x: 0, y: 0 }, 1);
+    const trPos = objectPointToStageSpace_New([modObj], { x: object.width!, y: 0 }, 1);
+    const blPos = objectPointToStageSpace_New([modObj], { x: 0, y: object.height! }, 1);
+    const brPos = objectPointToStageSpace_New([modObj], { x: object.width!, y: object.height! }, 1);
+
+    const [xC1, xC2] = movingRight ? [trPos, brPos] : [tlPos, blPos];
+    const xSide = movingRight ? "right" : "left";
+    const srX1 = computeSnap({
+      left: xSide === "left" ? xC1.x : LARGE, right: xSide === "right" ? xC1.x : LARGE,
+      top: LARGE, bottom: LARGE, vcenter: LARGE, hcenter: LARGE,
+    } as unknown as Bounds, snapBounds, selectedObjectIds, zoom);
+    const srX2 = computeSnap({
+      left: xSide === "left" ? xC2.x : LARGE, right: xSide === "right" ? xC2.x : LARGE,
+      top: LARGE, bottom: LARGE, vcenter: LARGE, hcenter: LARGE,
+    } as unknown as Bounds, snapBounds, selectedObjectIds, zoom);
+
+    const [yC1, yC2] = movingBottom ? [blPos, brPos] : [tlPos, trPos];
+    const ySide = movingBottom ? "bottom" : "top";
+    const srY1 = computeSnap({
+      left: LARGE, right: LARGE, vcenter: LARGE, hcenter: LARGE,
+      top: ySide === "top" ? yC1.y : LARGE, bottom: ySide === "bottom" ? yC1.y : LARGE,
+    } as unknown as Bounds, snapBounds, selectedObjectIds, zoom);
+    const srY2 = computeSnap({
+      left: LARGE, right: LARGE, vcenter: LARGE, hcenter: LARGE,
+      top: ySide === "top" ? yC2.y : LARGE, bottom: ySide === "bottom" ? yC2.y : LARGE,
+    } as unknown as Bounds, snapBounds, selectedObjectIds, zoom);
+
+    const R_rad = (getObjectRotation(object) * Math.PI) / 180;
+    const cosR = Math.cos(R_rad);
+    const sinR = Math.sin(R_rad);
+    const EPS = 1e-6;
+    const w = object.width!;
+    const h = object.height!;
+    const xLX = movingRight ? w : 0;
+    const yLY = movingBottom ? h : 0;
+
+    const snapCandidates: number[] = [];
+    if (srX1.deltaX !== 0) {
+      const s = (xLX - px) * cosR - (0 - py) * sinR;
+      if (Math.abs(s) > EPS) snapCandidates.push(scale + srX1.deltaX / s);
+    }
+    if (srX2.deltaX !== 0) {
+      const s = (xLX - px) * cosR - (h - py) * sinR;
+      if (Math.abs(s) > EPS) snapCandidates.push(scale + srX2.deltaX / s);
+    }
+    if (srY1.deltaY !== 0) {
+      const s = (0 - px) * sinR + (yLY - py) * cosR;
+      if (Math.abs(s) > EPS) snapCandidates.push(scale + srY1.deltaY / s);
+    }
+    if (srY2.deltaY !== 0) {
+      const s = (w - px) * sinR + (yLY - py) * cosR;
+      if (Math.abs(s) > EPS) snapCandidates.push(scale + srY2.deltaY / s);
+    }
+
+    let snapScale = scale;
+    if (snapCandidates.length > 0) {
+      snapScale = snapCandidates.reduce((best, c) =>
+        Math.abs(c - scale) < Math.abs(best - scale) ? c : best
       );
-      left += dLeft;
-      top += dTop;
-      transform =
-        "rotate(" + getObjectRotation(object) + "deg) scale(" + scale + ")";
     }
 
-    if (eData.handle === "left" || eData.handle === "width") {
-      if (eData.handle === "left") {
-        objectClone.left =
-          objectSize.x + realMoveX / (getObjectScale(object) ?? 1);
-      }
-
-      const widthDirection = eData.handle === "left" ? -1 : 1;
-
-      objectClone.width =
-        objectSize.width +
-        widthDirection * (realMoveX / (getObjectScale(object) ?? 1));
-    } else if (eData.handle === "top" || eData.handle === "height") {
-      if (eData.handle === "top") {
-        objectClone.top =
-          objectSize.y + realMoveY / (getObjectScale(object) ?? 1);
-      }
-
-      const widthDirection = eData.handle === "top" ? -1 : 1;
-
-      objectClone.height =
-        objectSize.height +
-        widthDirection * (realMoveY / (getObjectScale(object) ?? 1));
-    } else {
-      objectClone.left = left;
-      objectClone.top = top;
-      objectClone.scale = scale;
-    }
+    const { dLeft: sdL, dTop: sdT } = fixedCornerDelta(oldScale, snapScale, getObjectRotation(object), px, py);
+    objectClone.left = objectSize.x + sdL;
+    objectClone.top = objectSize.y + sdT;
+    objectClone.scale = snapScale;
 
     _updateObject(objectClone);
   });
+
+  clearSnapGuides();
 }

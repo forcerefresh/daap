@@ -67,7 +67,9 @@ The daap project is a web-based design editor (rich interactive presentations/sl
 
 ## Phase 4 — Feature Improvement: Snap to Guideline
 
-**Goal:** Replace the current broken snap implementation with a proper snap engine.
+> **Detailed plan:** [doc/refactoring/phase-4-snap-engine.md](phase-4-snap-engine.md)
+
+**Goal:** Extend the existing snap implementation (already working for move) to cover resize, and fix the incomplete snap-layout-input UI.
 
 ### Current state (poor)
 

@@ -66,7 +66,7 @@
   align-items: center;
   padding: 2px 4px;
   //border: 1px solid #252526;
-  border-bottom: 1px solid $gray5;
+  border-bottom: 1px solid $daap-border;
 
   .moreBtn {
     margin-left: 5px;
@@ -216,7 +216,7 @@
 
 :global(.bp5-dark) {
   .slide {
-    border-bottom: 1px solid $dark-gray5;
+    border-bottom: 1px solid $daap-border-dark;
   }
 }
 

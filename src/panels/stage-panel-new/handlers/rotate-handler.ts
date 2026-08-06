@@ -8,12 +8,6 @@ import { decomposeMatrix2DW3 } from "../stage-panel-utils";
 import { getObjectRotation, getObjectScale } from "../../../objects/object-utils";
 import { computeGroupChildrenBounds } from "../../../store/actions/actions-utils";
 
-/**
- * Returns the rotation pivot in the object's LOCAL coordinate space.
- * For groups, uses the visual children bounds center so the rotation
- * matches the overlay handle position. For other objects, uses the
- * stored bounds center.
- */
 function getRotationPivot(
   object: IObject,
   objectById: { [key: string]: IObject },

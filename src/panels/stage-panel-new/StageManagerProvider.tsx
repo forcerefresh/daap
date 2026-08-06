@@ -40,6 +40,11 @@ import {
   processScaleStopEvent,
 } from "./handlers/scale-handler";
 import {
+  processResizeStartEvent,
+  processResizeChangeEvent,
+  processResizeStopEvent,
+} from "./handlers/resize-handler";
+import {
   processPanChangeEvent,
   processPanStopEvent,
 } from "./handlers/pan-handler";
@@ -49,8 +54,9 @@ import {
   processPointsRepositionStopEvent,
 } from "./handlers/points-reposition-handler";
 
-// Re-export snap utilities that other modules depend on
-export { clearSnapHolder, isNear } from "./handlers/move-handler";
+// Re-export snap utilities for external callers
+export { clearSnapGuides } from "../../utils/snap/snap-renderer";
+export { isNear } from "../../utils/snap/snap-engine";
 
 type StageManagerProviderOwnProps = { children?: React.ReactNode };
 
@@ -136,24 +142,11 @@ export const StageManagerProviderInternal = (
           );
           break;
         case StageToolEnum.SCALE:
-          processScaleStartEvent(
-            eData,
-            objectById,
-            {
-              activeObjectId,
-              selectedObjectIdsRef,
-              zoom,
-              selectionPath,
-            },
-            {
-              _updateObject,
-              _activateObject,
-              _selectObjects,
-              _addObjectsToSelection,
-              _removeObjectsFromSelection,
-              _deactivateObject,
-            },
-          );
+          if (["left", "width", "top", "height"].includes(eData.handle)) {
+            processResizeStartEvent(eData, objectById, { activeObjectId, selectedObjectIdsRef, zoom, selectionPath }, { _updateObject, _activateObject, _selectObjects, _addObjectsToSelection, _removeObjectsFromSelection, _deactivateObject });
+          } else {
+            processScaleStartEvent(eData, objectById, { activeObjectId, selectedObjectIdsRef, zoom, selectionPath }, { _updateObject, _activateObject, _selectObjects, _addObjectsToSelection, _removeObjectsFromSelection, _deactivateObject });
+          }
           break;
         case StageToolEnum.POINTS_REPOSITION:
           processPointsRepositionStartEvent(eData, objectById);
@@ -175,10 +168,11 @@ export const StageManagerProviderInternal = (
           });
           break;
         case StageToolEnum.SCALE:
-          processScaleChangeEvent(eData, objectById, layerById, {
-            selectedObjectIdsRef,
-            zoom,
-          });
+          if (["left", "width", "top", "height"].includes(eData.handle)) {
+            processResizeChangeEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds });
+          } else {
+            processScaleChangeEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds });
+          }
           break;
         case StageToolEnum.PAN:
           processPanChangeEvent(
@@ -245,16 +239,11 @@ export const StageManagerProviderInternal = (
           );
           break;
         case StageToolEnum.SCALE:
-          processScaleStopEvent(
-            eData,
-            objectById,
-            layerById,
-            {
-              selectedObjectIdsRef,
-              zoom,
-            },
-            { _updateObject },
-          );
+          if (["left", "width", "top", "height"].includes(eData.handle)) {
+            processResizeStopEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds }, { _updateObject });
+          } else {
+            processScaleStopEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds }, { _updateObject });
+          }
           break;
         case StageToolEnum.PAN:
           processPanStopEvent(

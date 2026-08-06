@@ -10,8 +10,6 @@ import {
 import { selectForPropertiesProps } from "../../../store/actions/actions";
 import { populateObjectThreeIds } from "../../../store/actions/actions-utils";
 import {
-  getElementByClass,
-  getElementBySelector,
   getGroupMatrixFromSelectionPath,
   screenPointToLocal,
 } from "../stage-panel-utils";
@@ -21,6 +19,8 @@ import {
   stagePointToObjectSpace_New,
 } from "../../../utils/transform/transform-utils";
 import { setFloatingActionPanelVisibility } from "../../floating-actions-panel/utils";
+import { computeSnap } from "../../../utils/snap/snap-engine";
+import { clearSnapGuides, renderSnapGuides } from "../../../utils/snap/snap-renderer";
 
 export function processMoveStartEvent(
   eData: StageToolMoveEventData,
@@ -166,16 +166,12 @@ export function processMoveChangeEvent(
 
     if (objectId === eData.objectId) {
       if (snapDeltaGlobal.x === 0 && snapDeltaGlobal.y === 0) {
-        const snapDelta = renderSnapLines(
-          newObjectBounds,
-          snapBounds,
-          selectedObjectIds,
-          zoom,
-          object.scale ?? 1,
-        );
+        clearSnapGuides();
+        const snapResult = computeSnap(newObjectBounds, snapBounds, selectedObjectIds, zoom);
+        renderSnapGuides(snapResult.guides, snapResult.snappedObjectIds, zoom, object.scale ?? 1);
 
-        if (snapDelta.x !== 0 || snapDelta.y !== 0) {
-          snapDeltaGlobal = snapDelta;
+        if (snapResult.deltaX !== 0 || snapResult.deltaY !== 0) {
+          snapDeltaGlobal = { x: snapResult.deltaX, y: snapResult.deltaY };
         }
       }
     }
@@ -232,7 +228,7 @@ export function processMoveStopEvent(
     ) => void;
   },
 ) {
-  clearSnapHolder();
+  clearSnapGuides();
 
   const {
     selectedObjectIdsRef,
@@ -316,16 +312,10 @@ export function processMoveStopEvent(
 
     if (objectId === eData.objectId) {
       if (snapDeltaGlobal.x === 0 && snapDeltaGlobal.y === 0) {
-        const snapDelta = renderSnapLines(
-          newObjectBounds,
-          snapBounds,
-          selectedObjectIds,
-          zoom,
-          object.scale ?? 1,
-        );
+        const snapResult = computeSnap(newObjectBounds, snapBounds, selectedObjectIds, zoom);
 
-        if (snapDelta.x !== 0 || snapDelta.y !== 0) {
-          snapDeltaGlobal = snapDelta;
+        if (snapResult.deltaX !== 0 || snapResult.deltaY !== 0) {
+          snapDeltaGlobal = { x: snapResult.deltaX, y: snapResult.deltaY };
         }
       }
     }
@@ -364,208 +354,6 @@ export function processMoveStopEvent(
     _updateObject(cloneDeep(parentGroup));
   }
 
-  clearSnapHolder();
-
-  const els = document.getElementsByClassName("snap-highlight-object");
-  Array.from(els).forEach((el) => {
-    el.classList.remove("snap-highlight-object");
-  });
+  clearSnapGuides();
 }
 
-// ── Snap utilities ────────────────────────────────────────────────────────────
-
-export function clearSnapHolder() {
-  const snapHolderEl = getElementByClass("StagePanel-SnapHolder") as HTMLElement;
-  snapHolderEl.innerHTML = "";
-
-  return snapHolderEl;
-}
-
-export function isNear(value: number, refValue: number, threshold: number) {
-  return value > refValue - threshold && value < refValue + threshold;
-}
-
-type SideType = "left" | "top" | "right" | "bottom" | "vcenter" | "hcenter";
-
-function renderSnapLines(
-  newObjectBounds: Bounds,
-  snapBounds: {
-    bounds: Bounds;
-    objectId: string;
-  }[],
-  skipObjectIds: string[],
-  stageScale: number,
-  objectScale: number,
-) {
-  const snapHolderEl = clearSnapHolder();
-
-  const snapDelta = { x: 0, y: 0 };
-
-  snapBounds.forEach((snapBound) => {
-    if (skipObjectIds.includes(snapBound.objectId)) return;
-
-    const objectSelectorEl = getElementBySelector(
-      ".object-holder-" + snapBound.objectId + " > .object-selection",
-    ) as HTMLDivElement;
-    if (objectSelectorEl) {
-      objectSelectorEl.style.setProperty(
-        "--snap-border-width",
-        `${1.2 / objectScale}px`,
-      );
-
-      objectSelectorEl.classList.remove("snap-highlight-object");
-    }
-
-    renderSnapLine(
-      newObjectBounds,
-      snapBound,
-      true,
-      ["left", "right"],
-      "left",
-      snapDelta,
-      stageScale,
-      snapHolderEl,
-    );
-    renderSnapLine(
-      newObjectBounds,
-      snapBound,
-      false,
-      ["top", "bottom"],
-      "top",
-      snapDelta,
-      stageScale,
-      snapHolderEl,
-    );
-    renderSnapLine(
-      newObjectBounds,
-      snapBound,
-      true,
-      ["left", "right"],
-      "right",
-      snapDelta,
-      stageScale,
-      snapHolderEl,
-    );
-    renderSnapLine(
-      newObjectBounds,
-      snapBound,
-      false,
-      ["top", "bottom"],
-      "bottom",
-      snapDelta,
-      stageScale,
-      snapHolderEl,
-    );
-
-    renderSnapLine(
-      newObjectBounds,
-      snapBound,
-      true,
-      ["vcenter"],
-      "vcenter",
-      snapDelta,
-      stageScale,
-      snapHolderEl,
-    );
-    renderSnapLine(
-      newObjectBounds,
-      snapBound,
-      false,
-      ["hcenter"],
-      "hcenter",
-      snapDelta,
-      stageScale,
-      snapHolderEl,
-    );
-  });
-
-  return snapDelta;
-}
-
-function renderSnapLine(
-  newObjectBounds: Bounds,
-  snapBounds: {
-    bounds: Bounds;
-    objectId: string;
-    snapThreshold?: number;
-  },
-  isHorizontal: boolean,
-  sides: SideType[],
-  propertyName: SideType,
-  snapDelta: {
-    x: number;
-    y: number;
-  },
-  stageScale: number,
-  snapHolderEl: HTMLElement,
-) {
-  sides.forEach((side) => {
-    // TODO
-    if (
-      snapDelta.x &&
-      (side === "left" || side === "right" || side === "vcenter")
-    ) {
-      return;
-    }
-    // TODO
-    if (
-      snapDelta.y &&
-      (side === "top" || side === "bottom" || side === "hcenter")
-    ) {
-      return;
-    }
-
-    const boundsAny = snapBounds.bounds as any;
-    const newBoundsAny = newObjectBounds as any;
-
-    if (
-      isNear(
-        newBoundsAny[propertyName],
-        boundsAny[side],
-        (snapBounds.snapThreshold ?? 5) / stageScale,
-      )
-    ) {
-      if (isHorizontal) {
-        snapHolderEl.innerHTML += `
-          <div
-            style="
-              position: absolute;
-              top: -10000px;
-              left: ${boundsAny[side]}px;
-              bottom: -10000px;
-              width: 0px;
-              border-left: ${1 / stageScale}px solid #ce58d1;
-              overflow: visible;
-            "
-          ></div>
-        `;
-      } else {
-        snapHolderEl.innerHTML += `
-          <div
-            style="
-              position: absolute;
-              left: -10000px;
-              top: ${boundsAny[side]}px;
-              right: -10000px;
-              height: 0px;
-                border-top: ${1 / stageScale}px solid #ce58d1;
-              overflow: visible;
-            "
-          ></div>
-        `;
-      }
-
-      const objectSelectorEl = getElementBySelector(
-        ".object-holder-" + snapBounds.objectId + " > .object-selection",
-      );
-      objectSelectorEl?.classList.add("snap-highlight-object");
-
-      const deltaProp =
-        side == "left" || side == "right" || side === "vcenter" ? "x" : "y";
-
-      snapDelta[deltaProp] = boundsAny[side] - newBoundsAny[propertyName];
-    }
-  });
-
-  return snapDelta;
-}
