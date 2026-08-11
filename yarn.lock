@@ -4024,9 +4024,13 @@ d@1, d@^1.0.1, d@^1.0.2:
     es5-ext "^0.10.64"
     type "^2.7.2"
 
-"daap-player@link:../daap-player":
-  version "0.0.0"
-  uid ""
+daap-player@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/daap-player/-/daap-player-0.1.0.tgz#3f1ecf8e10cf798980082eeb82138464bdcd6803"
+  integrity sha512-W5XSA1Fm1S/CaVNXz2IjzyAfC0+iBpzEBvCbGSMiJVIKpVU+qyZIKZVrqn3ADK3lgAgyeNi8Drs9Y5B2aVzi1A==
+  dependencies:
+    animejs "^3.2.1"
+    events "^3.3.0"
 
 date-time@^3.1.0:
   version "3.1.0"
