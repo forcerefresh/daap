@@ -1,6 +1,6 @@
 import { Button, HTMLSelect } from "@blueprintjs/core";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { Player } from "../player/player/Player";
+import { Player } from "daap-player";
 import { getSliderOptionsFromLocalStorage } from "./utils";
 import css from "./PlayerDev.module.scss";
 import cx from "classnames";
