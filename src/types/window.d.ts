@@ -1,4 +1,4 @@
-import type { Player } from "../player/player/Player";
+import type { Player } from "daap-player";
 import type { FontPreloader } from "../objects/font-preloader";
 import type animejs from "animejs";
 

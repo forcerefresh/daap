@@ -142,7 +142,8 @@
     "webfontloader": "^1.6.28",
     "webpack-cli": "^4.9.2",
     "webpack-node-externals": "^3.0.0",
-    "webslider-sdk": "^2.2.0",
+    "daap-player": "link:../daap-player",
+    "webslider-sdk": "^2.2.1",
     "write-file-atomic": "^5.0.0",
     "yt-player": "^3.5.0",
     "yup": "^1.4.0"

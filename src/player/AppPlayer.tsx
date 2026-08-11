@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from "react";
 import { isEmpty, omit } from "lodash-es";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { IPreviewState } from "../store/reducers/stage";
-import { Player } from "./player/Player";
+import { Player } from "daap-player";
 import { IPlayerData } from "../export/i-export-html";
 import { PreviewTimelineContext } from "../utils/preview-timeline-provider/PreviewTimelineProvider";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";

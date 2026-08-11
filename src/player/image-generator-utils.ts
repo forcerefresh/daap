@@ -1,6 +1,6 @@
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 import { IPlayerData } from "../export/i-export-html";
-import { Player } from "./player/Player";
+import { Player } from "daap-player";
 import { ILayer, ILayers } from "../store/reducers/i-layers";
 import { IPages } from "../store/reducers/i-pages";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
