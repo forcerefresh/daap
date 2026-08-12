@@ -11,6 +11,7 @@ import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { isEqual } from "lodash-es";
 import ConfirmButton from "../../utils/components/confirm-button/confirm-button";
 import { AUTH_LOGOUT } from "../../pages/login/constants";
+import { SectionHeader } from "../common/section-header/SectionHeader";
 
 enum GlobalPanelSections {
   AccountConfiguration = "accountConfiguration",
@@ -75,8 +76,7 @@ const AccountSettingsPanel: React.FC<IAccountSettingsPanelMergedProps> = (
   return (
     <div className={css.accountSettingsPanel}>
       <section>
-        <div
-          className={css.sectionHeader}
+        <SectionHeader
           onClick={() => {
             //toggleSection(GlobalPanelSections.AccountConfiguration)
           }}
@@ -91,7 +91,7 @@ const AccountSettingsPanel: React.FC<IAccountSettingsPanelMergedProps> = (
             }
         ></Button>*/}
           Account settings
-        </div>
+        </SectionHeader>
         {visibleSectionIds[GlobalPanelSections.AccountConfiguration] && (
           <div className={css.panel}>
             <div className={css.group}>
@@ -118,8 +118,7 @@ const AccountSettingsPanel: React.FC<IAccountSettingsPanelMergedProps> = (
       </section>
 
       <section>
-        <div
-          className={css.sectionHeader}
+        <SectionHeader
           onClick={() => {
             //toggleSection(GlobalPanelSections.AccountConfiguration)
           }}
@@ -134,7 +133,7 @@ const AccountSettingsPanel: React.FC<IAccountSettingsPanelMergedProps> = (
             }
         ></Button>*/}
           Close account
-        </div>
+        </SectionHeader>
         {visibleSectionIds[GlobalPanelSections.AccountConfiguration] && (
           <div className={css.panel}>
             <div>

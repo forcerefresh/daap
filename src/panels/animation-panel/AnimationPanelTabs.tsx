@@ -36,6 +36,7 @@ import {
   getAnimationsOptions,
 } from "webslider-sdk/lib/animations/animations-register";
 import { AnimationType } from "webslider-sdk/lib/animations/i-animation-types";
+import { PanelHeader } from "../common/panel-header/PanelHeader";
 import { IntegrationContext } from "../../integration";
 
 type IAnimationPanel = typeof mapDispatchToProps &
@@ -454,7 +455,7 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
   }
   return (
     <div className={classnames(css.animation, className)}>
-      {!hideHeader && <div className={css.panelHeader}>ANIMATION PANEL</div>}
+      {!hideHeader && <PanelHeader title="ANIMATION PANEL" />}
       {id ? (
         <Tabs className={css.tabs}>
           {sections.map((section) => {

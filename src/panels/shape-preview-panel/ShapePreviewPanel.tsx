@@ -30,6 +30,7 @@ import {
 } from "../../objects/line/line";
 import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
+import { SectionHeader } from "../common/section-header/SectionHeader";
 
 enum ShapeSections {
   Line = "line",
@@ -424,8 +425,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
             [css.open]: visibleSectionIds[ShapeSections.Line],
           })}
         >
-          <div
-            className={css.sectionHeader}
+          <SectionHeader
             onClick={() => toggleSection(ShapeSections.Line)}
           >
             {/* <Button
@@ -438,7 +438,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
               }
             ></Button> */}
             <span>Line</span>
-          </div>
+          </SectionHeader>
           <div
             style={{
               padding: "10px",
@@ -508,8 +508,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
             [css.open]: visibleSectionIds[ShapeSections.Rectangle],
           })}
         >
-          <div
-            className={css.sectionHeader}
+          <SectionHeader
             onClick={() => toggleSection(ShapeSections.Rectangle)}
           >
             {/* <Button
@@ -522,7 +521,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
               }
             ></Button> */}
             <span>Rectangle</span>
-          </div>
+          </SectionHeader>
           <div
             style={{
               padding: "10px",
@@ -588,8 +587,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
             [css.open]: visibleSectionIds[ShapeSections.Circle],
           })}
         >
-          <div
-            className={css.sectionHeader}
+          <SectionHeader
             onClick={() => toggleSection(ShapeSections.Circle)}
           >
             {/* <Button
@@ -602,7 +600,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
               }
             ></Button> */}
             <span>Circle</span>
-          </div>
+          </SectionHeader>
           <div
             style={{
               padding: "10px",
@@ -672,8 +670,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
             [css.open]: visibleSectionIds[ShapeSections.Star],
           })}
         >
-          <div
-            className={css.sectionHeader}
+          <SectionHeader
             onClick={() => toggleSection(ShapeSections.Star)}
           >
             {/* <Button
@@ -686,7 +683,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
               }
             ></Button> */}
             <span>Star</span>
-          </div>
+          </SectionHeader>
           <div
             style={{
               padding: "10px",
@@ -756,8 +753,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
             [css.open]: visibleSectionIds[ShapeSections.Polygon],
           })}
         >
-          <div
-            className={css.sectionHeader}
+          <SectionHeader
             onClick={() => toggleSection(ShapeSections.Polygon)}
           >
             {/* <Button
@@ -770,7 +766,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
               }
             ></Button> */}
             <span>Polygon</span>
-          </div>
+          </SectionHeader>
           <div
             style={{
               padding: "10px",

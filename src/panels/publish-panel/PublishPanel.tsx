@@ -22,6 +22,8 @@ import { ObjectStorageItem } from "../../integration/hooks/object-storage-hook/i
 import ConfirmButton from "../../utils/components/confirm-button/confirm-button";
 import { base64ToBlob, downloadBlob } from "../../utils/file/file-utils";
 import copyToClipboard from "copy-to-clipboard";
+import { PanelHeader } from "../common/panel-header/PanelHeader";
+import { SectionHeader } from "../common/section-header/SectionHeader";
 
 interface IPublishPanelProps {
   onRequestClose: () => void;
@@ -131,11 +133,9 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
   };
   return (
     <div className={cx("bp5-dark", css.publishPanel)}>
-      <div className={css.panelHeader}>
-        <div>PUBLISH PANEL</div>
-      </div>
+      <PanelHeader title="PUBLISH PANEL" />
       <div className={css.publishHolder}>
-        <div className={css.sectionHeader}>
+        <SectionHeader>
           <div>BUCKETS</div>
 
           <Popover2
@@ -158,7 +158,7 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
               Assign bucket to this project
             </Button>
           </Popover2>
-        </div>
+        </SectionHeader>
         {assignedBuckets.map((bucket) => (
           <div className={css.bucketItem}>
             <p>
@@ -374,7 +374,7 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
             </ConfirmButton>
           </div>
         ))}
-        <div className={css.sectionHeader}>DOWNLOAD</div>
+        <SectionHeader>DOWNLOAD</SectionHeader>
         <div className={css.bucketItem}>
           <p>
             <ConfirmButton

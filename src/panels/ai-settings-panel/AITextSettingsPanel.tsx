@@ -16,6 +16,7 @@ import { cloneDeep } from "lodash-es";
 import { setAIEnabled } from "../../store/actions/actions";
 import { TEXT } from "../../objects/text/text";
 import { IntegrationContext } from "../../integration";
+import { SectionHeader } from "../common/section-header/SectionHeader";
 
 interface ITextAISettings {
   enabled: boolean;
@@ -157,8 +158,7 @@ const AITextSettingsPanel: React.FC<IAITextSettingsPanelMergedProps> = (
   return (
     <div className={css.aiSettingsPanel}>
       <section>
-        <div
-          className={css.sectionHeader}
+        <SectionHeader
           onClick={() => {
             //toggleSection(GlobalPanelSections.AccountConfiguration)
           }}
@@ -173,7 +173,7 @@ const AITextSettingsPanel: React.FC<IAITextSettingsPanelMergedProps> = (
             }
         ></Button>*/}
           Configuration
-        </div>
+        </SectionHeader>
         {
           //visibleSectionIds[GlobalPanelSections.Api] &&
           <div className={css.panel}>
@@ -247,8 +247,7 @@ const AITextSettingsPanel: React.FC<IAITextSettingsPanelMergedProps> = (
 
       {formData.enabled && (
         <section>
-          <div
-            className={css.sectionHeader}
+          <SectionHeader
             onClick={() => {
               //toggleSection(GlobalPanelSections.AccountConfiguration)
             }}
@@ -263,7 +262,7 @@ const AITextSettingsPanel: React.FC<IAITextSettingsPanelMergedProps> = (
             }
         ></Button>*/}
             Prompt templates
-          </div>
+          </SectionHeader>
           {
             //visibleSectionIds[GlobalPanelSections.Prompts] &&
             <div className={css.panel}>

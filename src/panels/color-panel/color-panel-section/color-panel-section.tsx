@@ -2,6 +2,7 @@ import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
 import css from "../ColorPanel.module.scss";
 import { ColorButtonWithTooltip } from "../../../inputs/color-input/color-button-with-tooltip";
 import { Text } from "@blueprintjs/core";
+import { SectionHeader } from "../../common/section-header/SectionHeader";
 
 interface IColorPanelSectionProps {
   title: string;
@@ -20,12 +21,12 @@ export const ColorPanelSection = (props: IColorPanelSectionProps) => {
 
   return (
     <section className={css.section}>
-      <div className={css.sectionHeader}>
+      <SectionHeader>
         <div>{title}</div>
         <div style={{ fontWeight: "normal" }} className="bp5-text-small">
           {info}
         </div>
-      </div>
+      </SectionHeader>
 
       <div className={css.sectionContent}>
         {colors.map((row, rowIndex) => (

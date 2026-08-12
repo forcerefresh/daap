@@ -64,6 +64,7 @@ import { FontPreloader } from "../../objects/font-preloader";
 
 import allFontsPairings from "../../utils/fonts/all-fonts-pairings.json";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
+import { SectionHeader } from "../common/section-header/SectionHeader";
 
 // const fontPairing = urbanFontPairing.futuristic_pairings[0].fontPairing;
 
@@ -423,9 +424,9 @@ const FontPairingPanel = (props: IFontPairingPanelMergedProps) => {
         </div>
 
         <section style={{ flexGrow: 0, minHeight: "10%", height: "100%" }}>
-          <div className={css.sectionHeader}>
+          <SectionHeader>
             <span>Font pairings</span>
-          </div>
+          </SectionHeader>
 
           <div className={css.panel}>
             <div

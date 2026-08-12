@@ -72,6 +72,7 @@ import { ColorButtonWithTooltip } from "../../inputs/color-input/color-button-wi
 import { ColorSplitButtonWithTooltip } from "../../inputs/color-input/color-split-button-with-tooltip";
 import { ColorPanelSection } from "./color-panel-section/color-panel-section";
 import { getRelatedColors } from "./related-colors-utils";
+import { SectionHeader } from "../common/section-header/SectionHeader";
 
 enum FontSections {
   MyFonts = "my-fonts",
@@ -423,7 +424,7 @@ const ColorPanel = (props: IColorPanelMergedProps) => {
         </section>
 
         <section className={css.section}>
-          <div className={css.sectionHeader}>Used in document</div>
+          <SectionHeader>Used in document</SectionHeader>
 
           <div className={css.sectionContent}>
             {colorsFromObjects.length === 0 ? (
@@ -454,7 +455,7 @@ const ColorPanel = (props: IColorPanelMergedProps) => {
         {documentColorPalettes.length > 0 &&
         documentColorPalettes[0].colors?.length > 0 ? (
           <section className={css.section}>
-            <div className={css.sectionHeader}>Brand colors</div>
+            <SectionHeader>Brand colors</SectionHeader>
 
             <div className={css.sectionContent}>
               <div>
@@ -497,7 +498,7 @@ const ColorPanel = (props: IColorPanelMergedProps) => {
 
         {imagesColors.length > 0 && (
           <section className={css.section}>
-            <div className={css.sectionHeader}>Colors from photos</div>
+            <SectionHeader>Colors from photos</SectionHeader>
 
             <div className={css.sectionContent}>
               {imagesColors.map((row, rowIndex) => (
@@ -518,7 +519,7 @@ const ColorPanel = (props: IColorPanelMergedProps) => {
         )}
 
         <section className={css.section}>
-          <div className={css.sectionHeader}>Base colors</div>
+          <SectionHeader>Base colors</SectionHeader>
 
           <div className={css.sectionContent}>
             <div className={css.sectionColorRow}>
@@ -538,7 +539,7 @@ const ColorPanel = (props: IColorPanelMergedProps) => {
         </section>
 
         <section className={css.section}>
-          <div className={css.sectionHeader}>More colors</div>
+          <SectionHeader>More colors</SectionHeader>
 
           <div className={css.sectionContent}>
             {moreColors.map((row, rowIndex) => (

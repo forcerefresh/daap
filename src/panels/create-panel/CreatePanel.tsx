@@ -34,6 +34,7 @@ import {
   getUnitNumericFiled,
 } from "../../inputs/input-utils";
 import ChangeCheckerButton from "../../utils/components/change-checker-button/ChangeCheckerButton";
+import { SectionHeader } from "../common/section-header/SectionHeader";
 import {
   setupNewProject,
   setupNewProjectFromExisting,
@@ -373,7 +374,7 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
               return (
                 <React.Fragment key={rootCat.category + cat.category}>
                   <div>
-                    <div className={css.sectionHeader}>{cat.category}</div>
+                    <SectionHeader>{cat.category}</SectionHeader>
                   </div>
                   <div style={{ display: "flex", flexWrap: "wrap" }}>
                     {renderObjectsCards(cat.items, cat.category)}

@@ -37,6 +37,7 @@ import { IGlobalSlideOverlapTime } from "webslider-sdk/lib/common/i-slider-durat
 import { cloneDeep } from "lodash-es";
 import { getDocumentsOptionFromThree } from "../../utils/document/documents-type-utils";
 import { IntegrationContext } from "../../integration";
+import { SectionHeader } from "../common/section-header/SectionHeader";
 
 enum ProjectPanelSections {
   Project = "Project",
@@ -156,8 +157,7 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
   return (
     <div className={css.projectPanel}>
       <section>
-        <div
-          className={settingsCss.sectionHeader}
+        <SectionHeader
           onClick={() => toggleSection(ProjectPanelSections.Project)}
         >
           <Button
@@ -170,7 +170,7 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
             }
           ></Button>
           Document
-        </div>
+        </SectionHeader>
         {visibleSectionIds[ProjectPanelSections.Project] && (
           <div className={settingsCss.panel}>
             <FormGroup>
@@ -300,8 +300,7 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
       </section>
 
       {/* <section>
-        <div
-          className={settingsCss.sectionHeader}
+        <SectionHeader
           onClick={() => toggleSection(ProjectPanelSections.Page)}
         >
           <Button
@@ -314,7 +313,7 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
             }
           ></Button>
           Page
-        </div>
+        </SectionHeader>
         {visibleSectionIds[ProjectPanelSections.Page] && (
           <div className={settingsCss.panel}>
             <FormGroup>
@@ -374,8 +373,7 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
       </section> */}
 
       {/* <section>
-        <div
-          className={settingsCss.sectionHeader}
+        <SectionHeader
           onClick={() => toggleSection(ProjectPanelSections.Preview)}
         >
           <Button
@@ -388,7 +386,7 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
             }
           ></Button>
           Preview
-        </div>
+        </SectionHeader>
         {visibleSectionIds[ProjectPanelSections.Preview] && (
           <div className={settingsCss.panel}>
             <div
@@ -439,8 +437,7 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
       </section> */}
 
       {/* <section>
-        <div
-          className={settingsCss.sectionHeader}
+        <SectionHeader
           onClick={() => toggleSection(ProjectPanelSections.Breakpoints)}
         >
           <Button
@@ -453,7 +450,7 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
             }
           ></Button>
           Responsive configuration
-        </div>
+        </SectionHeader>
         {visibleSectionIds[ProjectPanelSections.Breakpoints] && (
           <div className={settingsCss.panel}>
             {breakpointConfiguration.breakpointsConfiguration.map(

@@ -24,6 +24,7 @@ import { generateImages } from "../../player/image-generator-utils";
 import JSZip from "jszip";
 import FileSaver from "file-saver";
 import { SliderInputForm } from "../../inputs/slider-input/slider-input";
+import { SectionHeader } from "../common/section-header/SectionHeader";
 import {
   base64ToBlob,
   blobToBase64,
@@ -131,7 +132,7 @@ const ExportPanel: React.FC<IExportPanelMergedProps> = (props) => {
       <div className={css.exportHolder}>
         <section>
           <div>
-            <div className={css.sectionHeader}>Export size</div>
+            <SectionHeader>Export size</SectionHeader>
           </div>
           <div style={{ display: "flex", flexWrap: "wrap" }}>
             <div
@@ -180,7 +181,7 @@ const ExportPanel: React.FC<IExportPanelMergedProps> = (props) => {
         <Divider />
         <section>
           <div>
-            <div className={css.sectionHeader}>Scale</div>
+            <SectionHeader>Scale</SectionHeader>
           </div>
           <div style={{ display: "flex", flexWrap: "wrap" }}>
             <div
@@ -221,7 +222,7 @@ const ExportPanel: React.FC<IExportPanelMergedProps> = (props) => {
         <Divider />
         <section>
           <div>
-            <div className={css.sectionHeader}>Format</div>
+            <SectionHeader>Format</SectionHeader>
           </div>
           <div style={{ paddingLeft: "5px" }}>
             <div
@@ -274,7 +275,7 @@ const ExportPanel: React.FC<IExportPanelMergedProps> = (props) => {
 
         <section>
           <div>
-            <div className={css.sectionHeader}>File names</div>
+            <SectionHeader>File names</SectionHeader>
           </div>
           <div style={{ paddingLeft: "5px" }}>
             <div
@@ -314,7 +315,7 @@ const ExportPanel: React.FC<IExportPanelMergedProps> = (props) => {
 
         <section>
           <div>
-            <div className={css.sectionHeader}>Crop</div>
+            <SectionHeader>Crop</SectionHeader>
           </div>
           <div
             className={cx("input400-force", css.inputHolder)}

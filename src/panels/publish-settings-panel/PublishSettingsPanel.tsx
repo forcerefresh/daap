@@ -19,6 +19,7 @@ import {
 } from "../../store/actions/actions";
 import { TEXT } from "../../objects/text/text";
 import { IntegrationContext } from "../../integration";
+import { SectionHeader } from "../common/section-header/SectionHeader";
 
 interface IPublishSettings {
   enabled: boolean;
@@ -111,8 +112,7 @@ const PublishSettingsPanel: React.FC<IPublishSettingsPanelMergedProps> = (
   return (
     <div className={css.publishSettingsPanel}>
       <section>
-        <div
-          className={css.sectionHeader}
+        <SectionHeader
           onClick={() => {
             //toggleSection(GlobalPanelSections.AccountConfiguration)
           }}
@@ -127,7 +127,7 @@ const PublishSettingsPanel: React.FC<IPublishSettingsPanelMergedProps> = (
             }
         ></Button>*/}
           Publish Configuration
-        </div>
+        </SectionHeader>
         {
           //visibleSectionIds[GlobalPanelSections.Api] &&
           <div className={css.panel}>

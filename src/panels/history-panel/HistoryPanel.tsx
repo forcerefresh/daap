@@ -5,6 +5,7 @@ import { IStore } from "../../store/store";
 import css from "./HistoryPanel.module.scss";
 import { doRedo, doUndo, IUndoableAction } from "../../store/actions/actions";
 import { Button } from "@blueprintjs/core";
+import { PanelHeader } from "../common/panel-header/PanelHeader";
 
 interface IHistoryPanelProps {
   onRequestClose: () => void;
@@ -63,29 +64,26 @@ const HistoryPanel: React.FC<IHistoryPanelMergedProps> = (props) => {
 
   return (
     <div className={cx("bp5-dark", css.historyPanel)}>
-      <div className={css.panelHeader}>
-        <div>HISTORY PANEL</div>
-        <div>
-          <Button
-            disabled={!hasUndoItem}
-            minimal
-            small
-            onClick={() => doUndo()}
-            icon="undo"
-          >
-            Undo
-          </Button>
-          <Button
-            disabled={!hasRedoItem}
-            minimal
-            small
-            onClick={() => doRedo()}
-            icon="redo"
-          >
-            Redo
-          </Button>
-        </div>
-      </div>
+      <PanelHeader title="HISTORY PANEL">
+        <Button
+          disabled={!hasUndoItem}
+          minimal
+          small
+          onClick={() => doUndo()}
+          icon="undo"
+        >
+          Undo
+        </Button>
+        <Button
+          disabled={!hasRedoItem}
+          minimal
+          small
+          onClick={() => doRedo()}
+          icon="redo"
+        >
+          Redo
+        </Button>
+      </PanelHeader>
       <div className={css.historyHolder}>
         <div>
           {/*nextItems.map((item, idx) => (

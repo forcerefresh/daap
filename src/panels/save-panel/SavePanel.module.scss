@@ -41,35 +41,6 @@
   //   outline: none;
   // }
 
-  .panelHeader {
-    display: flex;
-    //flex-direction: column;
-    align-items: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-    // padding: 5px;
-    // padding-left: 10px;
-    font-weight: bold;
-    color: gray;
-    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
-
-    > *:first-child {
-      flex-grow: 1;
-    }
-
-    .saving {
-      width: auto;
-      display: flex;
-      column-gap: 5px;
-
-      :global {
-        .bp5-spinner {
-          display: inline-flex;
-        }
-      }
-    }
-  }
-
   .saveHolder {
     flex-grow: 1;
     overflow-y: auto;

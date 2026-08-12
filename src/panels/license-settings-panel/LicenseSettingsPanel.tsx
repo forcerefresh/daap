@@ -22,6 +22,7 @@ import {
   getSubscriptionNameByType,
 } from "./license-utils";
 import ConfirmButton from "../../utils/components/confirm-button/confirm-button";
+import { SectionHeader } from "../common/section-header/SectionHeader";
 
 enum GlobalPanelSections {
   LicenseConfiguration = "licenseConfiguration",
@@ -72,8 +73,7 @@ const LicenseSettingsPanel: React.FC<ILicenseSettingsPanelMergedProps> = (
   return (
     <div className={css.licenseSettingsPanel}>
       <section>
-        <div
-          className={css.sectionHeader}
+        <SectionHeader
           onClick={() => {
             //toggleSection(GlobalPanelSections.LicenseConfiguration)
           }}
@@ -88,7 +88,7 @@ const LicenseSettingsPanel: React.FC<ILicenseSettingsPanelMergedProps> = (
             }
         ></Button>*/}
           License settings
-        </div>
+        </SectionHeader>
         {visibleSectionIds[GlobalPanelSections.LicenseConfiguration] && (
           <div className={css.panel}>
             <div className={css.serialGroup}>

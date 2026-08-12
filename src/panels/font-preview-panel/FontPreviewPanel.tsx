@@ -42,6 +42,7 @@ import { debounce, isArray } from "lodash-es";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
+import { SectionHeader } from "../common/section-header/SectionHeader";
 
 enum FontSections {
   MyFonts = "my-fonts",
@@ -389,8 +390,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
             [css.open]: visibleSectionIds[FontSections.MyFonts],
           })}
         >
-          <div
-            className={css.sectionHeader}
+          <SectionHeader
             onClick={() => toggleSection(FontSections.MyFonts)}
           >
             <Button
@@ -417,7 +417,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
                 Upload font
               </Button>
             </div>
-          </div>
+          </SectionHeader>
 
           {visibleSectionIds[FontSections.MyFonts] && (
             <div className={cx(css.panel, css.myFontsPanel)}>
@@ -505,8 +505,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
             [css.open]: visibleSectionIds[FontSections.GoogleFonts],
           })}
         >
-          <div
-            className={css.sectionHeader}
+          <SectionHeader
             onClick={() => toggleSection(FontSections.GoogleFonts)}
           >
             <Button
@@ -519,7 +518,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
               }
             ></Button>
             Google fonts
-          </div>
+          </SectionHeader>
 
           {visibleSectionIds[FontSections.GoogleFonts] && (
             <div className={css.panel}>
@@ -556,8 +555,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
             [css.open]: visibleSectionIds[FontSections.SystemFonts],
           })}
         >
-          <div
-            className={css.sectionHeader}
+          <SectionHeader
             onClick={() => toggleSection(FontSections.SystemFonts)}
           >
             <Button
@@ -570,7 +568,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
               }
             ></Button>
             System Fonts
-          </div>
+          </SectionHeader>
           {visibleSectionIds[FontSections.SystemFonts] && (
             <div className={css.panel}>
               {systemFonts.map((font) => (

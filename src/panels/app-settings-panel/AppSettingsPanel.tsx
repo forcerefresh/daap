@@ -24,6 +24,7 @@ import {
 
 import { IAppSettings } from "../../store/reducers/globals";
 import { IntegrationContext } from "../../integration";
+import { SectionHeader } from "../common/section-header/SectionHeader";
 
 enum GlobalPanelSections {
   Editor = "editor",
@@ -65,8 +66,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
   return (
     <div className={css.appSettingsPanel}>
       <section>
-        <div
-          className={css.sectionHeader}
+        <SectionHeader
           onClick={() => toggleSection(GlobalPanelSections.Editor)}
         >
           <Button
@@ -79,7 +79,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
             }
           ></Button>
           Editor
-        </div>
+        </SectionHeader>
         {visibleSectionIds[GlobalPanelSections.UiLayout] && (
           <div className={css.panel}>
             <div className="input60">
@@ -277,8 +277,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
       </section>
 
       {/* <section>
-        <div
-          className={css.sectionHeader}
+        <SectionHeader
           onClick={() => toggleSection(GlobalPanelSections.UiLayout)}
         >
           <Button
@@ -291,7 +290,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
             }
           ></Button>
           App layout
-        </div>
+        </SectionHeader>
         {visibleSectionIds[GlobalPanelSections.UiLayout] && (
           <div className={css.panel}>
             <FormGroup
@@ -327,8 +326,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
         )}
       </section> */}
       <section>
-        <div
-          className={css.sectionHeader}
+        <SectionHeader
           onClick={() => toggleSection(GlobalPanelSections.OtherSettings)}
         >
           <Button
@@ -341,7 +339,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
             }
           ></Button>
           General
-        </div>
+        </SectionHeader>
         {visibleSectionIds[GlobalPanelSections.OtherSettings] && (
           <div className={css.panel}>
             {import.meta.env.VITE_APP_INTEGRATION === "wp" && (
@@ -460,8 +458,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
       </section>
       {/* 
       <section>
-        <div
-          className={css.sectionHeader}
+        <SectionHeader
           onClick={() => toggleSection(GlobalPanelSections.DeveloperSettings)}
         >
           <Button
@@ -474,7 +471,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
             }
           ></Button>
           Developer
-        </div>
+        </SectionHeader>
         {visibleSectionIds[GlobalPanelSections.DeveloperSettings] && (
           <div className={css.panel}>
             <FormGroup
