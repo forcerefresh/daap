@@ -88,7 +88,9 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
       try {
         // @vite-ignore and webpackIgnore needed for dynamic external URL imports
         await import(/* webpackIgnore: true */ /* @vite-ignore */ devItem.appDevUrl + "?" + Math.random());
-        await import(/* webpackIgnore: true */ /* @vite-ignore */ devItem.playerDevUrl + "?" + Math.random());
+        if (devItem.extensionType !== "plugin" && devItem.playerDevUrl) {
+          await import(/* webpackIgnore: true */ /* @vite-ignore */ devItem.playerDevUrl + "?" + Math.random());
+        }
 
         const devItemUpdate: Partial<DevelopmentItem> = {
           id: devItem.id,
@@ -112,6 +114,15 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
             },
             true
           );
+        }
+
+        if (devItem.extensionType === "plugin") {
+          logger.app.debug(`Register plugin (${devItem.type})`);
+          const key = `${devItem.type}-${devItem.version}`;
+          const pluginDef = global.plugins?.[key];
+          if (pluginDef) {
+            global.registerPlugin?.(pluginDef, true);
+          }
         }
 
         if (devItem.extensionType === "animation") {

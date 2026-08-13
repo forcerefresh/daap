@@ -10916,10 +10916,10 @@ webslider-sdk@^1.1.144:
     semver "^7.7.2"
     webslider-sdk "^1.1.144"
 
-webslider-sdk@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-2.2.1.tgz#47b605178067ae0c156103d2527e33a4aadcbff8"
-  integrity sha512-GrCBlL5JI5R/XJ3CO/GIuQzwP2c9r41ZqcydatrFI5eqQiaYFrqPQIGUEJfRCytOAcxRva9h6RRmetcYuOghOQ==
+webslider-sdk@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-2.3.0.tgz#8d66f5f5e2a7eec53bdbc12938e81a9b699ba289"
+  integrity sha512-8dKFKbCZK7xmOWOgqV/cHd4Atffopz0gyc8rUYsy5T+9u3D+I8LGEEi5zBoiKEVl9/TRNOO6uzakC2Pc7imEBg==
   dependencies:
     "@types/lodash-es" "^4.17.12"
     "@types/semver" "^7.7.0"

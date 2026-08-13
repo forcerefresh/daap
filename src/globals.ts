@@ -9,6 +9,8 @@ import {
   registerExternalAnimation,
   unregisterAnimation,
 } from "webslider-sdk/lib/animations/animations-register";
+import { IPlugin } from "webslider-sdk/lib/plugins/i-plugin";
+import { registerPlugin } from "webslider-sdk/lib/plugins/plugins-register";
 import { getFonts } from "./utils/fonts/fonts";
 import { getGoogleFontList } from "./utils/fonts/google-fonts";
 
@@ -18,6 +20,9 @@ export interface IWebSliderGlobalScope {
   appObjects?: Record<string, IObjectAppDefinition>;
   playerAnimations?: Record<string, unknown>;
   appAnimations?: Record<string, unknown>;
+  // Plugin registry — populated by plugin bundles at runtime
+  plugins?: Record<string, IPlugin>;
+  registerPlugin?: typeof registerPlugin;
   // Registration helpers exposed for external bundles
   registerExternalObject?: typeof registerExternalObject;
   unregisterObject?: typeof unregisterObject;

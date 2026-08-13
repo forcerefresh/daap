@@ -265,6 +265,10 @@ export const IntegrationContext = React.createContext({
   //     Promise.resolve({ url: "" }),
   // }),
 
+  usePluginsHook: () => ({
+    loadPlugins: (): Promise<void> => Promise.resolve(),
+  }),
+
   useExtensionsHook: () => ({
     /* get installed extensions */
     getInstalledExtensions: (): Promise<{ data: IExtensionItem[] }> =>
@@ -754,6 +758,19 @@ function useLicenseHookFactory() {
   }
 }
 
+function usePluginsHookFactory() {
+  if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
+    return require("./integration/hooks/plugins-hook/saas-use-plugins-hook")
+      .usePluginsHook;
+  } else if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
+    return require("./integration/hooks/plugins-hook/wp-use-plugins-hook")
+      .usePluginsHook;
+  } else {
+    return require("./integration/hooks/plugins-hook/wp-use-plugins-hook")
+      .usePluginsHook;
+  }
+}
+
 function useDevelopmentHookFactory() {
   if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/development-hook/electron-use-development-hook")
@@ -780,6 +797,7 @@ export const IntegrationContextProvider = (
         //useAssetsHook: useAssetsHookFactory(),
         usePresets: usePresetsHookFactory(),
         useObjectStorageHook: useObjectStorageFactory(),
+        usePluginsHook: usePluginsHookFactory(),
         useExtensionsHook: useExtensionsHookFactory(),
         // useAppSettingsHook: useAppSettingsHookFactory(),
         useDevelopmentHook: useDevelopmentHookFactory(),

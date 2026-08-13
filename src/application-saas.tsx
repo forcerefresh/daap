@@ -23,6 +23,7 @@ import {
   registerExternalAnimation,
   unregisterAnimation,
 } from "webslider-sdk/lib/animations/animations-register";
+import { registerPlugin } from "webslider-sdk/lib/plugins/plugins-register";
 import css from "./App.module.scss";
 import MainHeader from "./integration/components/main-header/SassMainHeader";
 import { HotkeysProvider, PortalProvider } from "@blueprintjs/core";
@@ -127,3 +128,6 @@ global.WebSlider_GlobalScope.registerExternalAnimation =
 
 // EXTERNAL EFFECT UNREGISTER
 global.WebSlider_GlobalScope.unregisterAnimation = unregisterAnimation;
+
+// PLUGIN REGISTER
+global.WebSlider_GlobalScope.registerPlugin = registerPlugin;

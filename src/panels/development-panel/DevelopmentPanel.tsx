@@ -124,6 +124,13 @@ const DevelopmentPanel: React.FC<IDevelopmentMergedProps> = (props) => {
         >
           Add Extension
         </Button>
+        <Button
+          intent="primary"
+          icon={"plus"}
+          onClick={() => addItem("plugin")}
+        >
+          Add Plugin
+        </Button>
       </div>
     </div>
   );

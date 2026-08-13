@@ -74,6 +74,9 @@ import ExtensionsPanel from "../extensions-panel/ExtensionsPanel";
 import LayoutsPanel from "../layouts-panel/LayoutsPanel";
 import LayoutToTemplatePanel from "../../template-generator/components/layout-to-template-panel/LayoutToTemplatePanel";
 import LayoutToTemplatePanelOld from "../../template-generator/components/layout-to-template-panel/LayoutToTemplatePanelOld";
+import { getPlugins } from "webslider-sdk/lib/plugins/plugins-register";
+import { IPlugin } from "webslider-sdk/lib/plugins/i-plugin";
+import PluginDrawer from "../plugin-drawer/PluginDrawer";
 
 enum VisiblePanel {
   None = "none",
@@ -133,6 +136,14 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
 
   const globalContext = useContext(IntegrationContext);
   // const { getLicenseDetails } = globalContext.useLicenseHook();
+
+  const { loadPlugins } = globalContext.usePluginsHook();
+  const [plugins, setPlugins] = useState<IPlugin[]>([]);
+  const [activePlugin, setActivePlugin] = useState<IPlugin | null>(null);
+
+  useEffect(() => {
+    loadPlugins().then(() => setPlugins(getPlugins()));
+  }, []);
 
   const [defaultSettingsSelectedTabId, setDefaultSettingsSelectedTabId] =
     useState<string | undefined>();
@@ -880,6 +891,28 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
               </div>
             )}
           </Portal>
+
+          {plugins.map((plugin) => (
+            <Button
+              key={plugin.id}
+              className={css.largeButton}
+              minimal
+              active={activePlugin?.id === plugin.id}
+              title={plugin.buttonConfig.tooltip ?? plugin.buttonConfig.label}
+              onClick={() =>
+                setActivePlugin(activePlugin?.id === plugin.id ? null : plugin)
+              }
+            >
+              <Icon icon={plugin.buttonConfig.icon as any} />
+            </Button>
+          ))}
+
+          {activePlugin && (
+            <PluginDrawer
+              plugin={activePlugin}
+              onClose={() => setActivePlugin(null)}
+            />
+          )}
 
           <Portal>
             {showPanel === VisiblePanel.Layout2Template && (

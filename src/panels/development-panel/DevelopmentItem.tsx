@@ -132,7 +132,7 @@ const DevelopmentItemComp = (props: IDevelopmentItemProps) => {
                   intent: "warning",
                 });
                 return;
-              } else if (!item.appDevUrl || !item.playerDevUrl || !item.type) {
+              } else if (!item.appDevUrl || (item.extensionType !== "plugin" && !item.playerDevUrl) || !item.type) {
                 AppToaster.show({
                   message: "Token is not valid.",
                   intent: "warning",
