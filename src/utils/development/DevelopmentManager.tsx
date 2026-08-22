@@ -86,8 +86,23 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
       hasUpdate = true;
 
       try {
-        // @vite-ignore and webpackIgnore needed for dynamic external URL imports
-        await import(/* webpackIgnore: true */ /* @vite-ignore */ devItem.appDevUrl + "?" + Math.random());
+        if (devItem.extensionType === "plugin") {
+          // Plugins are UMD bundles that rely on window.React — use <script> injection
+          // so the UMD wrapper runs in global scope and can find window globals.
+          await new Promise<void>((resolve, reject) => {
+            const prev = document.querySelector(`script[data-plugin="${devItem.type}"]`);
+            if (prev) prev.remove();
+            const script = document.createElement("script");
+            script.dataset.plugin = devItem.type;
+            script.src = devItem.appDevUrl + "?" + Math.random();
+            script.onload = () => resolve();
+            script.onerror = () => reject(new Error(`Failed to load plugin script: ${devItem.appDevUrl}`));
+            document.head.appendChild(script);
+          });
+        } else {
+          // @vite-ignore and webpackIgnore needed for dynamic external URL imports
+          await import(/* webpackIgnore: true */ /* @vite-ignore */ devItem.appDevUrl + "?" + Math.random());
+        }
         if (devItem.extensionType !== "plugin" && devItem.playerDevUrl) {
           await import(/* webpackIgnore: true */ /* @vite-ignore */ devItem.playerDevUrl + "?" + Math.random());
         }

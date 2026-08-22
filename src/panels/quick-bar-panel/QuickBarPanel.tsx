@@ -70,7 +70,6 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
     showSimplifiedLayers,
     _showSimplifiedPages,
     showSimplifiedPagesPanel,
-    layout2TemplateEnabled,
     breakpointConfig,
   } = props;
   const {
@@ -224,43 +223,6 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
           </Popover>
         </div> */}
 
-        {layout2TemplateEnabled ? (
-          <>
-            <div>
-              <Button
-                style={{ color: "rgb(110 240 239)" }}
-                icon={
-                  <Icon icon={"clean"} style={{ color: "rgb(110 240 239)" }} />
-                }
-                minimal
-                className={cx(css.button)}
-                onClick={() => {
-                  const event = new CustomEvent("OPEN_LAYOUT2TEMPLATE");
-                  window.dispatchEvent(event);
-                }}
-              >
-                Generate
-              </Button>
-            </div>
-
-            {/* <div>
-              <Button
-                style={{ color: "rgb(110 240 239)" }}
-                icon={
-                  <Icon icon={"clean"} style={{ color: "rgb(110 240 239)" }} />
-                }
-                minimal
-                className={cx(css.button)}
-                onClick={() => {
-                  const event = new CustomEvent("OPEN_LAYOUT2TEMPLATE_OLD");
-                  window.dispatchEvent(event);
-                }}
-              >
-                Generate OLD
-              </Button>
-            </div> */}
-          </>
-        ) : null}
 
         <div>
           <Popover
@@ -537,7 +499,6 @@ const mapStateToProps = (state: IStore) => {
 
   return {
     breakpointConfig,
-    layout2TemplateEnabled: globals.canUseAIGenerator ?? false,
     activeLayerId,
     activeObject,
     objectById: objects.objectById,

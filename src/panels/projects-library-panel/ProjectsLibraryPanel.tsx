@@ -6,6 +6,7 @@ import css from "./ProjectsLibraryPanel.module.scss";
 import { Tab, Tabs, Tag } from "@blueprintjs/core";
 import ProjectsPanel from "../projects-panel/ProjectsPanel";
 import MyTemplatesPanel from "../my-templates-panel/MyTemplatesPanel";
+import DevelopmentPanel from "../development-panel/DevelopmentPanel";
 
 interface IProjectsLibraryPanelProps {
   onRequestClose: () => void;
@@ -58,13 +59,13 @@ const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
             title="Local Extensions"
             panel={<MyExtensionsPanel onRequestClose={props.onRequestClose} />}
           /> */}
-          {/* {enableDeveloper && (
+          {enableDeveloper && (
             <Tab
               id="development"
               title="Development"
               panel={<DevelopmentPanel onRequestClose={props.onRequestClose} />}
             />
-          )} */}
+          )}
         </Tabs>
       </div>
     </div>

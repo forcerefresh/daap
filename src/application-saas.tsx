@@ -15,6 +15,7 @@ import "./objects/font-preloader";
 import {
   registerExternalObject,
   unregisterObject,
+  getAppObjectDefinition,
 } from "webslider-sdk/lib/objects/objects-register";
 import DevelopmentManager from "./utils/development/DevelopmentManager";
 import { DevelopmentContextProvider } from "./utils/development/DevelopmentProvider";
@@ -24,6 +25,7 @@ import {
   unregisterAnimation,
 } from "webslider-sdk/lib/animations/animations-register";
 import { registerPlugin } from "webslider-sdk/lib/plugins/plugins-register";
+import { PagePreviewInternal } from "./panels/pages-simplified/PagePreview";
 import css from "./App.module.scss";
 import MainHeader from "./integration/components/main-header/SassMainHeader";
 import { HotkeysProvider, PortalProvider } from "@blueprintjs/core";
@@ -122,6 +124,12 @@ global.WebSlider_GlobalScope.registerExternalObject = registerExternalObject;
 // EXTERNAL OBJECT UNREGISTER
 global.WebSlider_GlobalScope.unregisterObject = unregisterObject;
 
+// Object definition lookup — plugins use this to avoid bundling a separate registry
+global.WebSlider_GlobalScope.getAppObjectDefinition = getAppObjectDefinition;
+
+// Unconnected slide preview renderer — plugins pass a project and get a canvas preview
+global.WebSlider_GlobalScope.PagePreviewInternal = PagePreviewInternal;
+
 // EXTERNAL EFFECT REGISTER
 global.WebSlider_GlobalScope.registerExternalAnimation =
   registerExternalAnimation;
@@ -131,3 +139,7 @@ global.WebSlider_GlobalScope.unregisterAnimation = unregisterAnimation;
 
 // PLUGIN REGISTER
 global.WebSlider_GlobalScope.registerPlugin = registerPlugin;
+
+// Expose React globally so UMD plugin bundles can resolve their peer dependency
+(window as any).React = React;
+(window as any).ReactDOM = ReactDOM;

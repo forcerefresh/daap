@@ -72,8 +72,6 @@ import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
 import FontPairingPanel from "../font-pairing-panel/FontPairingPanel";
 import ExtensionsPanel from "../extensions-panel/ExtensionsPanel";
 import LayoutsPanel from "../layouts-panel/LayoutsPanel";
-import LayoutToTemplatePanel from "../../template-generator/components/layout-to-template-panel/LayoutToTemplatePanel";
-import LayoutToTemplatePanelOld from "../../template-generator/components/layout-to-template-panel/LayoutToTemplatePanelOld";
 import { getPlugins } from "webslider-sdk/lib/plugins/plugins-register";
 import { IPlugin } from "webslider-sdk/lib/plugins/i-plugin";
 import PluginDrawer from "../plugin-drawer/PluginDrawer";
@@ -88,9 +86,6 @@ enum VisiblePanel {
   History = "history",
   FontPreview = "font-preview",
   FontPairing = "font-pairing",
-  Layout2Template = "layout-to-template",
-  Layout2TemplateOld = "layout-to-template-old",
-
   MediaLibrary = "media-library",
   // ProjectsLibrary = "projects-library",
   Projects = "projects",
@@ -174,14 +169,6 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       setShowPanel(VisiblePanel.Extensions);
     };
 
-    const openLayoutToTemplateCallback = () => {
-      setShowPanel(VisiblePanel.Layout2Template);
-    };
-
-    const openLayoutToTemplateOldCallback = () => {
-      setShowPanel(VisiblePanel.Layout2TemplateOld);
-    };
-
     const openMediaFontsCallback = () => {
       setDefaultSettingsMediaLibraryTabId("myFonts");
       // setTimeout(() => {
@@ -235,15 +222,6 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     window.addEventListener("OPEN_EXPORT", openExportCallback);
 
     window.addEventListener("OPEN_EXTENSIONS", openExtensionsCallback);
-    window.addEventListener(
-      "OPEN_LAYOUT2TEMPLATE",
-      openLayoutToTemplateCallback,
-    );
-
-    window.addEventListener(
-      "OPEN_LAYOUT2TEMPLATE_OLD",
-      openLayoutToTemplateOldCallback,
-    );
 
     return () => {
       window.removeEventListener("OPEN_ACCOUNT_SETTINGS", openAccountCallback);
@@ -270,16 +248,6 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       window.removeEventListener("OPEN_TEXT_PANEL", openTextCallback);
 
       window.removeEventListener("OPEN_EXTENSIONS", openExtensionsCallback);
-
-      window.removeEventListener(
-        "OPEN_LAYOUT2TEMPLATE",
-        openLayoutToTemplateCallback,
-      );
-
-      window.removeEventListener(
-        "OPEN_LAYOUT2TEMPLATE_OLD",
-        openLayoutToTemplateOldCallback,
-      );
     };
   }, []);
 
@@ -913,32 +881,6 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
               onClose={() => setActivePlugin(null)}
             />
           )}
-
-          <Portal>
-            {showPanel === VisiblePanel.Layout2Template && (
-              <div ref={sharedRef}>
-                <LayoutToTemplatePanel
-                  onRequestClose={() => {
-                    setReplaceItem(undefined);
-                    setShowPanel(VisiblePanel.None);
-                  }}
-                />
-              </div>
-            )}
-          </Portal>
-
-          <Portal>
-            {showPanel === VisiblePanel.Layout2TemplateOld && (
-              <div ref={sharedRef}>
-                <LayoutToTemplatePanelOld
-                  onRequestClose={() => {
-                    setReplaceItem(undefined);
-                    setShowPanel(VisiblePanel.None);
-                  }}
-                />
-              </div>
-            )}
-          </Portal>
 
           <Portal>
             {showPanel === VisiblePanel.Export && (

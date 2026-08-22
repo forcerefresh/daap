@@ -4,6 +4,7 @@ import {
   IObjectPlayerDefinition,
   registerExternalObject,
   unregisterObject,
+  getAppObjectDefinition,
 } from "webslider-sdk/lib/objects/objects-register";
 import {
   registerExternalAnimation,
@@ -11,6 +12,7 @@ import {
 } from "webslider-sdk/lib/animations/animations-register";
 import { IPlugin } from "webslider-sdk/lib/plugins/i-plugin";
 import { registerPlugin } from "webslider-sdk/lib/plugins/plugins-register";
+import { PagePreviewInternal } from "./panels/pages-simplified/PagePreview";
 import { getFonts } from "./utils/fonts/fonts";
 import { getGoogleFontList } from "./utils/fonts/google-fonts";
 
@@ -26,6 +28,8 @@ export interface IWebSliderGlobalScope {
   // Registration helpers exposed for external bundles
   registerExternalObject?: typeof registerExternalObject;
   unregisterObject?: typeof unregisterObject;
+  getAppObjectDefinition?: typeof getAppObjectDefinition;
+  PagePreviewInternal?: typeof PagePreviewInternal;
   registerExternalAnimation?: typeof registerExternalAnimation;
   unregisterAnimation?: typeof unregisterAnimation;
   // Font helpers
