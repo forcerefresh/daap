@@ -1,0 +1,92 @@
+@import "/src/tokens";
+
+.pluginsPanel {
+  width: 950px;
+}
+
+.headerSection {
+  margin-bottom: 10px;
+}
+
+.mainSection {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(var(--daap-forcerefresh-app-height) - 290px);
+}
+
+.tableRow {
+  display: flex;
+  margin-bottom: 1px;
+
+  > * {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    margin-right: 1px;
+  }
+}
+
+.nameAndDesc {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.name {
+  font-weight: bold;
+}
+
+.version {
+  color: gray;
+  font-size: 12px;
+}
+
+.description {
+  color: gray;
+}
+
+.action {
+  width: 120px;
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 6px;
+}
+
+.installedBadge {
+  color: chartreuse;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.uploadSection {
+  margin-top: 20px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  h4 {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+.uploadRow {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.uploadField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  label {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+}

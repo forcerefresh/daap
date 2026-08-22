@@ -72,6 +72,7 @@ import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
 import FontPairingPanel from "../font-pairing-panel/FontPairingPanel";
 import ExtensionsPanel from "../extensions-panel/ExtensionsPanel";
 import LayoutsPanel from "../layouts-panel/LayoutsPanel";
+import PluginsPanel from "../plugins-panel/PluginsPanel";
 import { getPlugins } from "webslider-sdk/lib/plugins/plugins-register";
 import { IPlugin } from "webslider-sdk/lib/plugins/i-plugin";
 import PluginDrawer from "../plugin-drawer/PluginDrawer";
@@ -92,6 +93,7 @@ enum VisiblePanel {
   Templates = "templates",
   Layouts = "layouts",
   Extensions = "extensions",
+  Plugins = "plugins",
 
   Export = "export",
   ShapePreview = "shape-preview",
@@ -169,6 +171,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       setShowPanel(VisiblePanel.Extensions);
     };
 
+    const openPluginsCallback = () => {
+      setShowPanel(VisiblePanel.Plugins);
+    };
+
     const openMediaFontsCallback = () => {
       setDefaultSettingsMediaLibraryTabId("myFonts");
       // setTimeout(() => {
@@ -222,6 +228,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     window.addEventListener("OPEN_EXPORT", openExportCallback);
 
     window.addEventListener("OPEN_EXTENSIONS", openExtensionsCallback);
+    window.addEventListener("OPEN_PLUGINS", openPluginsCallback);
 
     return () => {
       window.removeEventListener("OPEN_ACCOUNT_SETTINGS", openAccountCallback);
@@ -248,6 +255,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       window.removeEventListener("OPEN_TEXT_PANEL", openTextCallback);
 
       window.removeEventListener("OPEN_EXTENSIONS", openExtensionsCallback);
+      window.removeEventListener("OPEN_PLUGINS", openPluginsCallback);
     };
   }, []);
 
@@ -851,6 +859,30 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             {showPanel === VisiblePanel.Extensions && (
               <div ref={sharedRef}>
                 <ExtensionsPanel
+                  onRequestClose={() => {
+                    setReplaceItem(undefined);
+                    setShowPanel(VisiblePanel.None);
+                  }}
+                />
+              </div>
+            )}
+          </Portal>
+
+          {globals.userRole === "ADMIN" && (
+            <Button
+              className={css.largeButton}
+              minimal
+              active={showPanel === VisiblePanel.Plugins}
+              title="Plugins"
+              onClick={() => setShowPanel(showPanel === VisiblePanel.Plugins ? VisiblePanel.None : VisiblePanel.Plugins)}
+            >
+              <Icon icon="cube" size={ICON_SIZE} />
+            </Button>
+          )}
+          <Portal>
+            {globals.userRole === "ADMIN" && showPanel === VisiblePanel.Plugins && (
+              <div ref={sharedRef}>
+                <PluginsPanel
                   onRequestClose={() => {
                     setReplaceItem(undefined);
                     setShowPanel(VisiblePanel.None);

@@ -267,6 +267,11 @@ export const IntegrationContext = React.createContext({
 
   usePluginsHook: () => ({
     loadPlugins: (): Promise<void> => Promise.resolve(),
+    getAvailablePlugins: (): Promise<any[]> => Promise.resolve([]),
+    getInstalledPlugins: (): Promise<any[]> => Promise.resolve([]),
+    installPlugin: (_plugin: any): Promise<any> => Promise.resolve(_plugin),
+    uninstallPlugin: (_id: string): Promise<void> => Promise.resolve(),
+    uploadPlugin: (_fileBase64: string, _filename: string, _type: string, _version: string): Promise<{ scriptUrl: string }> => Promise.resolve({ scriptUrl: "" }),
   }),
 
   useExtensionsHook: () => ({

@@ -7,6 +7,8 @@ import { Tab, Tabs, Tag } from "@blueprintjs/core";
 import ProjectsPanel from "../projects-panel/ProjectsPanel";
 import MyTemplatesPanel from "../my-templates-panel/MyTemplatesPanel";
 import DevelopmentPanel from "../development-panel/DevelopmentPanel";
+import PluginsPanel from "../plugins-panel/PluginsPanel";
+import MyExtensionsPanel from "../my-extensions-panel/MyExtensionsPanel";
 
 interface IProjectsLibraryPanelProps {
   onRequestClose: () => void;
@@ -19,7 +21,7 @@ export type IProjectsLibraryPanelMergedProps = typeof mapDispatchToProps &
 const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
   props
 ) => {
-  const { enableDeveloper, missingExtensions } = props;
+  const { enableDeveloper, missingExtensions, userRole } = props;
 
   return (
     <div className={cx("bp5-dark", css.projectsLibraryPanel)}>
@@ -54,11 +56,18 @@ const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
             }
             panel={<ExtensionsPanel onRequestClose={props.onRequestClose} />}
           /> */}
-          {/* <Tab
+          <Tab
             id="myExtensions"
             title="Local Extensions"
             panel={<MyExtensionsPanel onRequestClose={props.onRequestClose} />}
-          /> */}
+          />
+          {userRole === "ADMIN" && (
+            <Tab
+              id="plugins"
+              title="Plugins"
+              panel={<PluginsPanel onRequestClose={props.onRequestClose} />}
+            />
+          )}
           {enableDeveloper && (
             <Tab
               id="development"
@@ -75,6 +84,7 @@ const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
 const mapStateToProps = (state: IStore) => ({
   enableDeveloper: state.globals.enableDeveloper,
   missingExtensions: state.editor.missingExtensions,
+  userRole: state.globals.userRole,
 });
 
 const mapDispatchToProps = {};
