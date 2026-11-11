@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "jsx": "react-jsx",
+    "types": ["vite/client", "vite-plugin-svgr/client"],
+    "paths": {
+      // IDE-only alias — Vite resolves @platform at build time via each integration's vite.config.ts.
+      // Pointing to wp/ here gives the TypeScript language server a concrete target so @platform
+      // imports type-check in the editor. Switch to integration/saas/* when working on SAAS.
+      "@platform/*": ["./integration/wp/*"],
+      "@daap/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}

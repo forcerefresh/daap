@@ -1,0 +1,27 @@
+.dialog {
+  width: 800px;
+}
+.logsView {
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+
+  :global {
+    pre {
+      height: 300px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+  }
+}
+
+.logItem {
+  display: flex;
+  flex-direction: row;
+
+  > *:first-child {
+    width: 40px;
+    min-width: 40px;
+    margin-right: 10px;
+  }
+  margin-bottom: 10px;
+}

@@ -1,0 +1,172 @@
+@import "/src/tokens";
+
+.colorInput {
+  height: 25px;
+}
+
+.color {
+  width: 100%;
+  height: 100%;
+  //border-radius: 2px;
+}
+
+.swatch {
+  //padding: 2px;
+  //border-radius: 2px;
+  width: 45px;
+  height: 25px;
+  border: 2px solid #525252;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  > div {
+    position: relative;
+  }
+  svg {
+    top: 0px;
+    left: 0px;
+    position: absolute;
+  }
+}
+
+.popoverContent {
+  padding: 10px;
+  min-width: 340px;
+  max-width: 340px;
+  min-height: 400px;
+}
+
+:global {
+  .color-picker-popover .bp5-popover-content {
+    background: rgba(0, 0, 0, 0) !important;
+    //box-shadow: none !important;
+    height: fit-content;
+
+    background-color: $daap-bg-primary !important;
+
+    *,
+    *:hover,
+    *:active {
+      outline: none !important;
+    }
+  }
+
+  .bp5-dark .color-picker-popover .bp5-popover-content {
+    background-color: $daap-bg-primary-dark !important;
+  }
+
+  // color picker
+  .sketch-picker {
+    width: 300px !important;
+
+    background-color: $daap-bg-primary !important;
+    box-shadow: none !important;
+    color: black !important;
+  }
+
+  .bp5-dark .sketch-picker {
+    background-color: $daap-bg-primary-dark !important;
+  }
+
+  .bp5-dark .sketch-picker label {
+    color: #ccc !important;
+  }
+
+  .bp5-dark .sketch-picker .flexbox-fix:last-child {
+    border-top: 1px solid gray !important;
+  }
+}
+
+.sketch-picker {
+  width: 400px !important;
+}
+
+.actionHolder {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+
+  button,
+  :focus {
+    outline: none;
+  }
+}
+
+.buttonHolder {
+  display: flex;
+  flex-direction: row;
+  column-gap: 10px;
+}
+
+.squareSwatch {
+  border: 2px solid #ccc;
+  width: 28px;
+  height: 28px;
+}
+
+.squareColorInput {
+  height: 28px;
+  margin: 0px !important;
+}
+
+.colorButton {
+  display: flex;
+}
+
+.noColor {
+  > svg {
+    margin-left: 10px;
+    margin-top: 2px;
+  }
+}
+
+.sectionHeader {
+  cursor: pointer;
+  font-weight: bold;
+  color: #808080;
+  padding: 15px 10px 15px 10px;
+}
+
+.sectionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  padding: 0px 10px;
+}
+
+.sectionNoColor {
+  color: #808080;
+  font-size: 14px;
+}
+
+.sectionColor {
+  cursor: pointer;
+  width: 45px;
+  height: 25px;
+  border: 1px solid #ddd;
+}
+
+.sectionColorRow {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 5px;
+  // padding-top: 2px;
+  // padding-left: 5px;
+  // padding-right: 5px;
+  border: 1px solid transparent;
+  padding: 4px 4px 0px 4px;
+}
+
+.sectionColorRowSelected {
+  border: 1px solid gray;
+  background-color: rgba(127, 127, 127, 0.5);
+}
+
+.sectionWrapperDefaultColor {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+}

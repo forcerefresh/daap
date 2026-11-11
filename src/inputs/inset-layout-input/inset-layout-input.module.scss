@@ -1,0 +1,60 @@
+.main {
+  :global {
+    .bp5-form-group {
+      margin-bottom: 5px;
+    }
+  }
+}
+
+.container {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  place-items: unset;
+  // Label (displayName) style
+  :global {
+    .bp5-label {
+      width: var(--animations-panel-label-width);
+      min-width: var(--animations-panel-label-width);
+      margin-right: 10px;
+    }
+  }
+}
+.alignHolder {
+  display: flex;
+  .alignHolderInner {
+    display: flex;
+
+    > * + * {
+      margin-left: 5px;
+    }
+  }
+}
+
+.row {
+  display: flex;
+
+  :global {
+    input {
+      //width: 40px !important;
+      margin-right: 5px;
+    }
+  }
+}
+
+.perDeviceInput {
+  input {
+    max-width: 90px !important;
+  }
+}
+
+.commonRow {
+  :global {
+    .bp5-label {
+      width: 50px !important;
+    }
+    input {
+      width: 90px !important;
+    }
+  }
+}

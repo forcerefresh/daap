@@ -1,0 +1,181 @@
+.mainHeader {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 6px;
+
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none;
+    }
+  }
+}
+
+.buttonTag {
+  position: absolute;
+  transform-origin: left top;
+  left: 5px;
+  top: 0px;
+  font-weight: bold;
+  line-height: 10px !important;
+  min-height: 20px !important;
+  min-width: 20px !important;
+  padding: 4px !important;
+  padding-right: 5px !important;
+
+  text-align: center;
+  font-size: 13px !important;
+}
+
+:global(.bp5-dark) {
+  .mainHeader {
+    background-color: #252526;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+  }
+  .logo {
+    color: white;
+    fill: #ddd;
+  }
+
+  .mainHeader {
+    :global {
+    }
+  }
+}
+:global(.bp5-dark) {
+  .mainButtons {
+    // button {
+    span,
+    svg {
+      fill: #bbb !important;
+      color: #bbb !important;
+    }
+
+    // }
+  }
+}
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+
+  column-gap: 10px;
+  width: 20%;
+  justify-content: flex-end;
+
+  // & > * {
+  //   margin-right: 10px;
+  // }
+
+  > button {
+    box-shadow: none !important;
+    border-radius: 5px;
+  }
+
+  :global {
+    .bp5-control.bp5-switch:not(.bp5-align-right) {
+      padding-left: 46px;
+    }
+
+    .bp5-control.bp5-switch input:checked ~ .bp5-control-indicator {
+      background: rgba(143, 153, 168, 0.3);
+      color: #1c2127;
+    }
+  }
+}
+
+.logo {
+  margin-left: 5px;
+  height: 40px;
+  padding-top: 5px;
+}
+
+.themeIcon {
+  margin-right: 10px;
+}
+
+.themeLabel {
+  text-align: center;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: gray;
+}
+
+.themeHolder {
+  margin-right: 20px;
+}
+
+.inlineIcon {
+  color: rgb(97, 97, 97);
+
+  svg {
+    margin-left: 10px;
+  }
+
+  &.uploading {
+    svg {
+      color: #38ae38;
+    }
+  }
+}
+
+.contextMenu {
+  :global {
+    a,
+    a:hover,
+    a:visited,
+    a:active {
+      color: unset;
+      text-decoration: unset;
+    }
+  }
+}
+
+.leftActionHolder {
+  margin-left: 40px;
+  display: flex;
+}
+
+.rightActionsHolder {
+  margin-right: 20px;
+  // display: flex;
+  // column-gap: 20px;
+}
+
+.projectNameHolder {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  // align-items: center;
+  justify-content: center;
+
+  opacity: 0.85; //TODO
+
+  margin-left: 10px;
+  margin-right: 20px;
+  // :global {
+  //   span {
+  //     display: flex;
+  //     flex-direction: row;
+  //     justify-content: center;
+  //   }
+  // }
+}
+
+.downloadBtn {
+  background: rgba(125, 125, 125, 0.2) !important;
+}

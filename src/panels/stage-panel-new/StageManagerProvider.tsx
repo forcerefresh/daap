@@ -1,0 +1,401 @@
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { StageManager } from "../../utils/selection-manager/StageManager";
+import { IStore } from "../../store/store";
+import {
+  activateObject,
+  addObjectsToSelection,
+  deactivateObject,
+  removeObjectsFromSelection,
+  selectForProperties,
+  selectForPropertiesProps,
+  selectObjects,
+  setStagePan,
+  updateObject,
+  setSnapHint,
+} from "../../store/actions/actions";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
+import { connect } from "react-redux";
+import { StageToolEnum } from "../../utils/selection-manager/types";
+import {
+  StageToolEvent,
+} from "../../utils/selection-manager/events/StageToolEvent";
+import { Point } from "webslider-sdk/lib/objects/i-objects-register";
+
+import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
+import { ToolsContext } from "../../utils/tools/ToolsProvider";
+
+import {
+  processRotateStartEvent,
+  processRotateChangeEvent,
+  processRotateStopEvent,
+} from "./handlers/rotate-handler";
+import {
+  processMoveStartEvent,
+  processMoveChangeEvent,
+  processMoveStopEvent,
+} from "./handlers/move-handler";
+import {
+  processScaleStartEvent,
+  processScaleChangeEvent,
+  processScaleStopEvent,
+} from "./handlers/scale-handler";
+import {
+  processResizeStartEvent,
+  processResizeChangeEvent,
+  processResizeStopEvent,
+} from "./handlers/resize-handler";
+import {
+  processPanChangeEvent,
+  processPanStopEvent,
+} from "./handlers/pan-handler";
+import {
+  processPointsRepositionStartEvent,
+  processPointsRepositionChangeEvent,
+  processPointsRepositionStopEvent,
+} from "./handlers/points-reposition-handler";
+
+// Re-export snap utilities for external callers
+export { clearSnapGuides } from "../../utils/snap/snap-renderer";
+export { isNear } from "../../utils/snap/snap-engine";
+
+type StageManagerProviderOwnProps = { children?: React.ReactNode };
+
+type StageManagerProviderProps = typeof mapDispatchToProps &
+  ReturnType<typeof mapStateToProps> &
+  StageManagerProviderOwnProps;
+
+export interface StageManagerContextInterface {
+  stageManager: StageManager;
+  /** Called by StageManagerProvider immediately after each DOM mutation batch.
+   *  Supports multiple subscribers — add/delete via the Set. */
+  afterDomUpdateRef: React.MutableRefObject<Set<() => void>>;
+}
+
+export const StageManagerContext =
+  React.createContext<StageManagerContextInterface>({
+    stageManager: {} as StageManager,
+    afterDomUpdateRef: { current: new Set<() => void>() },
+  });
+
+export const StageManagerProviderInternal = (
+  props: StageManagerProviderProps,
+) => {
+  const {
+    children,
+    objectById,
+    layerById,
+    selectedObjectIds,
+    activeObjectId,
+    zoom,
+    selectionPath,
+    stagePan,
+    breakpointConfig,
+    _updateObject,
+    _activateObject,
+    _selectObjects,
+    _addObjectsToSelection,
+    _removeObjectsFromSelection,
+    _deactivateObject,
+    _setStagePan,
+    _selectForProperties,
+    _setSnapHint,
+  } = props;
+
+  const { activateTool, snapBounds } = useContext(ToolsContext);
+
+  const altKeyRef = useRef(false);
+  const snapDragActiveRef = useRef(false);
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Alt") {
+        altKeyRef.current = true;
+        if (snapDragActiveRef.current) _setSnapHint("Snapping disabled");
+      }
+    };
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.key === "Alt") {
+        altKeyRef.current = false;
+        if (snapDragActiveRef.current) _setSnapHint("Hold ⌥ Alt to disable snapping");
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+    };
+  }, [_setSnapHint]);
+
+  const selectedObjectIdsRef = useRef(selectedObjectIds);
+  selectedObjectIdsRef.current = selectedObjectIds;
+
+  const recentlySelectedRef = useRef(false);
+
+  /** Consumers register a callback here; we call it after every DOM mutation. */
+  const afterDomUpdateRef = useRef(new Set<() => void>());
+
+  const [stageManager] = useState(new StageManager());
+
+  useEffect(() => {
+    const startHandler = (e: StageToolEvent) => {
+      const eData = e.detail;
+      switch (eData.eventType) {
+        case StageToolEnum.ROTATE:
+          processRotateStartEvent(eData, objectById, _updateObject);
+          break;
+        case StageToolEnum.MOVE:
+          snapDragActiveRef.current = true;
+          _setSnapHint(altKeyRef.current ? "Snapping disabled" : "Hold ⌥ Alt to disable snapping");
+          processMoveStartEvent(
+            eData,
+            objectById,
+            {
+              activeObjectId,
+              selectedObjectIdsRef,
+              zoom,
+              selectionPath,
+              recentlySelectedRef,
+            },
+            {
+              _updateObject,
+              _activateObject,
+              _selectObjects,
+              _addObjectsToSelection,
+              _removeObjectsFromSelection,
+              _deactivateObject,
+              _selectForProperties,
+            },
+          );
+          break;
+        case StageToolEnum.SCALE:
+          snapDragActiveRef.current = true;
+          _setSnapHint(altKeyRef.current ? "Snapping disabled" : "Hold ⌥ Alt to disable snapping");
+          if (["left", "width", "top", "height"].includes(eData.handle)) {
+            processResizeStartEvent(eData, objectById, { activeObjectId, selectedObjectIdsRef, zoom, selectionPath }, { _updateObject, _activateObject, _selectObjects, _addObjectsToSelection, _removeObjectsFromSelection, _deactivateObject });
+          } else {
+            processScaleStartEvent(eData, objectById, { activeObjectId, selectedObjectIdsRef, zoom, selectionPath }, { _updateObject, _activateObject, _selectObjects, _addObjectsToSelection, _removeObjectsFromSelection, _deactivateObject });
+          }
+          break;
+        case StageToolEnum.POINTS_REPOSITION:
+          processPointsRepositionStartEvent(eData, objectById);
+          break;
+      }
+    };
+
+    const changeHandler = (e: StageToolEvent) => {
+      const eData = e.detail;
+      switch (eData.eventType) {
+        case StageToolEnum.ROTATE:
+          processRotateChangeEvent(eData, objectById, _updateObject);
+          break;
+        case StageToolEnum.MOVE:
+          processMoveChangeEvent(eData, objectById, layerById, {
+            selectedObjectIdsRef,
+            zoom,
+            snapBounds,
+            altKeyRef,
+          });
+          break;
+        case StageToolEnum.SCALE:
+          if (["left", "width", "top", "height"].includes(eData.handle)) {
+            processResizeChangeEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds, altKeyRef });
+          } else {
+            processScaleChangeEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds, altKeyRef });
+          }
+          break;
+        case StageToolEnum.PAN:
+          processPanChangeEvent(
+            eData,
+            objectById,
+            {
+              selectedObjectIdsRef,
+              zoom,
+            },
+            {
+              _setStagePan,
+            },
+          );
+          break;
+        case StageToolEnum.POINTS_REPOSITION:
+          processPointsRepositionChangeEvent(eData, objectById, { zoom });
+          break;
+      }
+      // All DOM mutations are done — notify StageToolsCanvas so it can
+      // reposition selection overlays immediately, in the same call stack.
+      afterDomUpdateRef.current.forEach((fn) => fn());
+    };
+
+    const stopHandler = (e: StageToolEvent) => {
+      const eData = e.detail;
+      switch (eData.eventType) {
+        case StageToolEnum.SELECT:
+          break;
+        case StageToolEnum.ROTATE:
+          processRotateStopEvent(
+            eData,
+            objectById,
+            {
+              selectedObjectIdsRef,
+              zoom,
+              breakpointConfig,
+            },
+            {
+              _updateObject,
+              _activateObject,
+              _selectObjects,
+            },
+          );
+          break;
+        case StageToolEnum.MOVE:
+          snapDragActiveRef.current = false;
+          _setSnapHint(null);
+          processMoveStopEvent(
+            eData,
+            objectById,
+            layerById,
+            {
+              selectedObjectIdsRef,
+              zoom,
+              breakpointConfig,
+              recentlySelectedRef,
+              snapBounds,
+              altKeyRef,
+            },
+            {
+              _updateObject,
+              _activateObject,
+              _selectObjects,
+              _selectForProperties,
+              activateTool: activateTool,
+            },
+          );
+          break;
+        case StageToolEnum.SCALE:
+          snapDragActiveRef.current = false;
+          _setSnapHint(null);
+          if (["left", "width", "top", "height"].includes(eData.handle)) {
+            processResizeStopEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds, altKeyRef }, { _updateObject });
+          } else {
+            processScaleStopEvent(eData, objectById, layerById, { selectedObjectIdsRef, zoom, snapBounds, altKeyRef }, { _updateObject });
+          }
+          break;
+        case StageToolEnum.PAN:
+          processPanStopEvent(
+            eData,
+            objectById,
+            {
+              selectedObjectIdsRef,
+              zoom,
+              stagePan,
+            },
+            {
+              _setStagePan,
+            },
+          );
+          break;
+        case StageToolEnum.POINTS_REPOSITION:
+          processPointsRepositionStopEvent(eData, objectById, { zoom }, { _updateObject });
+          break;
+      }
+    };
+
+    stageManager.addEventListener("start", startHandler as any);
+    stageManager.addEventListener("change", changeHandler as any);
+    stageManager.addEventListener("stop", stopHandler as any);
+
+    return () => {
+      stageManager.removeEventListener("start", startHandler as any);
+      stageManager.removeEventListener("change", changeHandler as any);
+      stageManager.removeEventListener("stop", stopHandler as any);
+    };
+  }, [
+    objectById,
+    _updateObject,
+    zoom,
+    stageManager,
+    activeObjectId,
+    _activateObject,
+    _selectObjects,
+    _addObjectsToSelection,
+    _removeObjectsFromSelection,
+    _deactivateObject,
+    stagePan,
+    _setStagePan,
+    selectionPath,
+    _selectForProperties,
+    layerById,
+    breakpointConfig,
+    activateTool,
+    selectedObjectIds,
+    snapBounds,
+  ]);
+
+  return (
+    <StageManagerContext.Provider
+      value={{
+        stageManager: stageManager,
+        afterDomUpdateRef,
+      }}
+    >
+      {children}
+    </StageManagerContext.Provider>
+  );
+};
+
+const mapStateToProps = (state: IStore) => {
+  const { zoom, activeStageTool, pan } = state.stage;
+  const { objects, selection, layers, settings } = state.project;
+
+  const breakpointConfig: BreakpointConfiguration | undefined =
+    settings.breakpoints.breakpointsConfiguration.find(
+      (breakpointConfig: any) =>
+        breakpointConfig.type === state.stage.selectedDevice,
+    );
+
+  return {
+    activeStageTool: activeStageTool.tool,
+    zoom,
+    breakpointConfig,
+    stagePan: pan,
+    selectionPath: selection.selectionPath,
+    activeObjectId: selection.activeObjectId,
+    objectById: objects.objectById,
+    layerById: layers.layerById,
+    selectedObjectIds: selection.selectedObjectIds,
+  };
+};
+
+const mapDispatchToProps = {
+  _updateObject: (object: IObject) => updateObject(object),
+  _activateObject: (objectId: string | null) => activateObject(objectId),
+  _deactivateObject: (objectId: string) => deactivateObject(objectId),
+  _selectObjects: (objectIds: string[]) => selectObjects(objectIds),
+  _addObjectsToSelection: (objectIds: string[]) =>
+    addObjectsToSelection(objectIds),
+  _removeObjectsFromSelection: (objectIds: string[]) =>
+    removeObjectsFromSelection(objectIds),
+  _setStagePan: (p: Point) => setStagePan(p),
+  _selectForProperties: (payload: selectForPropertiesProps) =>
+    selectForProperties(payload),
+  _setSnapHint: (hint: string | null) => setSnapHint(hint),
+};
+
+const StageManagerProvider = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(StageManagerProviderInternal) as React.ComponentType<StageManagerProviderOwnProps>;
+
+export default StageManagerProvider;
+
+// ── Shared utilities ──────────────────────────────────────────────────────────
+
+export function degrees_to_radians(degrees: number) {
+  const pi = Math.PI;
+  return degrees * (pi / 180);
+}
+
+export function getLayerIdRec(objectsById: any, id: string): string {
+  if (objectsById[id].layerId) return objectsById[id].layerId;
+
+  return getLayerIdRec(objectsById, objectsById[id].parentId);
+}

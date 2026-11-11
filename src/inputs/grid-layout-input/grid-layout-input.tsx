@@ -1,0 +1,240 @@
+import React, { useEffect } from "react";
+import { cloneDeep } from "lodash-es";
+import { getButtonGroupField, getNumericFiled } from "../input-utils";
+import {
+  IGridLayoutInput,
+  IUpdateInput,
+} from "webslider-sdk/lib/inputs/i-inputs";
+import classnames from "classnames";
+import { Button, Label } from "@blueprintjs/core";
+import { getIconByType } from "../../store/reducers/settings";
+import { getIconSize } from "../../panels/action-panel/ActionPanel";
+import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
+import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
+import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
+import css from "./grid-layout-input.module.scss";
+
+export const GridPlacementInputForm: React.FC<
+  IGridLayoutInput & IUpdateInput
+> = (props) => {
+  const {
+    value,
+    onChange,
+    inputProps = {},
+    breakpoints = { breakpointsConfiguration: [] },
+    selectedDevice = "",
+    onChangeDevice = (_device: string) => undefined,
+  } = props;
+  const { type, perDevice, common } = value;
+  const switchValue = type === "common" ? "common" : "perDevice";
+  const bpcArr = breakpoints.breakpointsConfiguration;
+
+  useEffect(() => {
+    if (type === "perDevice") {
+      let updateValue = false;
+      const newValue = cloneDeep(value);
+      // check if there are values for all devices
+      bpcArr.forEach((bpc) => {
+        const v = perDevice.find((item) => item.deviceType === bpc.type);
+        if (!v) {
+          newValue.perDevice.push({ ...value.common, deviceType: bpc.type });
+          updateValue = true;
+        }
+      });
+
+      if (updateValue) {
+        onChange(newValue);
+      }
+    }
+  }, [type]);
+
+  const getIcon = (bpConfig: BreakpointConfiguration) => {
+    const iconName = getIconByType(bpConfig.type);
+    const size = getIconSize(iconName);
+
+    return getResponsiveIcon(
+      iconName,
+      size.w,
+      size.h,
+      "lightgray",
+      bpConfig.portrait,
+      { verticalAlign: "text-bottom" }
+    );
+  };
+
+  const renderCommon = () => {
+    return (
+      <>
+        <div className={classnames(css.row, css.commonRow)}>
+          {getNumericFiled(
+            "Left",
+            common.left,
+            (left: any) => {
+              const commonClone = cloneDeep(common);
+              commonClone.left = left;
+              onChange({ ...value, common: commonClone });
+            },
+            "",
+            { disabled: inputProps.disablePosition }
+          )}
+        </div>
+
+        <div className={classnames(css.row, css.commonRow)}>
+          {getNumericFiled("Width", common.width, (right: any) => {
+            const commonClone = cloneDeep(common);
+            commonClone.width = right;
+            onChange({ ...value, common: commonClone });
+          })}
+        </div>
+
+        <div className={classnames(css.row, css.commonRow)}>
+          {getNumericFiled(
+            "Top",
+            common.top,
+            (top: any) => {
+              const commonClone = cloneDeep(common);
+              commonClone.top = top;
+              onChange({ ...value, common: commonClone });
+            },
+            "",
+            { disabled: inputProps.disablePosition }
+          )}
+        </div>
+
+        <div className={classnames(css.row, css.commonRow)}>
+          {getNumericFiled("Height", common.height, (bottom: any) => {
+            const commonClone = cloneDeep(common);
+            commonClone.height = bottom;
+            onChange({ ...value, common: commonClone });
+          })}
+        </div>
+      </>
+    );
+  };
+
+  const renderOneInput = (
+    t: DeviceType,
+    propertyName: "left" | "width" | "top" | "height"
+  ) => {
+    let oneValue = perDevice.find((item) => item.deviceType === t);
+    if (!oneValue) {
+      return null;
+    }
+
+    return (
+      <td>
+        {getNumericFiled(
+          "",
+          oneValue?.[propertyName],
+          (v: any) => {
+            const newValue = cloneDeep(value);
+            const oneV = newValue.perDevice.find(
+              (item) => item.deviceType === t
+            );
+            if (oneV) oneV[propertyName] = v;
+            onChange(newValue);
+          },
+          "",
+          {
+            disabled: t !== selectedDevice,
+            className: css.perDeviceInput,
+          }
+        )}
+      </td>
+    );
+  };
+
+  const renderPerDevice = () => {
+    const { breakpointsConfiguration: bcArr } = breakpoints;
+
+    return (
+      <>
+        <table>
+          <tr>
+            <td>
+              <Label></Label>
+            </td>
+            <>
+              {bcArr.map((bc) => {
+                if (!bc.enabled) return null;
+
+                return (
+                  <td>
+                    <Button
+                      minimal
+                      active={bc.type === selectedDevice}
+                      onClick={() => {
+                        onChangeDevice(bc.type);
+                      }}
+                    >
+                      {getIcon(bc)}
+                    </Button>
+                  </td>
+                );
+              })}
+            </>
+          </tr>
+
+          <tr>
+            <td>
+              <Label>Left</Label>
+            </td>
+            {bcArr.map((bc) => {
+              if (!bc.enabled) return null;
+              return renderOneInput(bc.type, "left");
+            })}
+          </tr>
+
+          <tr>
+            <td>
+              <Label>Width</Label>
+            </td>
+            {bcArr.map((bc) => {
+              if (!bc.enabled) return null;
+              return renderOneInput(bc.type, "width");
+            })}
+          </tr>
+          <tr>
+            <td>
+              <Label>Top</Label>
+            </td>
+            {bcArr.map((bc) => {
+              if (!bc.enabled) return null;
+              return renderOneInput(bc.type, "top");
+            })}
+          </tr>
+          <tr>
+            <td>
+              <Label>Height</Label>
+            </td>
+            {bcArr.map((bc) => {
+              if (!bc.enabled) return null;
+              return renderOneInput(bc.type, "height");
+            })}
+          </tr>
+        </table>
+      </>
+    );
+  };
+
+  return (
+    <>
+      {getButtonGroupField(
+        "",
+        switchValue,
+        (type: any) => {
+          onChange({ ...value, type });
+        },
+        [
+          {
+            value: "common",
+            label: `Common`,
+          },
+          { value: "perDevice", label: `Per device` },
+        ]
+      )}
+      {type === "common" && renderCommon()}
+      {type === "perDevice" && renderPerDevice()}
+    </>
+  );
+};

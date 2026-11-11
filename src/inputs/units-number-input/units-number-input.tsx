@@ -1,0 +1,216 @@
+import { Button, FormGroup, InputGroup, Intent, Tag } from "@blueprintjs/core";
+import { Tooltip2 } from "@blueprintjs/popover2";
+import classnames from "classnames";
+import { isEqual } from "lodash-es";
+import React, { useEffect, useState } from "react";
+import {
+  IUnitsNumberInput,
+  IUpdateInput,
+} from "webslider-sdk/lib/inputs/i-inputs";
+import { createInputLabel } from "../input-helpers";
+import css from "./units-number-input.module.scss";
+
+export type UnitType =
+  | "px"
+  | "em"
+  | "%"
+  | "ms"
+  | "s"
+  | "deg"
+  | "width"
+  | "height"
+  | null;
+interface UnitValue {
+  value: string;
+  unit: UnitType;
+}
+
+function value2UnitValue(
+  inputValue: string,
+  allowedUnits: UnitType[]
+): UnitValue {
+  const inputValueStr = inputValue?.toString(); // ?? "";
+  let unit: UnitType = null;
+  let value = "";
+
+  if (allowedUnits.indexOf("px") !== -1 && inputValueStr.includes("px")) {
+    unit = "px";
+    value = inputValueStr.split("px").join("");
+  } else if (
+    allowedUnits.indexOf("em") !== -1 &&
+    inputValueStr.includes("em")
+  ) {
+    unit = "em";
+    value = inputValueStr.split("em").join("");
+  } else if (allowedUnits.indexOf("%") !== -1 && inputValueStr.includes("%")) {
+    unit = "%";
+    value = inputValueStr.split("%").join("");
+  } else if (
+    allowedUnits.indexOf("ms") !== -1 &&
+    inputValueStr.includes("ms")
+  ) {
+    unit = "ms";
+    value = inputValueStr.split("ms").join("");
+  } else if (
+    allowedUnits.indexOf("deg") !== -1 &&
+    inputValueStr.includes("deg")
+  ) {
+    unit = "deg";
+    value = inputValueStr.split("deg").join("");
+  } else if (allowedUnits.indexOf("s") !== -1 && inputValueStr.includes("s")) {
+    unit = "s";
+    value = inputValueStr.split("s").join("");
+  } else {
+    value = inputValueStr;
+  }
+
+  return { value, unit };
+}
+
+export const UnitsNumberInputForm: React.FC<
+  IUnitsNumberInput & IUpdateInput
+> = (props) => {
+  const {
+    displayName,
+    propertyName,
+    placeholder,
+    allowedUnits = ["px", "em", "%"],
+    helperText,
+    inputProps,
+    value,
+    onChange,
+  } = props;
+  const id = `${propertyName}_units_input_number`;
+
+  const inputLabel = createInputLabel(displayName, propertyName);
+
+  const latestUnit = React.useRef<UnitType>(allowedUnits[0]);
+  if (value2UnitValue(value, allowedUnits).unit !== null) {
+    latestUnit.current = value2UnitValue(value, allowedUnits).unit;
+  }
+
+  const [internalValue, setInternalValue] = useState<UnitValue>(
+    value2UnitValue(value, allowedUnits)
+  );
+  const [latestValidValue, setLatestValidValue] = useState<UnitValue>(
+    value2UnitValue(value, allowedUnits)
+  );
+
+  useEffect(() => {
+    if (!isEqual(value2UnitValue(value, allowedUnits), latestValidValue)) {
+      setLatestValidValue(value2UnitValue(value, allowedUnits));
+      setInternalValue(value2UnitValue(value, allowedUnits));
+    }
+  }, [value]);
+
+  const [valid, setValid] = useState<boolean>(true);
+
+  const updateValue = (newValue: string) => {
+    if (
+      (allowedUnits.includes("width") && newValue === "width") ||
+      (allowedUnits.includes("height") && newValue === "height")
+    ) {
+      setValid(true);
+      onChange(newValue);
+      return;
+    }
+
+    const newValueValue = value2UnitValue(newValue, allowedUnits).value;
+    setInternalValue(value2UnitValue(newValue, allowedUnits));
+
+    const isNumber = new RegExp("^-?\\d*(\\.\\d+)?$").test(newValueValue);
+
+    let isValidValue: boolean;
+
+    if (isNumber && !isNaN(parseFloat(newValueValue))) {
+      isValidValue = true;
+
+      if (isValidValue) {
+        setLatestValidValue(value2UnitValue(newValue, allowedUnits));
+      }
+    } else {
+      isValidValue = false;
+    }
+
+    setValid(isValidValue);
+
+    const peaces = value2UnitValue(newValue, allowedUnits);
+    if (!peaces.unit) {
+      newValue += latestUnit.current;
+    } else {
+      // fix for case when user enter % in the middle of number
+      if (isValidValue) {
+        newValue = peaces.value + peaces.unit;
+      }
+    }
+
+    onChange(isValidValue ? newValue : value);
+  };
+
+  return (
+    <FormGroup
+      className={classnames(css.main, props.inputProps?.className)}
+      label={inputLabel}
+      labelFor={id}
+      helperText={!!helperText && helperText}
+      inline
+    >
+      {inputProps?.showIncDec && (
+        <Button
+          onClick={() => {
+            const newVal = parseInt(value) - 1;
+            updateValue(newVal + latestUnit?.current!);
+          }}
+          icon="minus"
+          minimal
+        ></Button>
+      )}
+      <InputGroup
+        inputRef={(el) => {
+          if (el) el!.autocomplete = "off";
+        }}
+        intent={!valid ? Intent.WARNING : Intent.NONE}
+        id={id}
+        rightElement={
+          <Tooltip2
+            disabled={inputProps?.disabled}
+            hoverOpenDelay={500}
+            position="top"
+            content={
+              <div
+                style={{
+                  background: "#4e5356",
+                  padding: "5px 10px",
+                }}
+              >
+                To change unit enter number followed by unit.
+                <br />
+                Available units: {allowedUnits.join(",")}
+              </div>
+            }
+            intent="primary"
+          >
+            <Tag style={{ cursor: "default" }} minimal={true}>
+              {value2UnitValue(value, allowedUnits).unit}
+            </Tag>
+          </Tooltip2>
+        }
+        value={internalValue.value}
+        onChange={(event: any) => updateValue(event.target.value)}
+        onInput={(event: any) => updateValue(event.target.value)}
+        placeholder={placeholder}
+        {...inputProps}
+      />
+      {inputProps?.showIncDec && (
+        <Button
+          onClick={() => {
+            const newVal = parseInt(value) + 1;
+            updateValue(newVal + latestUnit?.current!);
+          }}
+          icon="plus"
+          minimal
+        ></Button>
+      )}
+    </FormGroup>
+  );
+};

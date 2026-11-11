@@ -1,0 +1,46 @@
+.breakpointSettings {
+  display: flex;
+  flex-direction: row;
+}
+
+.breakpointForm {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.breakpointPreview {
+  margin-left: 30px;
+  /*width: 220px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;*/
+}
+
+.inlineRow {
+  display: flex;
+
+  > * + * {
+    margin-left: 15px;
+  }
+
+  :global {
+    .bp5-button-group.bp5-vertical.bp5-fixed {
+      display: none;
+    }
+  }
+}
+
+.inlineRowLabel {
+  text-align: left;
+  width: 135px;
+  line-height: 30px;
+}
+
+.tooltip {
+  background: #333;
+  padding: 10px;
+  max-width: 400px;
+  border-radius: 10px;
+}

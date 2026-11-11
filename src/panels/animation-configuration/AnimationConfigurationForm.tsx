@@ -1,0 +1,420 @@
+import { Alert, Button, Icon, Intent } from "@blueprintjs/core";
+import classnames from "classnames";
+import { cloneDeep, merge } from "lodash-es";
+import React, { useState } from "react";
+import { getInputForm } from "../../inputs/input-factory";
+import { v4 as uuid } from "uuid";
+import {
+  getInheritTimeField,
+  getNumericFiled,
+  getSelectField,
+  getTextField,
+  getUnitNumericFiled,
+} from "../../inputs/input-utils";
+import { IObject, ITransition } from "webslider-sdk/lib/objects/i-object";
+import FormWithLayout, {
+  flattenForm,
+} from "../../utils/form-layout/form-layout";
+import { IFormLayoutItem } from "webslider-sdk/lib/form/i-form-layout";
+
+import css from "./AnimationConfigurationForm.module.scss";
+import {
+  getAppAnimationDefinition,
+  getAnimationsOptions,
+} from "webslider-sdk/lib/animations/animations-register";
+import { Presets } from "../../utils/presets/Presets";
+import {
+  AnimeJSEasingOptions,
+  EasingOptions,
+  AnimationType,
+} from "webslider-sdk/lib/animations/i-animation-types";
+import { ILayer } from "../../store/reducers/i-layers";
+export interface IAnimationConfigurationForm {
+  animationType: AnimationType;
+  objectType?: string;
+  transition: ITransition;
+  onTransitionChange: (transition: ITransition) => void;
+  onRemove: () => void;
+  layer: ILayer | null;
+  layerObjects: IObject[] | null;
+}
+
+export const AnimationConfigurationForm: React.FC<
+  IAnimationConfigurationForm
+> = (props) => {
+  const {
+    transition,
+    animationType,
+    objectType,
+    onTransitionChange,
+    onRemove,
+    layer,
+    layerObjects,
+  } = props;
+
+  const [
+    isRemoveAnimationConfirmationOpen,
+    setIsRemoveAnimationConfirmationOpen,
+  ] = useState(false);
+
+  const renderAnimationForm = () => {
+    const animationDefinition = getAppAnimationDefinition(
+      transition.animation.id
+    );
+
+    const flatForm = flattenForm(
+      animationDefinition?.formDefinition.form as IFormLayoutItem[]
+    );
+
+    const inputs = flatForm
+      //.filter((item) => !item.formType || item.formType === FormType.INPUT)
+      .map((item) => {
+        function onChange(value: any) {
+          const newTransition = cloneDeep(transition);
+          (newTransition.animation.values as any)[item.propertyName] = value;
+          onTransitionChange(newTransition);
+        }
+
+        const value = (transition.animation.values as any)[item.propertyName];
+        const defaultValue =
+          animationDefinition?.formDefaults[item.propertyName];
+        const inputProps = {
+          ...item,
+          value: typeof value !== "undefined" ? value : defaultValue,
+        };
+        return {
+          input: getInputForm(item.inputType, inputProps, onChange, onChange, {
+            layerData: {
+              layer: layer,
+              objects: layerObjects,
+            },
+          }),
+          propertyName: item.propertyName,
+          duplicate: "",
+        };
+      });
+
+    return (
+      <FormWithLayout
+        values={transition.animation.values || {}}
+        inputs={inputs}
+        form={animationDefinition?.formDefinition.form as IFormLayoutItem[]}
+        formId={`${animationType}_${animationDefinition?.formDefinition.id}`}
+      />
+    );
+  };
+
+  const effDef = (_type: string) => {
+    return getAppAnimationDefinition(transition.animation.id);
+  };
+
+  const delayInput = () => (
+    <div className="">
+      {getUnitNumericFiled(
+        "Delay",
+        transition.delay,
+        (value: string) => {
+          const newTransition = cloneDeep(transition);
+          newTransition.delay = value;
+          onTransitionChange(newTransition);
+        },
+        "",
+        { style: { width: "90px" } },
+        ["ms", "s"]
+      )}
+    </div>
+  );
+
+  const durationInput = () => (
+    <div className="">
+      {getUnitNumericFiled(
+        "Duration",
+        transition.duration,
+        (value: any) => {
+          const newTransition = cloneDeep(transition);
+          newTransition.duration = value;
+          onTransitionChange(newTransition);
+        },
+        "",
+        { style: { width: "90px" } },
+        ["ms", "s"]
+      )}
+    </div>
+  );
+
+  const outAnimationStartInput = () => (
+    <div className={css.inlineFlex}>
+      {getInheritTimeField(
+        "Exit",
+        transition.outStartTime,
+        [
+          {
+            label: "Use slides 'Exit' configuration",
+            value: "inheritFromSlide",
+          },
+          { label: "Absolute time from beginning", value: "absolute" },
+        ],
+        (outStartTime: any) => {
+          const newTransition = cloneDeep(transition);
+          newTransition.outStartTime = outStartTime;
+          onTransitionChange(newTransition);
+        },
+        null
+      )}
+    </div>
+  );
+
+  const eventInput = () => (
+    <div className={css.inlineFlex}>
+      {getSelectField(
+        "Event",
+        transition.event,
+        [
+          { label: "none", value: "" },
+          { label: "Mouse click", value: "click" },
+          { label: "Mouse enter", value: "mouseenter" },
+          { label: "Mouse leave", value: "mouseleave" },
+        ],
+        (event: any) => {
+          const newTransition = cloneDeep(transition);
+          newTransition.event = event;
+          onTransitionChange(newTransition);
+        }
+      )}
+      {getTextField(
+        "Target",
+        transition.eventTargetId,
+        (eventTargetId: any) => {
+          const newTransition = cloneDeep(transition);
+          newTransition.eventTargetId = eventTargetId;
+          onTransitionChange(newTransition);
+        },
+        "",
+        { style: { width: "100px" }, disabled: transition.event === "time" }
+      )}
+    </div>
+  );
+
+  const reverseEventInput = () => (
+    <div className={css.inlineFlex}>
+      {getSelectField(
+        "Reverse",
+        transition.reverseEvent,
+        [
+          { label: "none", value: "" },
+          { label: "Mouse click", value: "click" },
+          { label: "Mouse enter", value: "mouseenter" },
+          { label: "Mouse leave", value: "mouseleave" },
+        ],
+        (reverseEvent: any) => {
+          const newTransition = cloneDeep(transition);
+          newTransition.reverseEvent = reverseEvent;
+          onTransitionChange(newTransition);
+        }
+      )}
+      {getTextField(
+        "Target",
+        transition.reverseEventTargetId,
+        (reverseEventTargetId: any) => {
+          const newTransition = cloneDeep(transition);
+          newTransition.reverseEventTargetId = reverseEventTargetId;
+          onTransitionChange(newTransition);
+        },
+        "",
+        { style: { width: "100px" }, disabled: transition.event === "time" }
+      )}
+    </div>
+  );
+
+  const selectedAnimationName = getAnimationsOptions(
+    animationType,
+    transition.canBeCombined
+  ).find((item) => item.value === transition.animation.id)?.label;
+
+  const useAnimeJs = effDef(animationType)?.formDefaults.library === "animejs";
+
+  const animationExists = !!getAppAnimationDefinition(transition.animation.id);
+
+  if (!animationExists) {
+    return (
+      <div>
+        Animation '{transition.animation.id}' is not installed.
+        <br />
+        Go to Library &gt; Extensions (or My Extensions) to install missing
+        extension.
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className={css.animationConfigurationForm}>
+        <div className={classnames(css.inlineFlex, css.selectAnimationRow)}>
+          {getSelectField(
+            transition.canBeCombined
+              ? "Attribute Animation"
+              : "Structural Animation",
+            transition.animation.id,
+            getAnimationsOptions(
+              animationType,
+              transition.canBeCombined,
+              objectType
+            ),
+            (value: any) => {
+              const newTransition = cloneDeep(transition);
+              newTransition.animation.id = value;
+
+              const values = (transition.animation.values || {}) as {
+                [key: string]: any;
+              };
+              const effDef = getAppAnimationDefinition(value);
+              const flatEffDef = flattenForm(
+                effDef?.formDefinition.form as IFormLayoutItem[]
+              );
+
+              flatEffDef.forEach((item) => {
+                values[item.propertyName] =
+                  effDef?.formDefaults[item.propertyName];
+              });
+              newTransition.animation.values = values;
+
+              onTransitionChange(newTransition);
+            },
+            { disabled: true }
+          )}
+          <div>
+            <Button
+              icon="delete"
+              small
+              minimal
+              className={classnames(css.smallDelete)}
+              onClick={() => {
+                setIsRemoveAnimationConfirmationOpen(true);
+              }}
+            ></Button>
+          </div>
+        </div>
+
+        <>
+          {(animationType === "in" ||
+            animationType === "animation" ||
+            animationType === "layer") && (
+            <>
+              <div className={css.inlineFlex}>
+                {effDef(animationType)?.formDefaults.hasDelay && delayInput()}
+                {effDef(animationType)?.formDefaults.hasDuration &&
+                  durationInput()}
+              </div>
+            </>
+          )}
+
+          {animationType === "out" && (
+            <>
+              {outAnimationStartInput()}
+              <div className={css.inlineFlex}>
+                {effDef(animationType)?.formDefaults.hasDelay && delayInput()}
+                {effDef(animationType)?.formDefaults.hasDuration &&
+                  durationInput()}
+              </div>
+            </>
+          )}
+
+          {animationType === "slide" && (
+            <div className={css.inlineFlex}>
+              {delayInput()}
+              {effDef(animationType)?.formDefaults.hasDuration &&
+                durationInput()}
+            </div>
+          )}
+
+          {animationType === "event" && (
+            <>
+              <div className={css.inlineFlex}>
+                {effDef(animationType)?.formDefaults.hasDelay && delayInput()}
+                {effDef(animationType)?.formDefaults.hasDuration &&
+                  durationInput()}
+              </div>
+              {eventInput()}
+              {reverseEventInput()}
+            </>
+          )}
+        </>
+
+        {animationType === "animation" && (
+          <div className="bp5-form-helper-text"></div>
+        )}
+
+        <Presets
+          presetGroup={`animation-${transition.animation.id}`}
+          currentValue={transition.animation.values}
+          onChange={(presetValues) => {
+            const newTransition = cloneDeep(transition);
+            newTransition.animation.values = merge(
+              newTransition.animation.values,
+              presetValues
+            );
+
+            newTransition.uid = uuid();
+            onTransitionChange(cloneDeep(newTransition));
+          }}
+        />
+
+        <div className={css.dynamicFields}>{renderAnimationForm()}</div>
+
+        <div>
+          {effDef(animationType)?.formDefaults.hasEase &&
+            getSelectField(
+              "Easing",
+              transition.ease,
+              useAnimeJs ? AnimeJSEasingOptions : EasingOptions,
+              (value: any) => {
+                const newTransition = cloneDeep(transition);
+                newTransition.ease = value;
+                onTransitionChange(newTransition);
+              }
+            )}
+          {effDef(animationType)?.formDefaults.hasChildEase &&
+            getSelectField(
+              "Child easing",
+              transition.childEase,
+              useAnimeJs ? AnimeJSEasingOptions : EasingOptions,
+              (value: any) => {
+                const newTransition = cloneDeep(transition);
+                newTransition.childEase = value;
+                onTransitionChange(newTransition);
+              }
+            )}
+          <div className="input60">
+            {effDef(animationType)?.formDefaults.hasTimeDistribution &&
+              getNumericFiled(
+                "Time distribution",
+                transition.timeDistribution,
+                (value: any) => {
+                  const newTransition = cloneDeep(transition);
+                  newTransition.timeDistribution = value;
+                  onTransitionChange(newTransition);
+                },
+                "Percentage that every item will take related to animation time (default 50%)"
+              )}
+          </div>
+        </div>
+      </div>
+      <Alert
+        cancelButtonText="Cancel"
+        confirmButtonText="Remove"
+        canOutsideClickCancel={false}
+        icon={<Icon icon="info-sign" size={36} intent={Intent.WARNING} />}
+        intent={Intent.PRIMARY}
+        isOpen={isRemoveAnimationConfirmationOpen}
+        onCancel={() => setIsRemoveAnimationConfirmationOpen(false)}
+        onConfirm={() => {
+          setIsRemoveAnimationConfirmationOpen(false);
+          onRemove();
+        }}
+        className="bp5-dark"
+      >
+        <p>Remove "{selectedAnimationName}" animation from list?</p>
+      </Alert>
+    </>
+  );
+};

@@ -1,0 +1,109 @@
+@import "/src/tokens";
+
+.colorPanel {
+  z-index: 100;
+  position: absolute;
+  top: 65px;
+  left: 78px;
+  min-width: 340px;
+  height: calc(var(--daap-forcerefresh-app-height) - 127px); // 53+65
+
+  max-width: 400px;
+  background: $daap-bg-primary;
+  box-shadow: $daap-shadow-0;
+  padding: 30px;
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+
+  section {
+    //box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+    flex-grow: 1;
+    flex-shrink: 1;
+
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+
+    overflow: auto;
+
+    &.open {
+      min-height: 25%;
+    }
+  }
+
+  .panel {
+    padding: 20px;
+    padding-top: 5px;
+    overflow: auto;
+    position: relative;
+    overflow-x: hidden;
+    // height: 80vh;
+    display: flex;
+    flex-grow: 1;
+
+    :global {
+      .bp5-form-group .bp5-control {
+        margin-bottom: 5px;
+      }
+      .bp5-label {
+        margin-bottom: 0px;
+        color: #b5b5b5;
+        font-weight: bold;
+      }
+      .virtuoso-scroller {
+        flex-grow: 1;
+      }
+    }
+
+    > div {
+      padding: 5px;
+    }
+  }
+}
+
+.searchFontHolder {
+  margin: 16px 16px 0px 16px;
+}
+
+:global(.bp5-dark) {
+  &.colorPanel {
+    background: $daap-bg-primary-dark !important;
+    // box-shadow: $daap-shadow-dark-1 !important;
+    // border-right: 1px solid #555;
+  }
+}
+
+.currentColorHolder {
+  width: 120px;
+  :global {
+    .bp5-form-group {
+      margin-bottom: 0px !important;
+    }
+  }
+}
+
+.sectionColorRow {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.sectionColorRow:last-child {
+  margin-bottom: 0px;
+}
+
+.sectionColorRowSelected {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.sectionColor {
+  cursor: pointer;
+  width: 45px;
+  height: 25px;
+  border: 1px solid #ddd;
+}
+
+.sectionContent {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,137 @@
+@import "../node_modules/normalize.css/normalize.css";
+@import "../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
+@import "../node_modules/@blueprintjs/core/lib/css/blueprint.css";
+
+@import "./tokens";
+
+#webpack-dev-server-client-overlay {
+  display: none;
+}
+
+html {
+  overflow: hidden;
+}
+
+body {
+  font-size: 0.9em;
+}
+
+.bp5-dark p {
+  color: $daap-text-primary-dark;
+}
+
+.bp5-toast-container-top {
+  top: 52px !important;
+}
+.bp5-dark .bp5-input {
+  box-shadow: none;
+}
+
+.bp5-input {
+  box-shadow: none;
+}
+
+.bp5-dark .bp5-card {
+  background-color: $daap-bg-card-dark;
+  box-shadow: 0 0 0 1px rgba(17, 20, 24, 0.1), 0 1px 1px rgba(17, 20, 24, 0.2),
+    0 2px 6px rgba(17, 20, 24, 0.2);
+}
+
+.bp5-portal {
+  top: 52px !important;
+  z-index: 1000;
+}
+
+.bp5-dark .bp5-html-select select,
+.bp5-dark .bp5-select select {
+  background: $daap-bg-select-dark;
+}
+
+.bp5-popover.bp5-dark .bp5-popover-content,
+.bp5-dark .bp5-popover .bp5-popover-content {
+  background-color: $daap-bg-popover-dark;
+}
+
+.bp5-dialog,
+.bp5-dialog {
+  background-color: $daap-bg-primary;
+}
+
+.bp5-dialog.bp5-dark,
+.bp5-dark .bp5-dialog {
+  background-color: $daap-bg-primary-dark;
+}
+
+.bp5-dark .bp5-overlay-backdrop {
+  background-color: rgba(17, 20, 24, 0.5) !important;
+}
+
+.bp5-dark .bp5-menu {
+  background: $daap-bg-secondary-dark;
+}
+
+.bp5-menu {
+  background: $daap-bg-secondary;
+}
+.bp5-overlay-open {
+  overflow: visible !important;
+}
+
+.bp5-overlay-open,
+.bp5-overlay-start-focus-trap {
+  outline: none !important;
+}
+
+.root-toaster {
+  left: 60px;
+  z-index: 1001;
+}
+
+.input65-force {
+  .bp5-input-group input {
+    width: 65px !important;
+  }
+}
+
+.input70-force {
+  .bp5-input-group input {
+    width: 70px !important;
+  }
+}
+
+.input75-force {
+  .bp5-input-group input {
+    width: 75px !important;
+  }
+}
+
+.input80-force {
+  .bp5-input-group input {
+    width: 75px !important;
+  }
+}
+
+.input100percent-force {
+  .bp5-form-group {
+    width: 100%;
+  }
+  .bp5-input-group input {
+    width: 100% !important;
+  }
+  textarea {
+    width: 100% !important;
+  }
+}
+
+.bp5-divider {
+  margin-left: 0px !important;
+}
+
+
+.bp5-dark .bp5-overlay-backdrop {
+  opacity: 0 !important;
+}
+
+.bp5-dark h3 {
+  color: $daap-text-heading-dark !important;
+}

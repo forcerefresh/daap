@@ -1,0 +1,19 @@
+name: Notify ops
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger daap-ops pipeline
+        run: |
+          curl -f --show-error -s -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: token ${{ secrets.OPS_DISPATCH_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            https://api.github.com/repos/forcerefresh/daap-ops/dispatches \
+            -d '{"event_type": "daap-main-push"}'

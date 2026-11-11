@@ -1,0 +1,71 @@
+.inputsHolder {
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  // column-gap: 10px;
+
+  :global {
+    *,
+    *:hover,
+    *:focus,
+    *:active {
+      outline: none;
+    }
+
+    .bp5-form-group {
+      margin: 0px !important;
+
+      label {
+        margin-left: 15px !important;
+      }
+    }
+    // .bp5-form-group bp5-inline {
+    //   margin-left: 10px;
+    // }
+  }
+}
+
+// .button {
+//   height: 50px;
+//   align-items: center;
+// }
+
+// .squareButton {
+//   width: 50px !important;
+// }
+
+// .checkboxHolder {
+//   :global {
+//     .bp5-form-group {
+//       display: flex;
+//       flex-direction: column-reverse;
+//       align-items: center;
+//       & > div {
+//         height: 25px;
+//       }
+//     }
+//   }
+// }
+
+// .strokeInput {
+//   width: 100px;
+//   margin-bottom: 0px;
+// }
+
+// .textButton {
+//   height: 34px !important;
+//   display: flex;
+//   align-items: center;
+
+//   :global {
+//     .bp5-button-text {
+//       height: 16px;
+//     }
+//   }
+// }
+
+// .colorInputHolder {
+//   height: 50px;
+//   display: flex;
+//   align-items: center;
+// }

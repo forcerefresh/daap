@@ -1,0 +1,199 @@
+@import "/src/tokens";
+
+// COMMON STYLE
+.mainLayout {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  //background: rgb(30, 30, 30);
+
+  .left {
+    overflow: auto;
+    z-index: 40;
+    width: 68px;
+    //THEME move to toolbar... background: rgb(51, 51, 51);
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);
+    flex: 0 0 68px;
+  }
+
+  .quickBar {
+    z-index: 1500;
+    box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .center {
+    z-index: 10;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    .content {
+      position: relative;
+      flex-grow: 1;
+    }
+  }
+
+  .right {
+    z-index: 95;
+    background: $daap-bg-primary;
+  }
+}
+:global(.bp5-dark) {
+  .right {
+    background: #252526; //$daap-bg-primary-dark;
+  }
+}
+
+.defaultStyle {
+  .right {
+    z-index: 50;
+    width: 370px;
+    min-width: 370px;
+    box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+
+    .slides {
+      height: 12vh;
+    }
+    .layers {
+      height: 29vh;
+      max-height: 30vh;
+    }
+    .properties {
+      height: 50vh;
+      max-height: 50vh;
+      min-height: 50vh;
+
+      :global {
+        .propertiesPanel {
+          height: calc(50vh - 67px);
+        }
+      }
+    }
+    .action {
+      height: 155px;
+      min-height: 55px;
+    }
+  }
+}
+
+.defaultLayersStyle {
+  .right {
+    // width: 711px !important;
+    // min-width: 711px !important;
+    display: flex;
+    flex-direction: row;
+    box-shadow: none;
+    > div {
+      height: 100%;
+      max-height: 100%;
+      display: flex;
+      flex-direction: column;
+      //box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
+      border-left: 1px solid $daap-border;
+
+      width: 352px;
+
+      &:last-child {
+        width: 358px;
+        z-index: 100;
+
+        max-width: 100%;
+      }
+
+      .action {
+        height: 155px;
+        min-height: 55px;
+      }
+      .slides {
+        min-height: 200px;
+        max-height: 200px;
+        flex-grow: 1;
+      }
+      .properties {
+        min-height: 100%;
+        //width: 340px;
+
+        :global {
+          .propertiesPanel {
+            //height: calc(var(--daap-forcerefresh-app-height) - 67px);
+          }
+        }
+      }
+      .layers {
+        overflow: auto;
+        //width: 340px;
+        // height: 70vh !important;
+        //THEME background: rgb(37, 37, 38);
+        //box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
+        //  border-left: 1px solid $daap-border
+        z-index: 100;
+      }
+    }
+  }
+}
+
+.snapHint {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 11px;
+  line-height: 1;
+  padding: 4px 10px;
+  border-radius: 4px;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+.simplifiedFloatingPanelHolder {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  bottom: 10px;
+  width: 500px;
+  pointer-events: none;
+  display: flex;
+  // align-content: stretch;
+  justify-content: end;
+  overflow: hidden;
+  z-index: 2001;
+  column-gap: 10px;
+}
+
+.layersSimplified {
+  pointer-events: all;
+  // position: absolute;
+  // right: 10px;
+  // top: 10px;
+  // bottom: 10px;
+  width: 113px;
+  // overflow: hidden;
+  // z-index: 2001;
+}
+
+.pagesSimplified {
+  pointer-events: all;
+
+  // position: absolute;
+  // right: 10px;
+  // top: 10px;
+  // bottom: 10px;
+  width: 160px;
+  // overflow: hidden;
+  // z-index: 2001;
+}
+
+:global(.bp5-dark) {
+  .defaultLayersStyle {
+    .right {
+      > div {
+        border-left: 1px solid $daap-border-dark;
+      }
+    }
+  }
+}

@@ -1,0 +1,74 @@
+@import "/src/tokens";
+
+.projectsLibraryPanel {
+  z-index: 170;
+  position: absolute;
+  top: 0px;
+  left: 68px;
+  width: 950px;
+  height: var(--daap-forcerefresh-app-height);
+
+  background: rgb(40, 40, 40);
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+
+  > div {
+    display: flex;
+  }
+
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none !important;
+    }
+
+    .bp5-form-content {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  > * {
+    display: flex;
+  }
+
+  .tabs {
+    width: 100%;
+    padding-left: 30px;
+  }
+
+  section {
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+
+  }
+
+  .panel {
+    padding: 20px;
+    padding-top: 5px;
+
+    :global {
+      .bp5-form-group .bp5-control {
+        margin-bottom: 5px;
+      }
+      .bp5-label {
+        margin-bottom: 0px;
+        color: #b5b5b5;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+:global(.bp5-dark) {
+  &.projectsLibraryPanel {
+    background: $daap-bg-primary-dark !important;
+    // box-shadow: $daap-shadow-dark-1 !important;
+    border-right: 1px solid #555;
+  }
+}

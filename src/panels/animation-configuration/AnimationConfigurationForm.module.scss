@@ -1,0 +1,47 @@
+animationConfigurationForm {
+  // background: rgba(222, 222, 222, 0.4);
+  padding: 8px;
+  padding-top: 0px;
+
+  :global {
+    .labelAuto .bp5-label {
+      width: auto;
+      min-width: auto;
+    }
+  }
+}
+
+.inlineFlex {
+  display: flex;
+
+  > * + * {
+    margin-left: 16px;
+  }
+}
+
+.dynamicFields {
+  :global {
+    .bp5-label {
+      width: var(--animations-panel-label-width);
+      min-width: var(--animations-panel-label-width);
+    }
+
+    .bp5-form-group.bp5-inline label.bp5-label {
+      //line-height: 30px;
+      line-height: 20px;
+      padding-top: 5px;
+    }
+  }
+}
+
+.selectAnimationRow {
+  margin-bottom: 10px;
+  > *:first-child {
+    margin-bottom: 0px !important;
+  }
+  > *:nth-child(2) {
+    flex-grow: 1;
+    display: flex;
+    justify-content: end;
+  }
+}

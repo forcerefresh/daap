@@ -1,0 +1,330 @@
+{
+  "sports_pairings": [
+    {
+      "name": "Velocity",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Barlow Condensed",
+          "font_weight": "800",
+          "font_style": "normal",
+          "usage": ["h1", "h2"]
+        },
+        "secondary": {
+          "font_family": "Barlow",
+          "font_weight": "500",
+          "font_style": "normal",
+          "usage": ["h3", "body"]
+        },
+        "accent": {
+          "font_family": "Barlow",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 24,
+          "name": "Fitness & Sports",
+          "subsector": "Track & Field Events",
+          "recommend": 100
+        },
+        {
+          "id": 15,
+          "name": "Transportation",
+          "subsector": "Cycling Competitions",
+          "recommend": 98
+        },
+        {
+          "id": 23,
+          "name": "Fashion",
+          "subsector": "Running Apparel",
+          "recommend": 95
+        },
+        {
+          "id": 44,
+          "name": "Events",
+          "subsector": "Marathon Branding",
+          "recommend": 90
+        },
+        {
+          "id": 13,
+          "name": "Retail",
+          "subsector": "Sporting Goods Stores",
+          "recommend": 85
+        },
+        {
+          "id": 29,
+          "name": "Marketing",
+          "subsector": "Athlete Endorsements",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Gridiron Grit",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Alfa Slab One",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Oswald",
+          "font_weight": "500",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Oswald",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 24,
+          "name": "Sports",
+          "subsector": "Football Team Merchandise",
+          "recommend": 100
+        },
+        {
+          "id": 44,
+          "name": "Events",
+          "subsector": "Tailgate Parties",
+          "recommend": 98
+        },
+        {
+          "id": 11,
+          "name": "Hospitality",
+          "subsector": "Sports Bars",
+          "recommend": 95
+        },
+        {
+          "id": 23,
+          "name": "Fashion",
+          "subsector": "Jersey Design",
+          "recommend": 90
+        },
+        {
+          "id": 8,
+          "name": "Entertainment",
+          "subsector": "Sports Graphics",
+          "recommend": 85
+        },
+        {
+          "id": 13,
+          "name": "Retail",
+          "subsector": "Fantasy Sports Platforms",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Court Classic",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Titillium Web",
+          "font_weight": "900",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Titillium Web",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Titillium Web",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 24,
+          "name": "Sports",
+          "subsector": "Basketball Franchises",
+          "recommend": 100
+        },
+        {
+          "id": 23,
+          "name": "Fashion",
+          "subsector": "Sneaker Culture",
+          "recommend": 98
+        },
+        {
+          "id": 44,
+          "name": "Events",
+          "subsector": "Streetball Tournaments",
+          "recommend": 95
+        },
+        {
+          "id": 13,
+          "name": "Retail",
+          "subsector": "Athletic Footwear",
+          "recommend": 90
+        },
+        {
+          "id": 6,
+          "name": "Education",
+          "subsector": "College Athletics",
+          "recommend": 85
+        },
+        {
+          "id": 29,
+          "name": "Marketing",
+          "subsector": "Player Signature Lines",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Extreme Impact",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Russo One",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Rajdhani",
+          "font_weight": "500",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Rajdhani",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 24,
+          "name": "Sports",
+          "subsector": "Action Sports Brands",
+          "recommend": 100
+        },
+        {
+          "id": 16,
+          "name": "Aerospace",
+          "subsector": "Drone Racing Leagues",
+          "recommend": 98
+        },
+        {
+          "id": 23,
+          "name": "Fashion",
+          "subsector": "BMX/Skate Apparel",
+          "recommend": 95
+        },
+        {
+          "id": 44,
+          "name": "Events",
+          "subsector": "X Games Sponsorships",
+          "recommend": 90
+        },
+        {
+          "id": 15,
+          "name": "Transportation",
+          "subsector": "Motocross Gear",
+          "recommend": 85
+        },
+        {
+          "id": 29,
+          "name": "Marketing",
+          "subsector": "Energy Drink Campaigns",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Olympian",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Anton",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Fjalla One",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Fjalla One",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 24,
+          "name": "Sports",
+          "subsector": "Olympic Committee Branding",
+          "recommend": 100
+        },
+        {
+          "id": 25,
+          "name": "Government",
+          "subsector": "National Team Uniforms",
+          "recommend": 98
+        },
+        {
+          "id": 44,
+          "name": "Events",
+          "subsector": "International Competitions",
+          "recommend": 95
+        },
+        {
+          "id": 23,
+          "name": "Fashion",
+          "subsector": "Athletic Performance Wear",
+          "recommend": 90
+        },
+        {
+          "id": 29,
+          "name": "Marketing",
+          "subsector": "Global Sponsorships",
+          "recommend": 85
+        },
+        {
+          "id": 6,
+          "name": "Education",
+          "subsector": "Sports Academies",
+          "recommend": 80
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 5,
+    "primary_industries": [
+      "Fitness & Sports (24)",
+      "Fashion (23)",
+      "Events (44)",
+      "Marketing (29)"
+    ],
+    "most_used_font": "Barlow (3 variants)",
+    "sport_types": {
+      "Extreme Sports": 40,
+      "Team Sports": 60,
+      "Individual Athletics": 50,
+      "Water Sports": 30
+    },
+    "audience_demographics": {
+      "Professional Athletes": 90,
+      "Weekend Warriors": 85,
+      "Sports Fans": 95
+    }
+  }
+}

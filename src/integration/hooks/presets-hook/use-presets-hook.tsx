@@ -1,0 +1,76 @@
+import { remove } from "lodash-es";
+import { Preset, PresetGroup } from "../../../utils/presets/i-presets";
+import { IPresetsHook } from "../../../integration/core/i-hooks";
+
+export const usePresets = (): IPresetsHook => {
+  const getPresets = (type: PresetGroup): Promise<Preset<any>[]> => {
+    const presets: any[] = JSON.parse(
+      localStorage.getItem(`presets-${type}`) || "[]"
+    );
+
+    return new Promise((resolve) => {
+      resolve(presets);
+    });
+  };
+
+  const addPreset = (
+    type: PresetGroup,
+    preset: Preset<any>
+  ): Promise<Preset<any>[]> => {
+    const presets: any[] = JSON.parse(
+      localStorage.getItem(`presets-${type}`) || "[]"
+    );
+
+    presets.push(preset);
+    localStorage.setItem(`presets-${type}`, JSON.stringify(presets));
+
+    return new Promise((resolve) => {
+      resolve(presets);
+    });
+  };
+
+  const deletePreset = (
+    type: PresetGroup,
+    uid: string
+  ): Promise<Preset<any>[]> => {
+    const presets: any[] = JSON.parse(
+      localStorage.getItem(`presets-${type}`) || "[]"
+    );
+
+    remove(presets, (presets: any) => {
+      return presets.uid === uid;
+    });
+
+    localStorage.setItem(`presets-${type}`, JSON.stringify(presets));
+
+    return new Promise((resolve) => {
+      resolve(presets);
+    });
+  };
+
+  const updatePreset = (
+    type: PresetGroup,
+    preset: Preset<any>
+  ): Promise<Preset<any>[]> => {
+    const presets: any[] = JSON.parse(
+      localStorage.getItem(`presets-${type}`) || "[]"
+    );
+
+    let presetItem = presets.find((p) => p.uid === preset.uid);
+    let presetItemIndex = presets.indexOf(presetItem);
+    presets[presetItemIndex].value = preset.value;
+
+    localStorage.setItem(`presets-${type}`, JSON.stringify(presets));
+
+    return new Promise((resolve) => {
+      resolve(presets);
+    });
+  };
+
+  return {
+    getPresets,
+    addPreset,
+    updatePreset,
+    deletePreset,
+  };
+};

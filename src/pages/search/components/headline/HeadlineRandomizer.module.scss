@@ -1,0 +1,25 @@
+@import "../../../../tokens";
+
+.searchTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  color: $daap-text-primary;
+  margin: 0;
+  margin-bottom: 0.5rem;
+
+  :global(.bp5-dark) & {
+    color: $daap-text-primary-dark;
+  }
+}
+
+.searchSubtitle {
+  font-size: 1rem;
+  font-weight: 400;
+  color: $daap-text-muted;
+  margin: 0;
+  line-height: 1.4;
+
+  :global(.bp5-dark) & {
+    color: $daap-text-muted-dark;
+  }
+}

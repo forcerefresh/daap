@@ -1,0 +1,57 @@
+.objectItem {
+  width: 90px;
+  padding: 2px;
+  height: 65px;
+  border: 1px solid #5c5c5c;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  position: relative;
+
+  &.selected {
+    border: 1px solid #48aff0;
+    border-radius: 4px;
+  }
+}
+
+.maskSvgPreview {
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+  }
+}
+
+.maskIconWrapper {
+  width: 30px;
+  height: 100%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #5c5c5c;
+}
+
+.lockIcon {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  color: #fa999c;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.groupObjectsCounter {
+  background-color: #48aff0 !important;
+  position: absolute;
+  top: -0px;
+  right: -0px;
+}

@@ -1,0 +1,15 @@
+@import "/src/tokens";
+
+:global(.bp5-dark) {
+  .contextMenu {
+    background: $daap-bg-primary-dark;
+  }
+}
+
+.contextMenu {
+  :global(a:hover) {
+    color: inherit !important;
+  }
+
+  background: $daap-bg-primary;
+}

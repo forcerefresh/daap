@@ -1,0 +1,64 @@
+.dropzone {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 10px 10px 10px;
+  border-width: 1px;
+  border-radius: 6px;
+  border-color: #eeeeee;
+  border-style: dashed;
+  /* background-color: #fafafa; */
+  color: #bdbdbd;
+  outline: none;
+  transition: border 0.24s ease-in-out;
+}
+
+.uploadFileHolder {
+  max-height: 500px;
+  overflow: auto;
+}
+.uploadFileRow {
+  // display: grid;
+  // align-items: center;
+  // grid-template-columns: 1.2fr 0.3fr 0.8fr 0.8fr 0.5fr;
+  padding: 15px 5px;
+
+  & > * {
+    margin: 10px 0px;
+  }
+  :global {
+    .bp5-form-group.bp5-inline {
+      margin-bottom: 0px !important;
+    }
+
+    .bp5-label {
+      width: 80px !important;
+    }
+  }
+}
+
+.uploadButton {
+  margin: 10px;
+}
+
+.uploadFilesHolder {
+  padding: 15px 20px 0px 20px;
+  > * {
+    padding: 10px;
+  }
+}
+
+.inlineSpinner {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.fileUploadTitle {
+  font-size: 20px;
+}
+.fileUploadActionHolder {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column-reverse;
+}

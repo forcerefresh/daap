@@ -1,0 +1,88 @@
+.actionPanel {
+  margin-top: auto;
+  height: 100%;
+
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none;
+    }
+  }
+
+  .sliderName {
+    color: #4b90c5;
+
+    margin-left: 10px;
+
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .changed {
+    color: #ff5151;
+  }
+
+  .responsiveButton {
+    width: 40px;
+    margin-right: 5px;
+    margin-top: 5px;
+    position: relative;
+
+    :global {
+      svg {
+        margin: 0 5px;
+      }
+      .bp5-icon {
+        margin-right: 0px !important;
+      }
+    }
+  }
+
+  .responsiveButtonNumber {
+    font-size: 11px;
+    font-weight: bold;
+    position: absolute;
+    top: 1px;
+    right: 1px;
+  }
+}
+
+.previewPlayStop {
+  margin-top: 5px;
+  margin-left: 5px;
+}
+.previewButtons {
+  display: flex;
+  > *:last-child {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row-reverse;
+    margin-right: 5px;
+  }
+
+  :global {
+    .bp5-active {
+      background: #3a80b5 !important;
+    }
+  }
+}
+
+.floatingSavePanel {
+  z-index: 200;
+  position: absolute;
+  right: 361px;
+  //top: 10vh;
+  background: #252526;
+  //width: 340px;
+  // height: 80vh;
+}
+
+.disabledButton {
+  opacity: 0.5;
+}
+
+.actionButtons {
+  margin-top: 4px;
+}

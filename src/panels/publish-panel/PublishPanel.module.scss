@@ -1,0 +1,68 @@
+.publishPanel {
+  //z-index: 120;
+  //position: absolute;
+  //top: 0px;
+  //left: 68px;
+  width: 700px;
+  height: var(--daap-forcerefresh-app-height);
+
+  background: #252526;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  flex-direction: column;
+
+  input,
+  button,
+  textarea,
+  :focus {
+    outline: none;
+  }
+
+  .publishHolder {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px 20px;
+    padding-bottom: 20px;
+    max-height: calc(100% - 25px);
+
+    > div {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .sectionCard {
+    background: rgba(133, 108, 108, 0) !important;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+
+  .bucketItem {
+    background: rgba(255, 255, 255, 0.02) !important;
+    margin: 10px;
+    padding: 10px;
+    position: relative;
+  }
+
+  .inSync {
+    //background: #12581a;
+    //padding: 5px;
+    color: #1bdd1b;
+  }
+  .notInSync {
+    //background: #ad2108;
+    color: #ffa723;
+    //padding: 5px;
+  }
+
+  .deleteButton {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+  }
+  .addNewBucket {
+    margin-top: 10px;
+    display: inline;
+  }
+}

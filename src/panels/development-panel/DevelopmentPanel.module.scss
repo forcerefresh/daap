@@ -1,0 +1,70 @@
+.extensionsPanel {
+  height: calc(var(--daap-forcerefresh-app-height) - 110px);
+  padding: 3px;
+  padding-right: 30px;
+  position: relative;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-right: 30px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+
+  :global {
+    .bp5-popover-target {
+      display: block;
+    }
+  }
+}
+
+.sectionCard {
+  background: rgba(133, 108, 108, 0) !important;
+
+  :global {
+    .bp5-label {
+      width: 120px;
+    }
+  }
+}
+
+.headerSection {
+  margin-bottom: 10px;
+}
+
+.mainSection {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(var(--daap-forcerefresh-app-height) - 230px);
+
+  :global {
+    .infinite-scroll-component {
+      padding-bottom: 100px;
+    }
+  }
+}
+
+.buttonsHolder {
+  margin-bottom: 15px;
+}
+
+.error {
+  color: red;
+}
+
+.ok {
+  color: rgb(7, 179, 7);
+}
+
+.actionHolder {
+  margin-top: 20px;
+  > * + * {
+    margin-left: 10px;
+  }
+}
+
+.delete {
+  float: right;
+}

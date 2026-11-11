@@ -1,0 +1,22 @@
+.main {
+  :global {
+    .bp5-form-group {
+      margin-bottom: 5px !important;
+    }
+  }
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+
+  > * + * {
+    margin-left: 10px;
+  }
+
+  :global {
+    .bp5-form-group {
+      margin-bottom: 0px !important;
+    }
+  }
+}

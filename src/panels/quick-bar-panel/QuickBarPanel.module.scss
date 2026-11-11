@@ -1,0 +1,208 @@
+@import "/src/tokens";
+
+:global(.bp5-dark) {
+  .quickBar {
+    color: $daap-text-muted-dark;
+    background: $daap-bg-primary-dark;
+    border-bottom: none; //1px solid $dark-gray5;
+    margin: 0px;
+  }
+}
+
+.sliderHolder {
+  padding: 10px 20px;
+
+  :global {
+    .bp5-label {
+      font-weight: bold;
+      color: #808080 !important;
+      margin-bottom: 10px;
+    }
+  }
+
+  :global {
+    .bp5-form-group {
+      // padding: 5px 5px 5px 18px !important;
+      margin-bottom: 0px;
+    }
+  }
+}
+.button {
+  height: 55px;
+  align-items: center;
+}
+
+.toolButtonHolder {
+  :global {
+    .bp5-button:not(.bp5-disabled) {
+      color: rgb(171, 179, 191) !important;
+    }
+  }
+}
+
+.squareButton {
+  width: 50px !important;
+}
+
+.quickBar {
+  color: $daap-text-muted;
+  background: $daap-bg-primary;
+  border-bottom: 1px solid $daap-border;
+
+  //padding: 10px;
+  margin: 0px 1px;
+  //color: gray;
+  //width: calc(var(--daap-forcerefresh-app-height) - 300px);
+  height: 55px;
+  min-height: 55px;
+
+  display: flex;
+
+  // .panelButtons {
+  //   line-height: 14px;
+  //   :global {
+  //     *,
+  //     *:hover,
+  //     *:active {
+  //       outline: none;
+  //     }
+
+  //     .bp5-button {
+  //       text-align: center;
+  //       position: relative;
+  //     }
+
+  //     .bp5-button:not(.bp5-small) {
+  //       width: 82px;
+  //       height: 55px;
+  //       margin-left: 2px;
+  //       margin-right: 2px;
+  //     }
+  //     .bp5-button.bp5-small {
+  //       width: 34px;
+  //       height: 34px;
+  //       // padding: 7px 14px;
+  //     }
+  //   }
+  // }
+
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none !important;
+    }
+
+    // .bp5-button-text {
+    //   height: 36px;
+    // }
+
+    // .bp5-button:not(.bp5-small) {
+    //   //width: 54px;
+    //   height: 54px;
+    //   color: gray;
+    // }
+
+    // .bp5-button:not(.bp5-small):hover {
+    //   color: white;
+    // }
+
+    // .bp5-button.bp5-small {
+    //   width: 34px;
+    //   height: 34px;
+    //   // padding: 7px 14px;
+    // }
+  }
+
+  // .buttonGroupsHolder {
+  //   height: 100%;
+  //   display: flex;
+  //   flex-direction: column;
+  // }
+  // .buttonGroupsHolder > div:last-of-type {
+  //   margin-top: auto;
+  // }
+  // .buttonGroupsHolder > * + * {
+  //   margin-top: 0px;
+  // }
+}
+
+// .delimiter {
+//   height: 20px;
+// }
+
+// .tbButton {
+//   position: relative;
+// }
+
+// .tbTag {
+//   position: absolute;
+//   right: 3px;
+//   top: 3px;
+//   //background: #d31a1a !important;
+//   //color: white !important;
+//   //border-radius: 20px;
+//   //text-align: center;
+//   //line-height: 14px;
+//   //font-weight: bold;
+// }
+.leftHolder {
+  flex-grow: 1;
+  display: flex;
+}
+.rightHolder {
+  flex-grow: 0;
+  display: flex;
+}
+
+.inputHolder {
+  display: flex;
+  align-items: center;
+  padding: 0px 5px;
+}
+
+.checkboxHolder {
+  :global {
+    .bp5-form-group {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      & > div {
+        height: 25px;
+      }
+    }
+  }
+}
+
+.strokeInput {
+  width: 100px;
+  margin-bottom: 0px;
+}
+
+.textButton {
+  height: 34px !important;
+
+  display: flex;
+  align-items: center;
+
+  :global {
+    .bp5-button-text {
+      height: 16px;
+    }
+  }
+}
+
+.mediaLibraryPanel {
+  position: static;
+  top: initial;
+  left: initial;
+  width: initial;
+  height: 75vh !important;
+
+  // height: calc(75vh - 110px);
+}
+
+.mediaLibraryPanelPopup {
+  width: 650px;
+  height: 75vh;
+}

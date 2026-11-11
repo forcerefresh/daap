@@ -1,0 +1,5 @@
+<svg clip-rule="evenodd" fill-rule="evenodd" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+	<g transform="matrix(.047588 0 0 .047588 -.064642 -1.0092)">
+		<path d="m286.5 511.5h-93v-178h-53v-78h53c-0.167-18.003 0-36.003 0.5-54 1.257-12.207 3.59-24.207 7-36 13.34-39.111 40.507-61.945 81.5-68.5 30.857-4.0083 61.524-2.8416 92 3.5v71c-17.021-1.46-34.021-1.294-51 0.5-19.412 3.746-31.245 15.246-35.5 34.5-1.406 16.29-1.906 32.624-1.5 49h83c-4.847 25.904-9.18 51.904-13 78h-70v178z" fill="#FFFFFF" />
+	</g>
+</svg>

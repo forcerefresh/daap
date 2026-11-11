@@ -1,0 +1,207 @@
+import { useContext, useEffect, useRef } from "react";
+import { connect } from "react-redux";
+import { IntegrationContext } from "../../integration";
+import { DevelopmentItem } from "../../panels/development-panel/i-development-types";
+import { forceRefresh } from "../../store/actions/actions";
+import { IStore, store } from "../../store/store";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { DevelopmentContext } from "./DevelopmentProvider";
+import { getGlobals } from "../../globals";
+
+export type IDevelopmentManagerProps = typeof mapDispatchToProps &
+  ReturnType<typeof mapStateToProps>;
+
+const DevelopmentManager = (props: IDevelopmentManagerProps) => {
+  const { globals } = props;
+
+  const globalContext = useContext(IntegrationContext);
+  const { getAll, updateDevelopmentItem } = globalContext.useDevelopmentHook();
+
+  const { developmentItems } = useContext(DevelopmentContext);
+
+  const developmentItemsRef = useRef<DevelopmentItem[]>(developmentItems);
+  developmentItemsRef.current = [...developmentItems];
+
+  const hashsRef = useRef<{ [key: string]: string }>({});
+
+  useEffect(() => {
+    if (globals.enableDeveloper) {
+      getAll();
+      restartDevelopmentInterval();
+      return () => stopDevelopmentInterval();
+    }
+  }, [globals.enableDeveloper]);
+
+  useEffect(() => {}, [developmentItems]);
+
+  const importAll = async () => {
+    const devItems = developmentItemsRef.current;
+
+    let hasUpdate = false;
+    for (let i = 0; i < devItems.length; i++) {
+      const devItem = devItems[i];
+
+      if (!devItem.monitoringEnabled) return;
+
+      // create url for hash.json
+      const urlPathArr = devItem.appDevUrl.split("/");
+      urlPathArr.pop();
+      const hashUrl = urlPathArr.join("/") + "/hash.json";
+
+      // load hash
+      let hashJson = { hash: "" };
+      try {
+        hashJson = await (await fetch(hashUrl)).json();
+      } catch (err: any) {
+        logger.app.error(err);
+        const devItemUpdate: Partial<DevelopmentItem> = {
+          id: devItem.id,
+          status: "ERROR",
+          statusMessage: `Something went wrong. Development item ${
+            devItems[i].appDevUrl
+          } cannot be loaded. Additional info: ${err?.toString?.()}`,
+        };
+        await updateDevelopmentItem(devItemUpdate);
+
+        return;
+      }
+      // compare hash
+      if (hashsRef.current[devItem.type] === hashJson.hash) {
+        continue;
+      }
+
+      logger.app.info(
+        `Development Component (${devItem.type}) has been changed. Reloading...`
+      );
+
+      hashsRef.current = {
+        ...hashsRef.current,
+        [devItem.type]: hashJson.hash,
+      };
+
+      hasUpdate = true;
+
+      try {
+        if (devItem.extensionType === "plugin") {
+          // Plugins are UMD bundles that rely on window.React — use <script> injection
+          // so the UMD wrapper runs in global scope and can find window globals.
+          await new Promise<void>((resolve, reject) => {
+            const prev = document.querySelector(`script[data-plugin="${devItem.type}"]`);
+            if (prev) prev.remove();
+            const script = document.createElement("script");
+            script.dataset.plugin = devItem.type;
+            script.src = devItem.appDevUrl + "?" + Math.random();
+            script.onload = () => resolve();
+            script.onerror = () => reject(new Error(`Failed to load plugin script: ${devItem.appDevUrl}`));
+            document.head.appendChild(script);
+          });
+        } else {
+          // @vite-ignore and webpackIgnore needed for dynamic external URL imports
+          await import(/* webpackIgnore: true */ /* @vite-ignore */ devItem.appDevUrl + "?" + Math.random());
+        }
+        if (devItem.extensionType !== "plugin" && devItem.playerDevUrl) {
+          await import(/* webpackIgnore: true */ /* @vite-ignore */ devItem.playerDevUrl + "?" + Math.random());
+        }
+
+        const devItemUpdate: Partial<DevelopmentItem> = {
+          id: devItem.id,
+          status: "OK",
+          statusMessage: ``,
+        };
+        await updateDevelopmentItem(devItemUpdate);
+
+        const global = getGlobals();
+
+        if (devItem.extensionType === "object") {
+          logger.app.debug(`Register external object (${devItem.type})`);
+          const _g = global as any;
+          _g.registerExternalObject?.(
+            {
+              ..._g.appObjects?.[devItem.type + "-" + devItem.version],
+              development: true,
+            },
+            {
+              ..._g.playerObjects?.[devItem.type + "-" + devItem.version],
+              development: true,
+            },
+            true
+          );
+        }
+
+        if (devItem.extensionType === "plugin") {
+          logger.app.debug(`Register plugin (${devItem.type})`);
+          const key = `${devItem.type}-${devItem.version}`;
+          const pluginDef = global.plugins?.[key];
+          if (pluginDef) {
+            global.registerPlugin?.(pluginDef, true);
+          }
+        }
+
+        if (devItem.extensionType === "animation") {
+          logger.app.debug(`Register external animation (${devItem.type})`);
+          const _g = global as any;
+          _g.registerExternalAnimation?.(
+            {
+              ..._g.appAnimations?.[devItems[i].type],
+              development: true,
+            },
+            {
+              ..._g.playerAnimations?.[devItems[i].type],
+              development: true,
+            },
+            true
+          );
+        }
+
+        logger.app.info(
+          `Development component (${devItem.extensionType}:${devItems[i].type}:v{${devItems[i].version}) has been loaded.`
+        );
+      } catch (err: any) {
+        logger.app.error(err);
+        const devItemUpdate: Partial<DevelopmentItem> = {
+          id: devItems[i].id,
+          status: "ERROR",
+          statusMessage: `Something went wrong. Development item ${
+            devItems[i].appDevUrl
+          } cannot be loaded. Additional info: ${err?.toString?.()}`,
+        };
+        await updateDevelopmentItem(devItemUpdate);
+      }
+    }
+
+    return hasUpdate;
+  };
+
+  const loadModulesInt = useRef<any>(-1);
+
+  const restartDevelopmentInterval = () => {
+    stopDevelopmentInterval();
+
+    const importAllPromise = async () => {
+      const hasUpdate = await importAll();
+      if (hasUpdate) store.dispatch(forceRefresh());
+    };
+
+    setTimeout(async () => {
+      await importAllPromise();
+    }, 500);
+
+    loadModulesInt.current = setInterval(async () => {
+      await importAllPromise();
+    }, 2000);
+  };
+
+  const stopDevelopmentInterval = () => {
+    clearInterval(loadModulesInt.current);
+  };
+
+  return null;
+};
+
+const mapStateToProps = (state: IStore) => ({
+  globals: state.globals,
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DevelopmentManager);

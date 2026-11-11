@@ -1,0 +1,73 @@
+@import "/src/tokens";
+
+:global(.bp5-dark) {
+  .propertiesSections {
+    background: $daap-bg-primary-dark;
+  }
+}
+
+.propertiesSections {
+  // border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  padding: 0px; //8px 0px 4px 0px;
+  color: gray;
+  background: $daap-bg-primary;
+
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none;
+    }
+
+    .bp5-button {
+      text-align: center;
+      position: relative;
+    }
+
+    .bp5-button:not(.bp5-small) {
+      width: 82px;
+      height: 55px;
+      margin-left: 2px;
+      margin-right: 2px;
+      line-height: 10px;
+    }
+    .bp5-button.bp5-small {
+      width: 34px;
+      height: 34px;
+      // padding: 7px 14px;
+    }
+  }
+
+  .buttonGroupsHolder {
+    display: flex;
+
+    // justify-content: center;
+    //flex-direction: row;
+    > * {
+      display: inline-block;
+    }
+    :global {
+      button {
+        color: #abb3bf !important;
+      }
+    }
+  }
+  .buttonGroupsHolder > div:last-of-type {
+    margin-top: auto;
+  }
+  .buttonGroupsHolder > * + * {
+    margin-top: 0px;
+  }
+}
+
+.delimiter {
+  height: 20px;
+}
+
+.tag {
+  position: absolute;
+  top: 1px;
+  background: #3a80b5 !important;
+  right: 1px;
+}

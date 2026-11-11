@@ -1,0 +1,470 @@
+@import "/src/tokens";
+
+.layerPanel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  input,
+  button,
+  textarea,
+  :focus {
+    outline: none;
+  }
+}
+.addNewLayer:hover {
+  :global {
+    .bp5-icon {
+      color: #53e456 !important;
+    }
+  }
+}
+
+.slideName {
+  line-height: initial;
+  vertical-align: text-bottom;
+  color: #1f82c0;
+  margin-left: 10px;
+  display: inline-block;
+  max-width: 140px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.objectName {
+  line-height: initial;
+  vertical-align: text-bottom;
+
+  //margin-left: 10px;
+  display: inline-block;
+  max-width: 160px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.layersHolder {
+  width: 357px;
+  // flex-grow: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.layer {
+  //border: 1px solid #252526;
+}
+
+.layerInner {
+  padding: 2px 0px 2px 4px;
+  //border: 1px solid #252526;
+  border-bottom: 1px solid $daap-border;
+  background: $daap-layer-header;
+
+  display: flex;
+  align-items: center;
+  cursor: default;
+
+  > *:first-child {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  &.active {
+    font-weight: bolder;
+    //border-top: 1px solid #1f82c0;
+    //border-bottom: 1px solid #1f82c0;
+  }
+
+  &.selected {
+    //border: 1px solid #444;
+    //background: #444;
+    //border: 1px solid rgba(0, 0, 0, 0);
+    //border-top: 1px solid #1f82c0;
+    //border-bottom: 1px solid #1f82c0;
+  }
+
+  .layerToggle {
+    margin-right: 0px;
+    margin-right: 5px;
+    /*&.layerOpen {
+        transform: rotate(90deg);
+      }*/
+  }
+
+  /*.slideAnimation {
+      margin-right: 0px;
+    }*/
+
+  .slideProperties {
+    margin-right: 5px;
+  }
+
+  .layoutIcon {
+    margin-right: 5px;
+    color: #3a80b5;
+  }
+
+  .objectCount {
+    display: none;
+    color: #858181;
+    margin-left: 10px;
+  }
+
+  .layerName {
+    max-width: 120px;
+    width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 10px;
+  }
+
+  .layerResponseVisibility {
+    font-weight: bold;
+    color: lightgray;
+
+    .layerResponseVisibilityAll {
+      color: $daap-color-device-all;
+      font-weight: bold;
+    }
+    .layerResponseVisibilityNone {
+      color: $daap-color-device-none;
+      font-weight: bold;
+    }
+
+    //     $daap-color-device-all: #24ac23;
+    // $daap-color-device-all-dark:  #34ec43;
+    // : #ff5f6d;
+    // $daap-color-device-none-dark:  #ff5f6d;
+
+    :global {
+      .bp5-popover-target {
+        max-width: 140px;
+      }
+    }
+  }
+
+  .deleteLayer {
+    display: none;
+  }
+  &:hover .deleteLayer {
+    display: block;
+  }
+  .deleteLayer {
+    svg {
+      fill: #525252;
+    }
+    &:hover {
+      svg {
+        fill: #ff5151;
+      }
+      :global {
+        .bp5-icon-delete {
+          color: #ff5151 !important;
+        }
+      }
+    }
+  }
+
+  &:hover .objectCount {
+    display: block;
+  }
+}
+
+.deleteObject,
+.deleteObject {
+  float: right;
+
+  margin: -4px;
+  color: #555;
+  :global {
+    .bp5-icon-delete {
+      color: #444 !important;
+    }
+  }
+}
+
+.objectHolder {
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-bottom: 1px solid $daap-border;
+  cursor: default;
+
+  .locked svg {
+    // consider lock to be red
+    //color: #ff4646;
+    //fill: #ff4646;
+  }
+
+  .objectHolderInner {
+    display: flex;
+    align-items: center;
+    padding: 2px 4px 2px 8px !important;
+  }
+
+  &.active {
+    font-weight: bolder;
+    //border-top: 1px solid #1f82c0;
+    //border-bottom: 1px solid #1f82c0;
+  }
+
+  &.selected {
+    //border: 1px solid #444;
+    //background: #444;
+    //border: 1px solid rgba(0, 0, 0, 0);
+    //border-top: 1px solid #1f82c0;
+    //border-bottom: 1px solid #1f82c0;
+  }
+
+  .objectDescription {
+    flex-grow: 1;
+    display: block;
+
+    > *:nth-child(2),
+    > *:nth-child(3) {
+      color: #737373;
+    }
+  }
+
+  .actionButtons {
+    //width: 100px;
+    display: flex;
+    align-items: center;
+
+    > * {
+      padding: 0px;
+      margin: 0 2px;
+      //margin-right: 5px;
+    }
+  }
+
+  //&:hover .deleteObject {
+  /*.deleteObject:hover {
+      :global {
+        .bp5-icon-delete {
+          color: #ff5151 !important;
+        }
+      }
+    }*/
+
+  .deleteObject {
+    display: none;
+  }
+  &:hover .deleteObject {
+    display: flex;
+  }
+  .deleteObject {
+    svg {
+      fill: #525252;
+    }
+    &:hover {
+      svg {
+        fill: #ff5151;
+      }
+      :global {
+        .bp5-icon-delete {
+          color: #ff5151 !important;
+        }
+      }
+    }
+  }
+}
+
+.propertiesActive {
+  color: $daap-color-active;
+  font-weight: bold;
+}
+
+/*.active {
+    font-weight: bolder; // **add
+    //**border: 1px solid #444;
+    //**background: #444;
+    :global {
+      .bp5-icon-delete {
+        color: #555 !important;
+      }
+    }
+  }*/
+
+//.selected {
+//background: #444; // **add
+//**border: 1px solid #1f82c0;
+//}
+
+/*.selected + .selected {
+    border-top: 1px solid #252526;
+  }*/
+
+.inlineValue {
+  font-weight: bold;
+}
+
+.selected {
+  //border: 1px solid #1f82c0;
+  background: $daap-row-selection;
+}
+:global(.bp5-dark) {
+  .selected {
+    //border: 1px solid #1f82c0;
+    background: $daap-row-selection-dark;
+  }
+
+  .layerInner:not(.selected) {
+    background: $daap-layer-header-dark;
+  }
+}
+
+.floatingAnimationPanel {
+  z-index: 200;
+  position: absolute;
+  right: 350px;
+  top: 10vh;
+  background: #252526;
+  width: 340px;
+  height: 80vh;
+}
+
+.objectCountClosed {
+  display: block;
+  color: #858181;
+  padding-left: 40px;
+  border-bottom: 1px solid $daap-border;
+  cursor: pointer;
+}
+
+.devicePopup {
+  padding: 10px;
+  background-color: $daap-bg-primary; // #282828;
+
+  hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #555;
+    margin: 1em 0;
+    padding: 0;
+  }
+}
+
+.devicesHolder {
+  cursor: "pointer";
+  height: 24px;
+  display: flex;
+  justify-content: ce;
+  align-content: center;
+  align-items: center;
+  &:hover {
+    background: #444444;
+  }
+}
+
+.dropObjectHandle {
+  position: relative;
+  > .dropObjectHandleLine {
+    position: absolute;
+    top: 0px;
+    height: 1px;
+    left: 0px;
+    right: 0px;
+    background: rgba(99, 99, 99, 1);
+    animation: top 1s;
+    animation: height 1s;
+    animation: background 1ms;
+    z-index: 1001;
+  }
+  > .dropObjectHandleDropZone {
+    position: absolute;
+    top: -10px;
+    height: 20px;
+    left: 0px;
+    right: 0px;
+    z-index: 1001;
+    color: white;
+    font-size: 11px !important;
+    padding: 3px 5px;
+  }
+
+  &.dropObjectHandleOver {
+    > .dropObjectHandleLine {
+      top: -7px;
+      height: 15px;
+      background: #3980b6;
+      color: white;
+      font-size: 11px !important;
+      /// background: rgba(77, 77, 77, 1);
+    }
+  }
+}
+
+.dropHereHint {
+  display: none;
+  z-index: 1000;
+  top: 0px;
+  right: 0px;
+  height: 17px;
+  padding: 1px 5px;
+  width: 130px;
+  position: absolute;
+  background: #3980b6;
+  color: white;
+  font-size: 11px;
+}
+
+.layerOver {
+  border: 1px solid #3980b6 !important;
+}
+
+.dropHereHintVisible {
+  display: block !important;
+}
+
+.disableObjectVisibility {
+  // opacity: 0.35;
+}
+
+.objectTypeSVGHolder {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 5px;
+  svg {
+    display: block;
+    color: #eee;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.layerTypeIcon {
+  // width: 20px;
+  // height: 20px;
+  // display: inline-flex;
+  // vertical-align: middle;
+  margin-right: 8px;
+  svg {
+    color: $daap-icon-dark;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+:global(.bp5-dark) {
+  .devicePopup {
+    background-color: $daap-bg-primary-dark; // #282828;
+  }
+  .objectCountClosed {
+    border-bottom: 1px solid $daap-border-dark;
+  }
+  .objectHolder {
+    border-bottom: 1px solid $daap-border-dark;
+  }
+  .layerInner {
+    border-bottom: 1px solid $daap-border-dark;
+  }
+}
+
+.objectGroup {
+  border-left: 28px solid transparent;
+}

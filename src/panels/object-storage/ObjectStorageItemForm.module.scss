@@ -1,0 +1,8 @@
+.formHolder {
+  :global {
+    .bp5-form-group {
+      flex-direction: column;
+      margin-bottom: 10px;
+    }
+  }
+}

@@ -1,0 +1,131 @@
+@import "/src/tokens";
+
+.addPanel {
+  z-index: 100;
+  position: absolute;
+  top: 65px;
+  left: 78px;
+  height: calc(var(--daap-forcerefresh-app-height) - 127px);
+  // top: 0px;// NOTE: update 3
+  // left: 68px;// NOTE: update 3
+  width: 730px;
+  // height: var(--daap-forcerefresh-app-height);// NOTE: update 3
+
+  background: $daap-bg-primary;
+  box-shadow: $daap-shadow-0;
+
+  padding: 0 30px 30px 30px;
+  display: flex;
+  flex-direction: column;
+
+  overflow: auto;
+
+  > * {
+    display: flex;
+  }
+
+  section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  h1,
+  p {
+    margin: 5px 14px;
+  }
+
+  h1 {
+    margin-top: 20px;
+  }
+}
+
+.card {
+  position: relative;
+  display: inline-block;
+  // background: rgb(51, 51, 51) !important;
+  text-align: center;
+  margin: 10px;
+  width: 200px;
+  max-width: 200px;
+  // height: 150px;
+  &.disabled {
+    opacity: 0.3;
+  }
+
+  .svgHolder {
+    width: 40px;
+    height: 40px;
+    margin: auto;
+
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  h3 {
+    text-transform: uppercase;
+  }
+}
+
+// .sectionCard {
+//   border: 0px solid black;
+
+//   background: rgba(0, 0, 0, 0) !important;
+//   box-shadow: none !important;
+//   text-align: left;
+//   margin: 20px 10px 10px 10px;
+//   width: 150px;
+//   max-width: 150px;
+//   min-width: 150px;
+//   padding: 10px 0;
+//   //height: 150px;
+// }
+
+.external {
+  color: #fbff00;
+  font-weight: 900;
+  font-size: 13px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.development {
+  color: #d868ff;
+  font-weight: 900;
+  font-size: 13px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.licenseRequired {
+  color: #ff6d74;
+  font-weight: 900;
+  font-size: 13px;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 5px;
+}
+
+.info {
+  font-weight: 900;
+  font-size: 13px;
+  margin: 30px 10px;
+}
+
+.description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+:global(.bp5-dark) {
+  &.addPanel {
+    background: $daap-bg-primary-dark !important;
+    // box-shadow: $daap-shadow-dark-1 !important; // NOTE: update 3
+  }
+}

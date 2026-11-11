@@ -1,0 +1,10 @@
+.propertiesHolder {
+  padding: 0 10px;
+  // overflow-y: auto;
+
+  :global {
+    .bp5-form-group {
+      margin: 0 0 5px;
+    }
+  }
+}

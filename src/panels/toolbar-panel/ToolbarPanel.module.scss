@@ -1,0 +1,120 @@
+@import "/src/tokens";
+
+:global(.bp5-dark) {
+  .toolbar {
+    color: $daap-text-muted-dark;
+    background: $daap-bg-primary-dark;
+    border-right: none; // 1px solid $dark-gray5;
+
+    padding-bottom: 30px;
+  }
+  .largeButton,
+  .smallButton {
+    :global {
+      svg {
+        color: $daap-text-muted-dark !important;
+      }
+    }
+  }
+
+  :global(.bp5-disabled) {
+    &.largeButton,
+    &.smallButton {
+      :global {
+        svg {
+          color: $daap-text-disabled-dark !important;
+        }
+      }
+    }
+  }
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  text-align: center;
+  padding: 0px 0px;
+
+  background: $daap-bg-primary;
+  color: $daap-text-muted;
+  border-right: 1px solid $daap-border;
+
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none;
+    }
+  }
+
+  :global(.bp5-disabled) {
+    &.largeButton,
+    &.smallButton {
+      :global {
+        svg {
+          color: $daap-text-disabled;
+        }
+      }
+    }
+  }
+}
+
+.delimiter {
+  margin: 10px;
+  border-bottom: 1px solid #8080809c;
+}
+
+.buttonTag {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+}
+
+.largeButton {
+  position: relative;
+  width: $daap-toolbar-btn-size-lg;
+  height: $daap-toolbar-btn-size-lg;
+
+  :global {
+    svg {
+      width: $daap-toolbar-btn-svg-lg;
+      height: $daap-toolbar-btn-svg-lg;
+      color: $daap-text-muted;
+    }
+  }
+}
+
+.smallButton {
+  position: relative;
+  width: $daap-toolbar-btn-size-sm;
+  height: $daap-toolbar-btn-size-sm;
+
+  :global {
+    svg {
+      width: $daap-toolbar-btn-svg-sm;
+      height: $daap-toolbar-btn-svg-sm;
+      color: $daap-text-muted;
+    }
+  }
+}
+
+.newVersionButton {
+  height: 78px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.helpMenu {
+  background: $daap-bg-primary !important;
+  // margin-bottom: 10px;
+}
+
+:global(.bp5-dark) {
+  .helpMenu {
+    background: $daap-bg-primary-dark !important;
+  }
+}

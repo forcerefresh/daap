@@ -1,0 +1,73 @@
+@import "../../../../tokens";
+.languageSelector {
+  display: flex;
+  justify-content: center;
+}
+
+.splitBadge {
+  display: inline-flex;
+  border-radius: 4px; // Reduced from 6px
+  overflow: hidden;
+  // border: 1px solid $daap-border;
+  background-color: white;
+  height: 24px; // Reduced from 32px
+
+  :global(.bp5-dark) & {
+    border-color: $daap-border-dark;
+    background-color: $daap-bg-primary-dark;
+  }
+}
+
+.badgeLeft {
+  padding: 0.25rem 0.5rem; // Reduced from 0.5rem 0.75rem
+  background-color: $daap-layer-header;
+  color: $daap-text-muted;
+  font-weight: 500;
+  font-size: 0.75rem; // Reduced from 0.85rem
+  display: flex;
+  align-items: center;
+  // border-right: 1px solid $daap-border;
+  white-space: nowrap;
+
+  :global(.bp5-dark) & {
+    background-color: $daap-layer-header-dark;
+    color: $daap-text-disabled-dark;
+    // border-right-color: $daap-border-dark;
+  }
+}
+
+.badgeRight {
+  :global(.bp5-html-select) {
+    height: 100%;
+
+    select {
+      border: none;
+      background: transparent;
+      padding: 0 0.5rem; // Reduced from 0.75rem
+      height: 100%;
+      outline: none;
+      font-size: 0.75rem; // Reduced from 0.85rem
+      min-width: 120px; // Reduced from 140px
+
+      :global(.bp5-dark) & {
+        color: $daap-text-primary-dark;
+        background-color: $daap-bg-primary-dark;
+      }
+
+      &:focus {
+        background-color: rgba($daap-color-active, 0.1);
+      }
+      // Target the caret icon
+    }
+  }
+  :global(.bp5-icon-double-caret-vertical) {
+    height: 12px; // Reduce from 16px
+    width: 12px; // Reduce from 16px
+    margin-top: -2px;
+
+    svg {
+      height: 12px;
+      width: 12px;
+    }
+  }
+}

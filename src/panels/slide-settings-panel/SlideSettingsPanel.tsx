@@ -1,0 +1,167 @@
+import { cloneDeep, get, set } from "lodash-es";
+import cx from "classnames";
+import React from "react";
+import { connect } from "react-redux";
+import {
+  getNumericFiled,
+  getSelectField,
+  getTextField,
+} from "../../inputs/input-utils";
+import { updateSlide } from "../../store/actions/actions";
+import { IPage } from "../../store/reducers/i-pages";
+import { IStore } from "../../store/store";
+
+import css from "./SlideSettingsPanel.module.scss";
+import { getInputForm } from "../../inputs/input-factory";
+import {
+  getAppAnimationDefinition,
+  getAnimationsOptions,
+} from "webslider-sdk/lib/animations/animations-register";
+import { EasingOptions } from "webslider-sdk/lib/animations/i-animation-types";
+
+type ISlideSettingsPanel = typeof mapDispatchToProps &
+  ReturnType<typeof mapStateToProps> & {
+    pageId: string;
+  };
+
+const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
+  const { slide, _updateSlide } = props;
+
+  const durationInput = () => (
+    <div className="input60">
+      {getNumericFiled(
+        "Transition duration",
+        get(slide, "slideTransition.duration"),
+        (value: any) => {
+          const obj = cloneDeep(slide);
+          set(obj!, "slideTransition.duration", value);
+          _updateSlide(obj as any as IPage);
+        }
+      )}
+    </div>
+  );
+
+  const renderAnimationForm = (
+    animationId: string,
+    object: IPage,
+    valuesPath: string
+  ) => {
+    const animationDefinition = getAppAnimationDefinition(animationId);
+
+    return animationDefinition?.formDefinition.form.map((item: any) => {
+      function onChange(value: any) {
+        const retObj = cloneDeep(object);
+        if (retObj) {
+          const values = get(retObj, valuesPath) || {};
+          values[item.propertyName] = value;
+          set(retObj, valuesPath, values);
+
+          _updateSlide(retObj as any as IPage);
+        }
+      }
+
+      const value = get(object, valuesPath)[item.propertyName];
+      const defaultValue = animationDefinition.formDefaults[item.propertyName];
+      const inputProps = {
+        ...item,
+        value: typeof value !== "undefined" ? value : defaultValue,
+      };
+      return getInputForm(item.inputType, inputProps, onChange, onChange);
+    });
+  };
+
+  if (!slide) return null;
+
+  const effDef = getAppAnimationDefinition(
+    get(slide, `slideTransition.animation.id`)!
+  );
+
+  return (
+    <div className={cx("bp5-dark", css.slideSettings)}>
+      <div className={css.slidePanel} key={slide?.id}>
+        <div className={css.slideHeader}>
+          <div>
+            SLIDE PROPERTIES
+            <span className={css.slideName}>
+              {slide && " [ " + slide.name + " ] "}
+            </span>
+          </div>
+        </div>
+        <div className={css.slidePropertiesHolder}>
+          {getTextField(
+            "Id",
+            slide.customId,
+            (value: string) => {
+              const obj = cloneDeep(slide);
+              obj.customId = value;
+              _updateSlide(obj as any as IPage);
+            },
+            "",
+            { placeholder: "Enter slide ID" }
+          )}
+          {getSelectField(
+            "Transition",
+            get(slide, `slideTransition.animation.id`),
+            getAnimationsOptions("slide"),
+            (value: any) => {
+              const obj = cloneDeep(slide);
+              set(obj, `slideTransition.animation.id`, value);
+
+              const values = (get(obj, `slideTransition.animation.values`) ||
+                {}) as { [key: string]: any };
+              const effDef = getAppAnimationDefinition(value);
+              effDef?.formDefinition.form.forEach((item: any) => {
+                values[item.propertyName] =
+                  effDef.formDefaults[item.propertyName];
+              });
+              set(obj, `slideTransition.animation.values`, values);
+
+              _updateSlide(obj as any as IPage);
+            }
+          )}
+          <div>
+            {durationInput()}
+          </div>
+          {effDef?.formDefaults.hasEase &&
+            getSelectField(
+              "Easing",
+              get(slide, "slideTransition.animation.values.ease"),
+              EasingOptions,
+              (value: any) => {
+                const newSlide = cloneDeep(slide);
+                set(newSlide, `slideTransition.animation.values.ease`, value);
+                _updateSlide(newSlide);
+              }
+            )}
+          <div className={css.dynamicFields}>
+            {renderAnimationForm(
+              get(slide, `slideTransition.animation.id`)!,
+              slide,
+              `slideTransition.animation.values`
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const mapStateToProps = (state: IStore) => {
+  const { pages, selection, settings } = state.project;
+  let slide: IPage | null = null;
+
+  if (selection.activeSlideId) {
+    slide = pages.pageById[selection.activeSlideId];
+  }
+
+  return {
+    slide,
+    settings,
+  };
+};
+
+const mapDispatchToProps = {
+  _updateSlide: (slide: IPage) => updateSlide(slide),
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SlidesPanel);

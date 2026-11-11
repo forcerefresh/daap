@@ -1,0 +1,66 @@
+.main {
+  :global {
+    .bp5-form-content {
+      min-width: 200px;
+    }
+  }
+}
+
+.mediaLibraryPanel {
+  position: static;
+  top: initial;
+  left: initial;
+  width: initial;
+}
+
+.mediaLibraryPanelPopup {
+  width: 850px;
+}
+
+.browseButton {
+  margin: 0px 10px;
+}
+
+.actions {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.row {
+  position: relative;
+  //display: flex;
+  margin-bottom: 5px;
+  //align-items: center;
+  background: #2e2e2e;
+  padding: 5px;
+}
+
+.addButton {
+  margin-top: 10px;
+}
+
+.addImagesButton {
+  margin-top: 2px;
+  display: block;
+}
+
+.imageName {
+  margin-bottom: 4px;
+}
+
+.previewHolder {
+  max-width: 140px;
+  max-height: 70px;
+  width: 100px;
+  height: 60px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-bottom: 5px;
+}
+
+.deleteBtn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}

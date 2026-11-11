@@ -1,0 +1,38 @@
+.main {
+  :global {
+    .bp5-form-content {
+      flex-grow: 1;
+    }
+  }
+  &.showLabels {
+    :global {
+      .bp5-form-content {
+        //margin-left: 10px;
+        margin-right: 15px;
+      }
+    }
+  }
+}
+
+.thumbPositionTop {
+  margin-top: 20px;
+
+  :global {
+    .bp5-slider-handle > .bp5-slider-label {
+      margin-top: -40px;
+    }
+  }
+}
+
+.hideLabels {
+  &:not(.thumbPositionTop) {
+    margin-bottom: 0px;
+  }
+  margin-bottom: -20px;
+
+  :global {
+    .bp5-slider-axis {
+      display: none !important;
+    }
+  }
+}

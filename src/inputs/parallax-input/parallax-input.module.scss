@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+
+  // Label (displayName) style
+  :global {
+    .bp5-label {
+      width: var(--animations-panel-label-width);
+      min-width: var(--animations-panel-label-width);
+      margin-right: 10px;
+    }
+  }
+}

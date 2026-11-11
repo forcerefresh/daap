@@ -1,0 +1,25 @@
+.main {
+  :global {
+    .bp5-button-group.bp5-vertical.bp5-fixed > button {
+      background: none !important;
+      box-shadow: none;
+    }
+  }
+}
+
+.optionalCheckbox {
+  margin-bottom: 5px;
+  display: inline-block;
+}
+
+.row {
+  display: flex;
+}
+
+.numberInput {
+  :global {
+    input {
+      max-width: 100px !important;
+    }
+  }
+}

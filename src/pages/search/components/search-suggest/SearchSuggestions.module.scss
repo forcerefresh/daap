@@ -1,0 +1,49 @@
+@import "../../../../tokens";
+
+.suggestionsContainer {
+  width: 100%;
+  padding-left: 0.3rem;
+
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.suggestionsLabel {
+  font-size: 0.9rem;
+  color: $daap-text-muted;
+  margin-bottom: 0.5rem;
+  align-items: center;
+  // margin-left: 0.5rem;
+
+  :global(.bp5-dark) & {
+    color: $daap-text-muted-dark;
+  }
+}
+
+.suggestionButton {
+  font-size: 0.85rem;
+  color: $daap-text-muted;
+  // font-style: italic;
+
+  font-weight: 100;
+  &:hover {
+    background: rgba($daap-text-muted, 0.1);
+    color: $daap-text-primary;
+  }
+
+  :global(.bp5-dark) & {
+    color: $daap-text-muted-dark !important;
+
+    &:hover {
+      background: rgba($daap-text-muted-dark, 0.1);
+      color: $daap-text-muted-dark;
+    }
+  }
+}

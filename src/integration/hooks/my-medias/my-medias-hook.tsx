@@ -1,0 +1,297 @@
+// *** this file contains implementation for development
+
+import {
+  MediaDataInfo,
+  ImageData,
+  MediaType,
+  VectorData,
+  VideoData,
+  ExtensionData,
+} from "webslider-sdk/lib/common/i-media-types";
+import { resizeFile } from "../../components/my-image-select/my-images-utils";
+import { v4 as uuid } from "uuid";
+import { remove } from "lodash-es";
+import {
+  file2Base64,
+  getImageVideoFromFile,
+} from "../../../utils/doom-utils/video";
+import { appendToFileName } from "../../../utils/file/file-utils";
+import { IMyMediaHook } from "../../../integration/core/i-hooks";
+
+type AudioItem = {
+  id?: string;
+  url?: string;
+  filename?: string;
+  mediaType?: MediaType;
+  sourceType?: "local" | string;
+  src?: string;
+};
+
+type FontItem = {};
+
+type AudioData = MediaDataInfo & { audio: AudioItem };
+type FontData = MediaDataInfo & { font: FontItem };
+
+export const useMyMediaHook = (): IMyMediaHook => {
+  const upload = (
+    type: MediaType,
+    file: File,
+    fileMetadata: MediaDataInfo
+  ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> => {
+    const lsKey = `my-${type}s`;
+    const lsMediaKey = `my-${type}s-storage`;
+
+    if (fileMetadata.tags?.[0] === "") {
+      fileMetadata.tags = [];
+    }
+
+    return new Promise(async (resolve) => {
+      const lsMyMedia: any[] = JSON.parse(localStorage.getItem(lsKey) || "[]");
+      const lsMyMediaStorage: any = JSON.parse(
+        localStorage.getItem(lsMediaKey) || "{}"
+      );
+
+      let item:
+        | ImageData
+        | VectorData
+        | VideoData
+        | ExtensionData
+        | AudioData
+        | FontData;
+
+      switch (type) {
+        case "image": {
+          const id = uuid();
+
+          const thumbFile = await resizeFile(file, 80, 80, 70);
+          const smallFile = await resizeFile(file, 120, 120, 70);
+          const mediumFile = await resizeFile(file, 300, 300, 70);
+
+          lsMyMediaStorage[id] = {
+            original: thumbFile as string,
+            small: smallFile as string,
+            medium: mediumFile as string,
+          };
+
+          item = {
+            id,
+            ...fileMetadata,
+            images: {
+              original: {
+                id,
+                filename: fileMetadata.filename,
+                mediaType: "image",
+                sourceType: "local",
+                sizeType: "original",
+                size: { width: 80, height: 80, type: "jpg" },
+              },
+              small: {
+                id,
+                filename: appendToFileName(fileMetadata.filename!, "_120"),
+                mediaType: "image",
+                sourceType: "local",
+                sizeType: "small",
+                size: { width: 120, height: 120, type: "jpg" },
+              },
+              medium: {
+                id,
+                filename: appendToFileName(fileMetadata.filename!, "_300"),
+                mediaType: "image",
+                sourceType: "local",
+                sizeType: "medium",
+                size: { width: 300, height: 300, type: "jpg" },
+              },
+            },
+          };
+          break;
+        }
+        case "video": {
+          // TODO: filename
+          const { blob, size: videoSize } = await getImageVideoFromFile(file);
+          await resizeFile(blob!, 80, 80, 70);
+          const thumbFile = await resizeFile(blob!, 80, 80, 70);
+          const smallFile = await resizeFile(blob!, 120, 120, 70);
+          const mediumFile = await resizeFile(blob!, 300, 300, 70);
+          const videoBase64 = await file2Base64(file);
+
+          const id = uuid();
+
+          lsMyMediaStorage[id] = {
+            video: videoBase64,
+            original: thumbFile as string,
+            small: smallFile as string,
+            medium: mediumFile as string,
+          };
+
+          item = {
+            id,
+            ...fileMetadata,
+            videos: {
+              original: {
+                id,
+                filename: fileMetadata.filename,
+                mediaType: "video",
+                sourceType: "local",
+                sizeType: "original",
+                size: { ...videoSize, type: "mp4" },
+              },
+            },
+            images: {
+              thumbnail: {
+                id,
+                filename: "id:" + id,
+                mediaType: "image",
+                sourceType: "local",
+                sizeType: "medium",
+                size: { width: 80, height: 80, type: "jpg" },
+              },
+              small: {
+                id,
+                filename: "id:" + id,
+                mediaType: "image",
+                sourceType: "local",
+                sizeType: "medium",
+                size: { width: 120, height: 120, type: "jpg" },
+              },
+              medium: {
+                id,
+                filename: "id:" + id,
+                mediaType: "image",
+                sourceType: "local",
+                sizeType: "medium",
+                size: { width: 300, height: 300, type: "jpg" },
+              },
+              original: {
+                id,
+                filename: "id:" + id,
+                mediaType: "image",
+                sourceType: "local",
+                sizeType: "medium",
+                size: { width: 300, height: 300, type: "jpg" },
+              },
+            },
+          };
+          break;
+        }
+        case "audio": {
+          item = {
+            id: uuid(),
+            ...fileMetadata,
+            audio: {},
+          };
+          break;
+        }
+        case "vector": {
+          item = {
+            id: uuid(),
+            ...fileMetadata,
+            svgString: await file.text(),
+          };
+          break;
+        }
+        case "font": {
+          item = {
+            id: uuid(),
+            ...fileMetadata,
+            font: {},
+          };
+          break;
+        }
+        case "extension": {
+          item = {
+            id: uuid(),
+            ...fileMetadata,
+            file: "file",
+            // no sense to save extension in local storage. Electron only impl.
+          };
+          break;
+        }
+        case "template": {
+          item = {
+            id: uuid(),
+            ...fileMetadata,
+            file: "file",
+            // no sense to save extension in local storage. Electron only impl.
+          };
+          break;
+        }
+      }
+
+      lsMyMedia.unshift(item!);
+
+      localStorage.setItem(lsKey, JSON.stringify(lsMyMedia));
+      localStorage.setItem(lsMediaKey, JSON.stringify(lsMyMediaStorage));
+
+      setTimeout(() => {
+        resolve({ status: "OK" });
+      }, 1);
+    });
+  };
+
+  const fetchMedias = async (props: {
+    type: MediaType;
+    from: number;
+    tags?: string[];
+    search?: string;
+    perPage?: number;
+  }): Promise<{ data: any[]; pagination: any }> => {
+    const { from, tags, search, type, perPage = 10 } = props;
+    const lsKey = `my-${type}s`;
+
+    let myImages: ImageData[] = JSON.parse(localStorage.getItem(lsKey) || "[]");
+
+    if (tags && tags.length > 0) {
+      const tagsUpper = tags.map((tag) => tag.toUpperCase());
+      myImages = myImages.filter(
+        (image) =>
+          image.tags &&
+          image.tags.find((tag: string) => tagsUpper.indexOf(tag.toUpperCase()) !== -1)
+      );
+    }
+
+    if (search) {
+      myImages = myImages.filter((image: any) => image.title?.indexOf(search) !== -1);
+    }
+
+    const total = myImages.length;
+    const retArr = [...myImages].splice(from, perPage);
+    const pageCount = Math.ceil(total / perPage);
+    const currentPage = Math.floor(from / perPage) + 1;
+
+    return {
+      data: retArr,
+      pagination: {
+        currentPage,
+        isFirstPage: currentPage === 1,
+        isLastPage: currentPage >= pageCount,
+        previousPage: currentPage > 1 ? currentPage - 1 : null,
+        nextPage: currentPage < pageCount ? currentPage + 1 : null,
+        pageCount,
+        totalCount: total,
+      },
+    };
+  };
+
+  const deleteMedias = async (
+    type: MediaType,
+    ids: string[]
+  ): Promise<{ response: { status: "SUCCESS" | "ERROR"; id: string }[] }> => {
+    const lsKey = `my-${type}s`;
+
+    const myImages: ImageData[] = JSON.parse(
+      localStorage.getItem(lsKey) || "[]"
+    );
+
+    ids.forEach((id) => {
+      remove(myImages, (item) => {
+        return item.id === id;
+      });
+    });
+
+    localStorage.setItem(lsKey, JSON.stringify(myImages));
+
+    return { response: ids.map((id) => ({ status: "SUCCESS", id })) };
+  };
+
+  return { upload, fetchMedias, deleteMedias };
+};

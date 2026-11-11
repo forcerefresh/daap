@@ -1,0 +1,197 @@
+import {
+  IButtonGroupInput,
+  IColorInput,
+  INumberInput,
+  ITextInput,
+  InputType,
+} from "webslider-sdk/lib/inputs/i-inputs";
+import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
+import {
+  ICommonObjectProperties,
+  IObject,
+} from "webslider-sdk/lib/objects/i-object";
+import {
+  GetHtmlFuncPropsType,
+  PostProcessFuncPropsType,
+  PostProcessFuncReturnType,
+  UpdateObjectSizeFuncPropsType,
+} from "webslider-sdk/lib/objects/objects-register";
+import svg from "./line.svg?raw";
+
+import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+
+import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
+import { convertRGBColor2CSSStyle } from "webslider-sdk/lib/utils/utils";
+import { cloneDeep } from "lodash-es";
+
+export const LINE = "io.forcerefresh.line.object";
+
+export interface LineValues {
+  strokeWidth?: number;
+  strokeColor?: RGBColor;
+  strokeLineCap?: "miter" | "round" | "bevel";
+  strokeDashArray?: string;
+}
+
+export type LinePropertiesTuple = [
+  INumberInput<"strokeWidth">,
+  IColorInput<"strokeColor">,
+  IButtonGroupInput<"strokeLineCap">,
+  ITextInput<"strokeDashArray">,
+];
+
+export function createLineObject(
+  initialValue?: Record<string, any>,
+): Omit<IObject, keyof ICommonObjectProperties | "layerId"> {
+  const object = createCommonObject(LINE);
+
+  const values: LineValues = {
+    strokeWidth: initialValue?.strokeWidth ?? 1,
+    strokeColor: initialValue?.strokeColor ?? { r: 255, b: 255, g: 255, a: 1 },
+    strokeLineCap: initialValue?.strokeLineCap ?? "miter",
+    strokeDashArray: initialValue?.strokeDashArray ?? "",
+  };
+
+  object.properties = values;
+
+  return object;
+}
+
+export function getLineForm(): LinePropertiesTuple {
+  const form: LinePropertiesTuple = [
+    {
+      inputType: InputType.NUMBER,
+      displayName: "Line",
+      propertyName: "strokeWidth",
+      value: 10,
+      defaultValue: 10,
+    },
+    {
+      inputType: InputType.COLOR,
+      displayName: "Line color",
+      propertyName: "strokeColor",
+      value: { r: 255, b: 255, g: 255, a: 1 },
+      defaultValue: { r: 255, b: 255, g: 255, a: 1 },
+    },
+    {
+      displayName: "Cap",
+      propertyName: "strokeLineCap",
+      inputType: InputType.BUTTON_GROUP_INPUT,
+      value: "miter",
+      defaultValue: "miter",
+      options: [
+        {
+          label: "Miter",
+          value: "miter",
+        },
+        {
+          label: "Round",
+          value: "round",
+        },
+        {
+          label: "Bevel",
+          value: "bevel",
+        },
+      ],
+    },
+    {
+      inputType: InputType.TEXT,
+      displayName: "Dash",
+      propertyName: "strokeDashArray",
+      value: "",
+      defaultValue: "",
+      helperText: `Comma separated line length
+       and white space (e.g 5,2)`,
+    },
+  ];
+
+  return form;
+}
+
+export function getLineHtml(props: GetHtmlFuncPropsType) {
+  const { object, deviceType } = props;
+  const lineValues = object.properties as LineValues;
+
+  const b = getBounds(object);
+
+  const nX1 = object.x1! - b.x;
+  const nX2 = object.x2! - b.x;
+  const nY1 = object.y1! - b.y;
+  const nY2 = object.y2! - b.y;
+
+  const path = "M" + nX1 + " " + nY1 + " " + nX2 + " " + nY2;
+
+  let style = "";
+  style = addCommonPropertiesToStyle(style, object, deviceType);
+  style = addTransformPropertiesToStyle(style, object, deviceType);
+
+  const dashattr = lineValues.strokeDashArray
+    ? ` stroke-dasharray="${lineValues.strokeDashArray}"`
+    : "";
+  const svg = `
+<svg style="overflow: visible; position: absolute;" viewBox="0 0 ${
+    b.width > 1 ? b.width : 1
+  } ${
+    b.height > 1 ? b.height : 1
+  }" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path  d="${path}" stroke-width="${lineValues.strokeWidth}" stroke="${
+    convertRGBColor2CSSStyle(lineValues.strokeColor).backgroundColor
+  }" stroke-linecap="${lineValues.strokeLineCap}" ${dashattr}></path>
+ </svg>`;
+  return `<div class="object-content object-content-${object.id}" style="${style}">${svg}</div>`;
+}
+
+export async function lineSizeUpdate(
+  _props: UpdateObjectSizeFuncPropsType,
+): Promise<void> {}
+
+export function linePostProcess(
+  props: PostProcessFuncPropsType,
+): PostProcessFuncReturnType {
+  const { object } = props;
+
+  const newObj = cloneDeep(object);
+
+  return newObj;
+}
+
+export const lineMeta = {
+  name: "Line",
+  description: "Line object",
+  icon: svg,
+  sizeType: "line" as const,
+  transformCapabilities: {
+    move: true,
+    scale: false,
+    resize: false,
+    rotate: true,
+    pointsReposition: true,
+  },
+};
+
+export function getBounds(object: IObject) {
+  let hMin = 100000;
+  let hMax = -100000;
+  let vMin = 100000;
+  let vMax = -100000;
+
+  const points = [
+    { x: object.x1, y: object.y1 },
+    { x: object.x2, y: object.y2 },
+  ];
+
+  points.forEach((p) => {
+    hMin = Math.min(hMin, p.x!);
+    hMax = Math.max(hMax, p.x!);
+    vMin = Math.min(vMin, p.y!);
+    vMax = Math.max(vMax, p.y!);
+  });
+
+  return {
+    x: hMin,
+    width: hMax - hMin,
+    y: vMin,
+    height: vMax - vMin,
+  };
+}

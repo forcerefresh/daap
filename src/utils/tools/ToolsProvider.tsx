@@ -1,0 +1,694 @@
+import React, { useEffect, useRef, useState } from "react";
+import { getObjectToolDefinitions } from "../../objects/objectToolFactory";
+import {
+  SnapBounds,
+  IToolClass,
+  Point,
+  Rect,
+} from "webslider-sdk/lib/objects/i-objects-register";
+import { getCanvas, getStage } from "./ToolsProviderUtils";
+import {
+  updateObject as updateObjectAction,
+  updateObjectForPreview as updateObjectForPreviewAction,
+  addNewObject,
+  deleteObjects,
+} from "../../store/actions/actions";
+import { IStore } from "../../store/store";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
+import { useSelector, useStore } from "react-redux";
+import { cloneDeep, forOwn } from "lodash-es";
+import { IToolConfig } from "./types";
+import {
+  ICursorStyle,
+} from "../../panels/stage-panel-new/CursorProvider";
+import { getZoom } from "../../store/helpers/calculateZoom";
+import {
+  isObjectGroup,
+  populateObjectThreeIds,
+} from "../../store/actions/actions-utils";
+import { getGroupMatrixFromSelectionPath } from "../../panels/stage-panel-new/stage-panel-utils";
+import {
+  getObjectBounds,
+  objectPointToStageSpace_New,
+} from "../transform/transform-utils";
+import { ILayer } from "../../store/reducers/i-layers";
+import { IPage } from "../../store/reducers/i-pages";
+import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
+import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
+import { AppToaster } from "../components/app-toaster/AppToaster";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
+
+export interface ToolsContextInterface {
+  isToolActive: boolean;
+  activeTool: { tool: string; version?: string } | null;
+  activeObjectId?: string | null;
+  activateTool: (tool: string, objectId?: string) => void;
+  deactivateTool: () => void;
+  deleteCurrentObject: () => void;
+  applyCurrentObject: () => void;
+  deleteObject: (object: IObject) => void;
+  // tool state
+  toolConfig: IToolConfig;
+  setToolConfig: (state: IToolConfig) => void;
+  updateObject: (_object: IObject) => void;
+  updateObjectForPreview: (_object: IObject) => void;
+
+  //
+  cursorStyle: ICursorStyle | undefined;
+  //
+  appZoom?: number;
+  //
+  snapBounds: { bounds: SnapBounds; objectId: string }[];
+}
+
+export const ToolsContext = React.createContext<ToolsContextInterface>({
+  isToolActive: false,
+  activeTool: null,
+  activeObjectId: null,
+  activateTool: (_tool: string, _objectId?: string) => {},
+  deactivateTool: () => {},
+  deleteCurrentObject: () => {},
+  applyCurrentObject: () => {},
+  deleteObject: (_object: IObject) => {},
+  //
+  toolConfig: {},
+  setToolConfig: (_state: unknown) => {},
+  //
+  updateObject: (_object: IObject) => undefined,
+  updateObjectForPreview: (_object: IObject) => undefined,
+
+  //
+  cursorStyle: undefined,
+  //
+  snapBounds: [],
+});
+
+export const ToolsProvider = (
+  props: { children?: React.ReactNode },
+) => {
+  const { children } = props;
+
+  const store = useStore<IStore>();
+  const { dispatch } = store;
+
+  const {
+    stageZoom,
+    activeLayerId,
+    objectById,
+    allObjects,
+    layerById,
+    appZoom,
+    globals,
+    activePageId,
+    allLayers,
+    pageById,
+    margins,
+    pageSize,
+  } = useSelector((_state: IStore) => {
+    const breakpointConfig: BreakpointConfiguration | undefined =
+      _state.project.settings.breakpoints.breakpointsConfiguration.find(
+        (breakpointConfig: any) =>
+          breakpointConfig.type === _state.stage.selectedDevice,
+      );
+
+    return {
+      appZoom: _state.globals.appZoom,
+      stageZoom: getZoom(_state.stage, _state.project.settings),
+      activeLayerId: _state.project.selection.activeLayerId,
+      activePageId: _state.project.selection.activeSlideId,
+
+      objectById: _state.project.objects.objectById,
+      allObjects: _state.project.objects.allObjects,
+      layerById: _state.project.layers.layerById,
+      allLayers: _state.project.layers.allLayers,
+      pageById: _state.project.pages.pageById,
+
+      margins: breakpointConfig?.normal.margins!,
+      pageSize: breakpointConfig?.normal.maxSliderSize!,
+
+      globals: _state.globals,
+    };
+  });
+
+  const storeRef = useRef({
+    stageZoom,
+    activeLayerId,
+    objectById,
+    allObjects,
+    layerById,
+    activePageId,
+    allLayers,
+    pageById,
+  });
+  storeRef.current = {
+    stageZoom,
+    activeLayerId,
+    objectById,
+    allObjects,
+    layerById,
+    activePageId,
+    allLayers,
+    pageById,
+  };
+
+  const [snapBounds, setSnapBounds] = useState<
+    { bounds: SnapBounds; objectId: string; snapThreshold: number }[]
+  >([]);
+
+  useEffect(() => {
+    if (!globals.snapToObject) {
+      setSnapBounds([]);
+      return;
+    }
+
+    const allObjectBounds: {
+      bounds: SnapBounds;
+      objectId: string;
+      snapThreshold: number;
+    }[] = [];
+
+    const pageObjects = getPageObjects(storeRef.current);
+
+    pageObjects.forEach((object) => {
+      if (isObjectGroup(object)) {
+        return;
+      }
+
+      const objectPathArr = getObjectPath(object.id, objectById);
+
+      if (objectPathArr.length > 0) {
+        const bounds = getObjectBounds(objectPathArr);
+
+        allObjectBounds.push({
+          bounds,
+          objectId: object.id,
+          snapThreshold: globals.snapToObjectThreshold,
+        });
+      }
+    });
+
+    // NOTE: append margins
+    if (globals.snapToMargin) {
+      const bounds = {
+        ...margins,
+        right: pageSize.width - margins.right,
+        bottom: pageSize.height - margins.bottom,
+      };
+
+      allObjectBounds.push({
+        objectId: "",
+        bounds: {
+          ...bounds,
+          vcenter: bounds.left + (bounds.right - bounds.left) / 2,
+          hcenter: bounds.top + (bounds.bottom - bounds.top) / 2,
+        },
+        snapThreshold: globals.snapToMarginThreshold,
+      });
+    }
+
+    if (globals.snapToDocument) {
+      const bounds = {
+        left: 0,
+        top: 0,
+        right: pageSize.width,
+        bottom: pageSize.height,
+      };
+
+      allObjectBounds.push({
+        objectId: "",
+        bounds: {
+          ...bounds,
+          vcenter: bounds.right / 2,
+          hcenter: bounds.bottom / 2,
+        },
+        snapThreshold: globals.snapToMarginThreshold,
+      });
+    }
+
+    setSnapBounds(allObjectBounds);
+  }, [
+    objectById,
+    layerById,
+    activePageId,
+    pageById,
+    allLayers,
+    globals.snapToObject,
+  ]);
+
+  const [cursorStyle, setCursorStyle] = useState<ICursorStyle | undefined>();
+
+  const [toolConfig, setToolConfigState] = useState<IToolConfig>({});
+  const [activeTool, setActiveTool] = useState<{
+    tool: string;
+    version?: string;
+  } | null>(null);
+  const [activeObjectId, setActiveObjectId] = useState<
+    string | null | undefined
+  >(null);
+
+  const activeToolRef = useRef<{ tool: string; version?: string } | null>(null);
+
+  const activeToolInst = useRef<IToolClass | null>(null);
+
+  const requestDeactivation = () => {
+    deactivateTool();
+  };
+
+  const requestObjectUpdate = (params: {
+    objectValues?: unknown;
+    bounds?: Rect;
+    isEdit?: boolean;
+    objectId?: string;
+    points?: {
+      x1: number;
+      x2: number;
+      y1: number;
+      y2: number;
+    };
+    reactivate?: boolean;
+  }) => {
+    if (!params.isEdit) {
+      if (!storeRef.current.activeLayerId) {
+        AppToaster.show({
+          intent: "warning",
+          message: `No layer selected. Please choose a layer first.`,
+        });
+        return;
+      }
+
+      // When inside a group scope, all coordinates from getMousePoint are in
+      // stage-space. Convert bounds and bezier paths to group-local space so
+      // the new object lands at the correct position with the correct shape.
+      let effectiveBounds = params.bounds;
+      let effectiveObjectValues = params.objectValues;
+      const scope = store.getState().project.selection.currentScope;
+      if (scope.type === "group" && params.bounds) {
+        const groupId = scope.groupId;
+
+        // Transform bounding-box origin to group-local absolute coords.
+        const localOrigin = stagePointToObjectSpace(groupId, {
+          x: params.bounds.x,
+          y: params.bounds.y,
+        });
+
+        // Transform bezier control points (free-draw uses them; other objects
+        // may not have them, in which case we fall through to the else branch).
+        const rawBeziers = (params.objectValues as any)?.beziers as
+          | ([number, number][])[]
+          | undefined;
+
+        if (rawBeziers && rawBeziers.length > 0) {
+          let minBx = Infinity,
+            maxBx = -Infinity;
+          let minBy = Infinity,
+            maxBy = -Infinity;
+
+          // Each bezier point (bx, by) is relative to params.bounds origin.
+          // Convert: absolute stage pt → absolute group-local pt → relative.
+          const transformed = rawBeziers.map((curve) =>
+            curve.map(([bx, by]) => {
+              const absLocal = stagePointToObjectSpace(groupId, {
+                x: params.bounds!.x + bx,
+                y: params.bounds!.y + by,
+              });
+              const relX = absLocal.x - localOrigin.x;
+              const relY = absLocal.y - localOrigin.y;
+              minBx = Math.min(minBx, relX);
+              maxBx = Math.max(maxBx, relX);
+              minBy = Math.min(minBy, relY);
+              maxBy = Math.max(maxBy, relY);
+              return [relX, relY];
+            }),
+          );
+
+          // If rotation causes some relative coords to go negative, shift them
+          // all so the bounding box starts at (0, 0) and adjust the origin.
+          const adjustX = minBx < 0 ? -minBx : 0;
+          const adjustY = minBy < 0 ? -minBy : 0;
+
+          effectiveBounds = {
+            x: localOrigin.x - adjustX,
+            y: localOrigin.y - adjustY,
+            width: maxBx + adjustX,
+            height: maxBy + adjustY,
+          };
+          effectiveObjectValues = {
+            ...(params.objectValues as any),
+            beziers: transformed.map((curve) =>
+              curve.map(([bx, by]) => [bx + adjustX, by + adjustY]),
+            ),
+          };
+        } else {
+          // No beziers — just reposition; keep width/height as-is.
+          effectiveBounds = {
+            x: localOrigin.x,
+            y: localOrigin.y,
+            width: params.bounds.width,
+            height: params.bounds.height,
+          };
+        }
+      }
+
+      dispatch(
+        addNewObject(
+          storeRef.current.activeLayerId!,
+          activeToolRef.current!.tool, // TODO VERSION
+          {
+            left: effectiveBounds?.x ?? 100,
+            top: effectiveBounds?.y ?? 100,
+            width: effectiveBounds?.width ?? 100,
+            height: effectiveBounds?.height ?? 100,
+          },
+          {
+            ...(effectiveObjectValues as any),
+          },
+        ),
+      );
+    } else {
+      const newObj = cloneDeep(storeRef.current.objectById[params.objectId!]);
+      // NOTE maybe replace, rather that merge
+      if (params.objectValues) {
+        newObj.properties = {
+          ...(newObj.properties ?? {}),
+          ...(params.objectValues as any),
+        };
+      }
+      if (params.points) {
+        newObj.x1 = params.points.x1;
+        newObj.x2 = params.points.x2;
+        newObj.y1 = params.points.y1;
+        newObj.y2 = params.points.y2;
+      }
+
+      if (params.bounds) {
+        // NOTE: LAYOUT CHANGE
+        newObj.left = params.bounds.x;
+        newObj.top = params.bounds.y;
+        newObj.width = params.bounds.width;
+        newObj.height = params.bounds.height;
+      }
+
+      dispatch(updateObjectAction(newObj));
+    }
+
+    if (params.reactivate) {
+      const tool = activeToolRef.current;
+      deactivateTool();
+      activateTool(tool!.tool, "latest", params.objectId);
+    }
+  };
+
+  const updateObject = (object: IObject) => {
+    const newObj = cloneDeep(object);
+    dispatch(updateObjectAction(newObj));
+  };
+
+  const updateObjectForPreview = (object: IObject) => {
+    const newObj = cloneDeep(object);
+    dispatch(updateObjectForPreviewAction(newObj));
+  };
+
+  const getMousePoint = (e: MouseEvent) => {
+    const stageEl = getCanvas().getElementsByClassName(
+      "MainToolStage",
+    )[0] as HTMLDivElement;
+
+    const stageRect = stageEl?.getBoundingClientRect()!;
+
+    const x = (e.pageX - stageRect.x) / storeRef.current.stageZoom / appZoom; //(e.currentTarget as HTMLElement).offsetLeft;
+    const y = (e.pageY - stageRect.y) / storeRef.current.stageZoom / appZoom; //(e.currentTarget as HTMLElement).offsetTop;
+
+    return { x, y };
+  };
+
+  const getObjectTransform = (
+    objectId: string,
+    options?: { includeTranslate?: boolean; skipStageScale?: boolean },
+    overrideObjectSize?: {
+      [key: string]: Pick<IObject, "left" | "top" | "width" | "height">;
+    },
+  ): DOMMatrix => {
+    // >>>>>>>>>>>>>>>>>>
+    // duplicate 123
+    const objectPath: string[] = [];
+
+    populateObjectThreeIds(
+      objectPath,
+      objectId,
+      storeRef.current.objectById,
+      storeRef.current.layerById,
+    );
+
+    const groupsMatrix = getGroupMatrixFromSelectionPath(
+      [...objectPath, objectId],
+      storeRef.current.objectById,
+      options,
+      overrideObjectSize,
+    );
+
+    const transform = options?.skipStageScale
+      ? groupsMatrix
+      : groupsMatrix.multiply(new DOMMatrix("scale(" + stageZoom + ")"));
+
+    return transform;
+    /////
+  };
+
+  const objectPointToStageSpace = (
+    objectId: string,
+    p: Point,
+    _includeTranslate = true,
+  ) => {
+    return objectPointToStageSpace_New(
+      [storeRef.current.objectById[objectId]],
+      p,
+      1, // stageZoom - do not send stage zoom as we have same scale.
+    );
+  };
+
+  const stagePointToObjectSpace = (
+    objectId: string,
+    p: Point,
+    overrideObjectSize?: Pick<IObject, "left" | "top" | "width" | "height">,
+    includeTranslate: boolean = true,
+  ) => {
+    const objTransform = getObjectTransform(
+      objectId,
+      {
+        includeTranslate,
+        skipStageScale: true,
+      },
+      overrideObjectSize ? { [objectId!]: overrideObjectSize } : {},
+    );
+
+    const pointMatrix = new DOMMatrix(
+      `translateX(${p.x}px) translateY(${p.y}px)`,
+    );
+
+    objTransform.invertSelf().multiplySelf(pointMatrix);
+    const translateX = objTransform.e;
+    const translateY = objTransform.f;
+
+    return { x: translateX, y: translateY };
+  };
+
+  const activateTool = (tool: string, version?: string, objectId?: string) => {
+    const toolDef =
+      getObjectToolDefinitions(tool, version) ??
+      getAppObjectDefinition(tool, "latest");
+
+    if (toolDef?.toolClass) {
+      const object = objectId ? storeRef.current.objectById[objectId] : null;
+      const values = object?.properties;
+
+      // NOTE: LAYOUT CHANGE
+      const x = object?.left;
+      const y = object?.top;
+
+      const canvas = getCanvas();
+      const rootStage = getStage();
+
+      const clazz = toolDef.toolClass;
+      if (clazz) {
+        const inst = new clazz();
+        inst.activate({
+          rootStage,
+          canvas,
+          object,
+          requestDeactivation,
+          requestObjectUpdate,
+          objectPointToStageSpace,
+          stagePointToObjectSpace,
+          getMousePoint,
+          getObjectTransform,
+          isEdit: !!objectId,
+          editorConfig: { stageZoom },
+          objectValues: values,
+          objectId,
+          position: object ? { x: x ?? 0, y: y ?? 0 } : { x: 0, y: 0 },
+          getObjects: (type: string): IObject[] => {
+            const retObjs: IObject[] = [];
+            allObjects.forEach((objectId) => {
+              if (storeRef.current.objectById[objectId].type === type) {
+                retObjs.push(storeRef.current.objectById[objectId]);
+              }
+            });
+            return retObjs;
+          },
+          requestObjectDelete: (objectId: string) => {
+            dispatch(deleteObjects([objectId]) as any);
+          },
+          requestCursorChange: (cursor) => {
+            setCursorStyle(cursor);
+          },
+        });
+        activeToolInst.current = inst;
+      }
+
+      setActiveTool({ tool, version });
+      setActiveObjectId(objectId);
+      activeToolRef.current = { tool, version };
+    } else {
+      logger.app.warn(`Tool ${tool} is not registered.`);
+    }
+  };
+
+  const deactivateTool = () => {
+    if (activeToolInst.current) {
+      activeToolInst.current.deactivate({});
+      activeToolInst.current = null;
+      setActiveTool(null);
+      setActiveObjectId(null);
+      setToolConfigState({});
+      setCursorStyle(undefined);
+    }
+  };
+
+  const deleteCurrentObject = () => {
+    if (activeToolInst.current) {
+      activeToolInst.current.deactivate({ delete: true });
+      activeToolInst.current = null;
+      setActiveTool(null);
+      setToolConfigState({});
+    }
+  };
+
+  const deleteObject = (object: IObject) => {
+    dispatch(deleteObjects([object.id]) as any);
+  };
+
+  const applyCurrentObject = () => {
+    if (activeToolInst.current) {
+      activeToolInst.current.deactivate({});
+      activeToolInst.current = null;
+      setActiveTool(null);
+      setToolConfigState({});
+    }
+  };
+
+  const setToolConfig = (config: IToolConfig) => {
+    setToolConfigState(config);
+    if (activeToolInst.current) {
+      activeToolInst.current.toolConfigChange(config);
+    }
+  };
+
+  useEffect(() => {
+    activeToolInst.current?.editorChange({ stageZoom });
+  }, [stageZoom]);
+
+  useEffect(() => {
+    if (!activeTool) return;
+
+    const retObjs: IObject[] = [];
+
+    allObjects.forEach((objectId) => {
+      if (
+        objectById[objectId].type === activeTool.tool &&
+        objectById[objectId].version === activeTool.version
+      ) {
+        retObjs.push(objectById[objectId]);
+      }
+    });
+    activeToolInst.current?.objectsChange(retObjs);
+  }, [allObjects, objectById, activeTool]);
+
+  return (
+    <ToolsContext.Provider
+      value={{
+        activeTool,
+        activeObjectId,
+
+        activateTool,
+        deactivateTool,
+        deleteCurrentObject,
+        deleteObject,
+        applyCurrentObject,
+        isToolActive: activateTool !== null,
+        //
+        toolConfig,
+        setToolConfig,
+        //
+        updateObject,
+        updateObjectForPreview,
+        cursorStyle,
+        //
+        appZoom,
+        //
+        snapBounds,
+      }}
+    >
+      {children}
+    </ToolsContext.Provider>
+  );
+};
+
+export function getObjectPath(objectId: string, objectById: any) {
+  const objectPathArr: IObject[] = [];
+  populateObjectPathRec(objectPathArr, objectId, objectById);
+  return objectPathArr;
+}
+
+function populateObjectPathRec(
+  objectPathArr: IObject[],
+  objectId: string,
+  objectById: any,
+) {
+  const object = objectById[objectId];
+
+  if (object) {
+    objectPathArr.unshift(object);
+    populateObjectPathRec(objectPathArr, object.parentId, objectById);
+  }
+}
+
+function getPageObjects(store: {
+  activeLayerId: string | null;
+  objectById: {
+    [id: string]: IObject<{}>;
+  };
+  allObjects: string[];
+  layerById: {
+    [id: string]: ILayer;
+  };
+  activePageId: string | null;
+  allLayers: string[];
+  pageById: {
+    [id: string]: IPage;
+  };
+}) {
+  const objects: IObject[] = [];
+
+  const pageLayerIds = store.allLayers.filter((layerId) => {
+    const layer = store.layerById[layerId];
+    return layer.pageId === store.activePageId;
+  });
+
+  forOwn(store.objectById, (obj, _objId) => {
+    if (pageLayerIds.includes(obj.layerId)) {
+      objects.push(obj);
+    }
+  });
+
+  return objects;
+}

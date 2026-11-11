@@ -1,0 +1,63 @@
+.licenseSettingsPanel {
+  section {
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+
+  .panel {
+    padding: 20px;
+    padding-top: 5px;
+
+    :global {
+      .bp5-form-group {
+        flex-direction: column;
+      }
+
+      .bp5-form-group .bp5-control {
+        margin-bottom: 5px;
+      }
+      .bp5-label {
+        //margin-bottom: 5px;
+        color: #b5b5b5;
+        font-weight: bold;
+      }
+    }
+
+    > div {
+      //margin-bottom: 30px;
+    }
+  }
+}
+
+.serialGroup {
+  :global {
+    .bp5-input-group input {
+      width: 400px;
+    }
+  }
+}
+
+.licenseDetails {
+  margin-top: 20px;
+  > * {
+    margin-top: 5px;
+  }
+}
+
+.licenseName,
+.licenseSubscriptionPlan {
+  font-weight: bold;
+  color: #44b7ff;
+}
+
+.licenseStatusOk {
+  color: rgb(0, 201, 0);
+  font-weight: bold;
+}
+
+.licenseStatusError {
+  color: rgb(237, 110, 37);
+  font-weight: bold;
+}

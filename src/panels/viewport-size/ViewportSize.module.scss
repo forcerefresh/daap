@@ -1,0 +1,55 @@
+.vieportSize {
+  //position: relative;
+  z-index: 2000;
+
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none;
+    }
+  }
+
+  .vieportSizeInner {
+    position: absolute;
+    z-index: 1000;
+    bottom: 10px;
+    left: 80px;
+    right: 720px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.sliderHolder {
+  padding: 0px 60px;
+}
+
+.slider {
+  margin-top: 20px;
+
+  :global {
+    .bp5-slider-handle > .bp5-slider-label {
+      margin-top: -55px;
+      font-weight: bold;
+      padding: 5px;
+    }
+
+    .bp5-slider-handle,
+    .bp5-slider-handle:hover,
+    .bp5-slider-handle.bp5-active {
+      background-color: rgb(10, 144, 189);
+    }
+
+    .bp5-slider-axis .bp5-slider-label {
+      margin-top: -22px;
+    }
+
+    .bp5-slider-axis .bp5-slider-label:first-child {
+      margin-left: -30px;
+    }
+    .bp5-slider-axis .bp5-slider-label:last-child {
+      margin-left: 30px;
+    }
+  }
+}

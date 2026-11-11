@@ -1,0 +1,39 @@
+@import "/src/tokens";
+
+:global(.bp5-dark) {
+  .floatingPointer {
+    // color: $daap-text-muted-dark;
+  }
+  .floatingPointerInner {
+    background: $daap-bg-primary-dark;
+  }
+}
+
+.floatingPointer {
+  z-index: 1000;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+
+  display: flex;
+  overflow: visible;
+
+  transition: opacity;
+  transition-duration: 200ms;
+
+  input,
+  button,
+  textarea,
+  :focus {
+    outline: none;
+  }
+}
+
+.floatingPointerInner {
+  padding: 4px;
+  // padding: 4px;
+  background: $daap-bg-primary;
+  display: inline-flex;
+  max-width: fit-content;
+  margin: 0 auto;
+}

@@ -1,0 +1,236 @@
+import { last } from "lodash-es";
+import React from "react";
+import { RGBColor } from "react-color";
+import {
+  IBorderValue,
+  ICornerRadiusValue,
+} from "webslider-sdk/lib/inputs/i-inputs";
+import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
+import { ISettings } from "../store/reducers/i-settings";
+import { IPage } from "../store/reducers/i-pages";
+
+export function getRealSlideDuration(_slide: IPage, _settings: ISettings) {
+  return "10s";
+}
+
+export function getRealExitSlideDuration(_slide: IPage, _settings: ISettings) {
+  return "2s";
+}
+
+export function getRealSlideDurationVisual(slide: IPage, settings: ISettings) {
+  const dur = getRealSlideDuration(slide, settings);
+  const durMs = convertTimeUnitToMs(dur);
+  return (durMs / 1000).toString() + "s";
+}
+
+export function getRealExitSlideDurationVis(slide: IPage, settings: ISettings) {
+  const dur = getRealExitSlideDuration(slide, settings);
+  const durMs = convertTimeUnitToMs(dur);
+  return (durMs / 1000).toString() + "s exit";
+}
+
+export function convertTimeUnitToMs(timeUnit: string) {
+  let durMs: number;
+  if (timeUnit.indexOf("ms") !== -1) {
+    durMs = parseInt(timeUnit, 10);
+  } else if (timeUnit.indexOf("s") !== -1) {
+    durMs = parseInt(timeUnit, 10) * 1000;
+  } else {
+    durMs = parseInt(timeUnit, 10);
+  }
+  return durMs;
+}
+
+export function removeFalsy(obj: { [key: string]: any }) {
+  let newObj: { [key: string]: any } = {};
+  Object.keys(obj).forEach((prop) => {
+    if (obj[prop]) {
+      newObj[prop] = obj[prop];
+    }
+  });
+  return newObj;
+}
+
+export function convertRGBColor2CSSProperties(
+  c?: RGBColor
+): React.CSSProperties {
+  if (!c) {
+    return {};
+  }
+
+  return {
+    backgroundColor: `rgba(${c.r}, ${c.g}, ${c.b}, ${c.a})`,
+  };
+}
+
+export function formatBytes(bytes: number, decimals = 2) {
+  if (bytes === 0) return "0 Bytes";
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+}
+
+export function getCroppedFileName(str: string, firstPart = 16, lastPart = 8) {
+  if (str.length > firstPart + lastPart) {
+    return str.substr(0, firstPart) + "..." + str.substr(-lastPart);
+  }
+  return str;
+}
+
+export function addBorderRadius(
+  style: string,
+  borderRadius: ICornerRadiusValue
+) {
+  const _br = borderRadius as any;
+  if (_br.common) {
+    style += "border-radius: " + _br.common + ";";
+  } else if (borderRadius.tl) {
+    style +=
+      "border-radius: " +
+      borderRadius.tl +
+      " " +
+      borderRadius.tr +
+      " " +
+      borderRadius.br +
+      " " +
+      borderRadius.bl +
+      ";";
+  }
+  return style;
+}
+
+export function addBackgroundColor(style: string, background: RGBColor) {
+  if (background) {
+    style +=
+      "background: " +
+      convertRGBColor2CSSProperties(background).backgroundColor +
+      ";";
+  }
+  return style;
+}
+
+export function addPaddingColor(style: string, padding: number) {
+  if (padding) {
+    style += "padding: " + padding + "px;";
+  }
+  return style;
+}
+
+export function addBorder(style: string, border: IBorderValue) {
+  const _b = border as any;
+  if (_b.useCommonValue) {
+    style += "border-width: " + _b.commonBorder.width + ";";
+    style +=
+      "border-color: " +
+      convertRGBColor2RGBAString(_b.commonBorder.color) +
+      ";";
+    style += "border-style: " + _b.commonBorder.style + ";";
+  } else {
+    style = addBorderSide(style, "top", _b.top);
+    style = addBorderSide(style, "bottom", _b.bottom);
+    style = addBorderSide(style, "left", _b.left);
+    style = addBorderSide(style, "right", _b.right);
+  }
+  return style;
+}
+
+export function addBorderSide(
+  style: string,
+  side: "left" | "bottom" | "right" | "top",
+  border: IBorderValue
+) {
+  style += "border-" + side + "-width: " + border.width + ";";
+  style +=
+    "border-" +
+    side +
+    "-color: " +
+    convertRGBColor2RGBAString(border.color) +
+    ";";
+  style += "border-" + side + "-style: " + border.style + ";";
+  return style;
+}
+
+export function humanizeSting(str: string, removeDottedPart = false) {
+  let targetStr = str;
+  if (removeDottedPart) {
+    const peaces = str.split(".");
+    targetStr = peaces[peaces.length - 1];
+  }
+  targetStr = targetStr.replaceAll("_", " ").replaceAll("-", " ");
+  targetStr = targetStr.charAt(0).toUpperCase() + targetStr.slice(1);
+  return targetStr;
+}
+
+export function forceDownload(url: string) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", url, true);
+  xhr.responseType = "blob";
+  xhr.onload = function () {
+    const urlCreator = window.URL || window.webkitURL;
+    const imageUrl = urlCreator.createObjectURL(this.response);
+    const tag = document.createElement("a");
+    tag.href = imageUrl;
+    tag.download = last(url.split("/")) || "image.png";
+    document.body.appendChild(tag);
+    tag.click();
+    document.body.removeChild(tag);
+  };
+  xhr.send();
+}
+
+export function getBooleanValue(
+  val: boolean | undefined,
+  defValue: boolean = false
+): boolean {
+  return typeof val === "undefined" ? defValue : val;
+}
+
+export function hexToRGB(hex: string, a?: number): RGBColor | null {
+  // Remove the # if present
+  if (typeof hex !== "string") {
+    return { r: 0, g: 0, b: 0, a: 1 };
+  }
+  let hexValue = hex.startsWith("#") ? hex.slice(1) : hex;
+
+  // Expand short hex format (e.g., #fff becomes #ffffff)
+  if (hexValue.length === 3) {
+    hexValue = hexValue
+      .split("")
+      .map((char) => char + char)
+      .join("");
+  }
+
+  // Validate hex length
+  if (hexValue.length !== 6) {
+    return null;
+  }
+
+  try {
+    const r = parseInt(hexValue.slice(0, 2), 16);
+    const g = parseInt(hexValue.slice(2, 4), 16);
+    const b = parseInt(hexValue.slice(4, 6), 16);
+
+    if (isNaN(r) || isNaN(g) || isNaN(b)) {
+      return null;
+    }
+
+    if (a !== undefined) {
+      return { r, g, b, a };
+    } else {
+      return { r, g, b, a: 1 };
+    }
+  } catch (ex) {
+    return null;
+  }
+}
+
+export function getNameFromFilename(filename: string): string {
+  const arr = filename.split(".");
+  arr.pop();
+  return arr.join(".");
+}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <!-- bottom-left rect: outline only -->
+  <rect x="2" y="8" width="13" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.9"/>
+  <!-- top-right rect: outline only -->
+  <rect x="9" y="3" width="13" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.9"/>
+  <!-- intersection: filled -->
+  <rect x="9" y="8" width="6" height="6" rx="1" fill="currentColor" opacity="0.9"/>
+</svg>

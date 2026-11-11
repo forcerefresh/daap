@@ -1,0 +1,15 @@
+.main {
+  position: relative;
+}
+.optionsHolder {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+.button:focus {
+  outline: none;
+}
+
+.popover {
+  background: #282828;
+}

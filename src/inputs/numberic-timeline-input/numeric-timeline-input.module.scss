@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  place-items: unset;
+  // Label (displayName) style
+  :global {
+    .bp5-label {
+      width: var(--animations-panel-label-width);
+      min-width: var(--animations-panel-label-width);
+      margin-right: 10px;
+    }
+  }
+}
+.rowHolder {
+  display: flex;
+}
+.rowHolderInputs {
+  :global {
+    .bp5-form-group {
+      margin-bottom: 0px !important;
+    }
+  }
+}
+.smallGap {
+  margin-bottom: 0px !important;
+}
+
+.smallTimelineHolder {
+  width: 100%;
+  margin: 7px 0;
+}
+
+.smallTimeline {
+  height: 5px;
+  width: 100%;
+  background-color: green;
+}

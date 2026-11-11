@@ -1,0 +1,124 @@
+import {
+  IColorInput,
+  INumberInput,
+  InputType,
+} from "webslider-sdk/lib/inputs/i-inputs";
+import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
+import {
+  ICommonObjectProperties,
+  IObject,
+} from "webslider-sdk/lib/objects/i-object";
+import {
+  GetHtmlFuncPropsType,
+  PreloadOrder,
+  UpdateObjectSizeFuncPropsType,
+} from "webslider-sdk/lib/objects/objects-register";
+import svg from "./free-draw.svg?raw";
+import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
+import {
+  getCommonObjectPropertiesDefinition,
+  getCommonPropertiesMetadataValues,
+  getCommonPropertiesValues,
+} from "webslider-sdk/lib/objects/common-properties";
+import {
+  addTransformPropertiesToStyle,
+} from "webslider-sdk/lib/objects/transform-properties";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+import { IBezier } from "./types";
+import { bezierArr2Path } from "./utils";
+import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
+import { convertRGBColor2CSSStyle } from "webslider-sdk/lib/utils/utils";
+
+export const FREE_DRAW = "io.forcerefresh.free-draw.object";
+
+export interface FreeDrawValues {
+  beziers: IBezier[];
+  strokeWidth: number;
+  color: RGBColor;
+}
+
+export type FreeDrawPropertiesTuple = [
+  INumberInput<"strokeWidth">,
+  IColorInput<"color">,
+];
+
+export function createFreeDrawObject(
+  initialValue?: Record<string, any>,
+): Omit<IObject, keyof ICommonObjectProperties | "layerId"> {
+  const object = createCommonObject(FREE_DRAW);
+
+  const values: FreeDrawValues = {
+    beziers: initialValue?.beziers ?? [],
+    strokeWidth: initialValue?.strokeWidth ?? 5,
+    color: initialValue?.color ?? { r: 255, b: 255, g: 255, a: 1 },
+  };
+
+  object.properties = values;
+
+  return object;
+}
+
+export function getFreeDrawForm(): FreeDrawPropertiesTuple {
+  const form: FreeDrawPropertiesTuple = [
+    {
+      inputType: InputType.NUMBER,
+      displayName: "Line",
+      propertyName: "strokeWidth",
+      value: 1,
+      defaultValue: 1,
+    },
+    {
+      inputType: InputType.COLOR,
+      displayName: "Line color",
+      propertyName: "color",
+      value: { r: 255, b: 255, g: 255, a: 1 },
+      defaultValue: { r: 255, b: 255, g: 255, a: 1 },
+    },
+  ];
+
+  return form;
+}
+
+export function getFreeDrawHtml(props: GetHtmlFuncPropsType) {
+  const { object, isPlayer, deviceType } = props;
+  const freeDrawValues = object.properties as FreeDrawValues;
+
+  // backward compatibility
+  const beziers =
+    freeDrawValues.beziers ?? (freeDrawValues as any).lines?.[0].bezier;
+
+  if (!isPlayer) {
+    if (!beziers || beziers.length === 0) {
+      return getObjectPlaceholder(`FREE DRAW<br/>(placeholder)`);
+    }
+  }
+
+  let pathsHtml = "";
+  const d = bezierArr2Path(beziers);
+  pathsHtml += `<path stroke-width="${freeDrawValues.strokeWidth}px" stroke="${
+    convertRGBColor2CSSStyle(freeDrawValues.color).backgroundColor
+  }" stroke-linejoin="round" stroke-linecap="round" d="${d}"/>`;
+
+  let style = "";
+  style = addCommonPropertiesToStyle(style, object, deviceType);
+  style = addTransformPropertiesToStyle(style, object, deviceType);
+  return `
+<div class="object-content object-content-${object.id}" style="${style}">
+  <svg fill="none"  viewBox="0 0 ${object.width! > 1 ? object.width : 1} ${
+    object.height! > 1 ? object.height : 1
+  }"  style="width: 100%; height: 100%; overflow:visible;">
+  ${pathsHtml}
+  </svg>
+</div>`;
+}
+
+export async function freeDrawSizeUpdate(
+  _props: UpdateObjectSizeFuncPropsType,
+): Promise<void> {}
+
+export const freeDrawMeta = {
+  name: "Free draw",
+  description: "Free hand draw",
+  preloadOrder: PreloadOrder.MIDDLE,
+  icon: svg,
+};

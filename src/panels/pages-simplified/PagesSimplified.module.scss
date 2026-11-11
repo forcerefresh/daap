@@ -1,0 +1,71 @@
+@import "/src/tokens";
+
+.pagePanel {
+  padding: 6px 0 6px 6px;
+  background: $daap-bg-primary;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  input,
+  button,
+  textarea,
+  :focus {
+    outline: none;
+  }
+}
+.layersHeader {
+  flex-grow: 0;
+}
+.layersHolder {
+  flex-grow: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.objectsHolder {
+  overflow: auto;
+  padding: 5px;
+}
+
+:global(.bp5-dark) {
+  .pagePanel {
+    background: $daap-bg-primary-dark !important;
+  }
+}
+
+.smallButton > span {
+  max-width: 75px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: pre;
+}
+
+.pageLabel {
+  padding: 2px 7px;
+  width: 90px;
+  background: blueviolet;
+  margin-bottom: 5px;
+  background-color: #444;
+  justify-content: normal;
+}
+
+.objectItem {
+  height: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.itemHolder {
+  .addPageSmall {
+    display: none;
+  }
+}
+.itemHolder:hover {
+  .addPageSmall {
+    display: block;
+  }
+}

@@ -1,0 +1,47 @@
+.breakpointPreview {
+  width: 220px;
+  height: 220px;
+}
+
+.breakpointPreviewInner {
+  position: relative;
+  width: 200px;
+  height: 200px;
+
+  .label {
+    position: absolute;
+  }
+
+  .breakpointPreviewInnerInner {
+    position: relative;
+    //top: 30px;
+    width: 200px;
+    height: 220px;
+
+    .breakpointPreviewInnerPage {
+      position: absolute;
+      //top: 0px;
+      //width: 200px;
+      //height: 220px;
+      border: 1px dotted #ff2121;
+    }
+
+    .breakpointPreviewInnerSlide {
+      position: absolute;
+      //top: 0px;
+      //left: 25px;
+      //width: 150px;
+      //height: 220px;
+      border: 1px solid #45c750;
+    }
+
+    .breakpointPreviewInnerGuidelines {
+      position: absolute;
+      top: 10px;
+      left: 35px;
+      width: 130px;
+      height: 200px;
+      border: 1px dotted #00d6ff;
+    }
+  }
+}

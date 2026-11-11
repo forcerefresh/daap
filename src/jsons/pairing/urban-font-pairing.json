@@ -1,0 +1,330 @@
+{
+  "urban_pairings": [
+    {
+      "name": "Concrete Jungle",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Bebas Neue",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Oswald",
+          "font_weight": "500",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Urbanist",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 8,
+          "name": "Entertainment",
+          "subsector": "Hip-Hop Record Labels",
+          "recommend": 100
+        },
+        {
+          "id": 24,
+          "name": "Fitness & Sports",
+          "subsector": "Street Basketball Leagues",
+          "recommend": 98
+        },
+        {
+          "id": 11,
+          "name": "Hospitality",
+          "subsector": "Graffiti-Themed Hostels",
+          "recommend": 95
+        },
+        {
+          "id": 23,
+          "name": "Fashion",
+          "subsector": "Skatewear Brands",
+          "recommend": 90
+        },
+        {
+          "id": 44,
+          "name": "Events",
+          "subsector": "Urban Art Festivals",
+          "recommend": 85
+        },
+        {
+          "id": 13,
+          "name": "Retail",
+          "subsector": "Sneaker Boutiques",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Street Raw",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Black Ops One",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Rajdhani",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Rajdhani",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 17,
+          "name": "Arts",
+          "subsector": "Street Murals",
+          "recommend": 100
+        },
+        {
+          "id": 29,
+          "name": "Marketing",
+          "subsector": "Extreme Sports Campaigns",
+          "recommend": 98
+        },
+        {
+          "id": 38,
+          "name": "Security",
+          "subsector": "MMA Gym Branding",
+          "recommend": 95
+        },
+        {
+          "id": 13,
+          "name": "Retail",
+          "subsector": "Tattoo Parlors",
+          "recommend": 90
+        },
+        {
+          "id": 23,
+          "name": "Fashion",
+          "subsector": "Urban Workwear",
+          "recommend": 85
+        },
+        {
+          "id": 44,
+          "name": "Events",
+          "subsector": "Underground Raves",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Graffiti Edge",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Permanent Marker",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Bungee",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Montserrat",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 44,
+          "name": "Events",
+          "subsector": "Spray Paint Workshops",
+          "recommend": 100
+        },
+        {
+          "id": 23,
+          "name": "Fashion",
+          "subsector": "Street Artist Collabs",
+          "recommend": 98
+        },
+        {
+          "id": 8,
+          "name": "Entertainment",
+          "subsector": "Breakdance Competitions",
+          "recommend": 95
+        },
+        {
+          "id": 13,
+          "name": "Retail",
+          "subsector": "Urban Vinyl Toys",
+          "recommend": 90
+        },
+        {
+          "id": 37,
+          "name": "Real Estate",
+          "subsector": "Loft Conversion Listings",
+          "recommend": 85
+        },
+        {
+          "id": 17,
+          "name": "Arts",
+          "subsector": "Graffiti Supply Stores",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Industrial Grit",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Anton",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Barlow Condensed",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Archivo Narrow",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 12,
+          "name": "Manufacturing",
+          "subsector": "Custom Motorcycle Shops",
+          "recommend": 100
+        },
+        {
+          "id": 5,
+          "name": "Construction",
+          "subsector": "Brutalist Architecture Firms",
+          "recommend": 98
+        },
+        {
+          "id": 24,
+          "name": "Sports",
+          "subsector": "Weightlifting Gyms",
+          "recommend": 95
+        },
+        {
+          "id": 47,
+          "name": "Wood & Furniture",
+          "subsector": "Reclaimed Metal Furniture",
+          "recommend": 90
+        },
+        {
+          "id": 23,
+          "name": "Fashion",
+          "subsector": "Steel-Toe Boot Brands",
+          "recommend": 85
+        },
+        {
+          "id": 30,
+          "name": "Mining",
+          "subsector": "Industrial Safety Gear",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Underground Rebel",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Audiowide",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Orbitron",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Share Tech",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 8,
+          "name": "Entertainment",
+          "subsector": "Techno Club Nights",
+          "recommend": 100
+        },
+        {
+          "id": 29,
+          "name": "Marketing",
+          "subsector": "Counterculture Campaigns",
+          "recommend": 98
+        },
+        {
+          "id": 23,
+          "name": "Fashion",
+          "subsector": "Cybernetic Streetwear",
+          "recommend": 95
+        },
+        {
+          "id": 14,
+          "name": "Technology",
+          "subsector": "Hacker Collective Branding",
+          "recommend": 90
+        },
+        {
+          "id": 44,
+          "name": "Events",
+          "subsector": "Warehouse Parties",
+          "recommend": 85
+        },
+        {
+          "id": 17,
+          "name": "Arts",
+          "subsector": "Glitch Art Exhibitions",
+          "recommend": 80
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 5,
+    "primary_industries": [
+      "Entertainment (8)",
+      "Fashion (23)",
+      "Arts (17)",
+      "Events (44)"
+    ],
+    "most_used_font": "Montserrat (3 pairings)",
+    "urban_aesthetics": {
+      "Graffiti": 80,
+      "Industrial": 70,
+      "Cyberpunk": 50,
+      "Brutalist": 60
+    },
+    "audience_age": {
+      "Gen Z": 90,
+      "Millennials": 85,
+      "Gen X": 40
+    }
+  }
+}

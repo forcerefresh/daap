@@ -1,0 +1,29 @@
+.main {
+  :global {
+    textarea {
+      margin-top: 5px;
+      height: 50px;
+      min-width: 190px;
+    }
+  }
+}
+
+.browseButton {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.previewHolder {
+  max-width: 140px;
+  max-height: 70px;
+  width: 100px;
+  height: 60px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-bottom: 5px;
+
+  svg {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}

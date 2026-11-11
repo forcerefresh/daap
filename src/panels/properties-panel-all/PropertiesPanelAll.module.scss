@@ -1,0 +1,57 @@
+.propertiesPanelAll {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none !important;
+    }
+
+    .bp5-tab-panel {
+      overflow: auto;
+      margin-top: 0px;
+    }
+
+    .bp5-tab-list {
+      margin-left: 10px;
+    }
+  }
+}
+
+.propertiesPanelPropertiesHolder {
+  padding-top: 5px;
+  height: 100%;
+
+  overflow: auto;
+}
+.panelName {
+  vertical-align: text-bottom;
+  color: #1f82c0;
+  margin-left: 10px;
+  display: inline-block;
+  max-width: 200px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tabs {
+  padding: 2px 0px;
+}
+
+.tag {
+  padding: 0 6px !important;
+  // font-weight: bold;
+}
+
+.propertiesPanel {
+  // overflow: auto;
+}
+
+.delimiter {
+  margin: 10px;
+  border-bottom: 1px solid #8080807c;
+}

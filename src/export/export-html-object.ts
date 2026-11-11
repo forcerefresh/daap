@@ -1,0 +1,240 @@
+import { forOwn } from "lodash-es";
+import { ILayerValues, IObject } from "webslider-sdk/lib/objects/i-object";
+import {
+  getAppObjectDefinition,
+  ICalculatedObjectSize,
+} from "webslider-sdk/lib/objects/objects-register";
+import {
+  calculateObjectSize,
+  calculateObjectSizePerDevice,
+} from "../panels/stage-panel/StagePanelUtils";
+import { ILayer } from "../store/reducers/i-layers";
+import {
+  BreakpointConfiguration,
+  Breakpoints,
+} from "webslider-sdk/lib/common/i-breakpoint-configuration";
+import { getObjectTransform } from "../panels/stage-panel-new/stage-panel-utils";
+import { getCustomIdClass, getObjectArr, getObjectHtml } from "./export-html";
+import { IItemsData } from "./i-export-html";
+import { IObjects } from "../store/reducers/i-objects";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
+
+// Avoid importing svg-mask.ts directly — it imports store.ts which creates a
+// circular dependency during store initialization. Use the type string directly.
+const SVG_MASK = "io.forcerefresh.svg-mask.object";
+
+export function generateObjectData(
+  objects: IObjects,
+  object: IObject<{}>,
+  itemsData: IItemsData[],
+  extensionTypes: string[],
+  layer: ILayer,
+  breakpointConfig: BreakpointConfiguration,
+  breakpoints: Breakpoints,
+  layerValues: ILayerValues,
+  layerTransformValues: Record<string, any> | undefined,
+  options: { isSave: boolean; isForThumbnail?: boolean },
+  containerObjectIds?: string[],
+) {
+  let html = "";
+
+  //part for externals
+  const objDeff = getAppObjectDefinition(object.type, object.version);
+  if (objDeff?.external) {
+    extensionTypes.push(object.type);
+  }
+
+  const effectWrappers: string[] = [];
+
+  // << part for externals
+
+  const objectClass = "object-" + object.id;
+
+  const calculatedObjectSize = calculateObjectSize(
+    object,
+    layer,
+    breakpointConfig,
+    { resetPosition: false },
+    undefined,
+    { skipHeight: !!object.properties?.autoHeight },
+  );
+
+  const calculatedObjectSizePerDevice = calculateObjectSizePerDevice(
+    object,
+    layer,
+    breakpoints,
+    { skipHeight: !!object.properties?.autoHeight },
+  );
+
+  let style = "";
+  forOwn(calculatedObjectSize, function (value, key) {
+    style += key + ":" + value + ";";
+  });
+
+  style += layerValues.hasLayoutChildren
+    ? "position: static;"
+    : "position: absolute;";
+
+  const overflowValue = object.style?.overflow ?? "visible";
+  style += `overflow: ${overflowValue};`;
+  // << "left", "top", "width", "height"
+
+  let wrapperStyle = style;
+  wrapperStyle += "pointer-events: none;";
+
+  style +=
+    "position: relative; left:initial; top: initial; overflow: visible; pointer-events:all;";
+
+  style += "transform :" + getObjectTransform(object) + ";";
+
+  let objectAnimWrapperStyle = "";
+  // NOTE exception for perspective >>>
+  if (
+    object.transform?.perspective &&
+    object.transform?.perspective !== "0px"
+  ) {
+    style += `perspective: ${object.transform?.perspective};`;
+    wrapperStyle += `perspective: ${object.transform?.perspective};`;
+    objectAnimWrapperStyle += `perspective: ${layerTransformValues?.perspective};`;
+  }
+
+  const trOrigin = `transform-origin: ${
+    object.transform?.transformOriginX ?? "left"
+  }  ${object.transform?.transformOriginY ?? "top"};`;
+
+  style += trOrigin;
+  wrapperStyle += trOrigin;
+  objectAnimWrapperStyle += trOrigin;
+
+  // SVG mask: detect whether the next sibling is an SVG_MASK object.
+  // If so, apply clip-path on this object's wrapper and pass target data
+  // to the mask's getHtml for static transform computation.
+  const effectiveContainerIds = containerObjectIds ?? layer.objectIds;
+  const objectIndex = effectiveContainerIds.indexOf(object.id);
+  const nextSiblingId = effectiveContainerIds[objectIndex + 1];
+  const nextSibling = nextSiblingId ? objects.objectById[nextSiblingId] : undefined;
+
+  let clipMaskHtml = "";
+  let maskStyle = "";
+  if (nextSibling?.type === SVG_MASK) {
+    maskStyle = `clip-path: url(#svg-mask-${nextSiblingId});`;
+  }
+  wrapperStyle += maskStyle;
+
+  // When this object IS the SVG_MASK, find its target (prev sibling) and
+  // pre-compute the target's size so getSvgMaskHtml can bake the clip transform.
+  let targetObject: IObject | undefined;
+  let targetCalculatedObjectSize: ICalculatedObjectSize | undefined;
+  if (object.type === SVG_MASK && objectIndex > 0) {
+    const prevSiblingId = effectiveContainerIds[objectIndex - 1];
+    targetObject = prevSiblingId ? objects.objectById[prevSiblingId] : undefined;
+    if (targetObject) {
+      targetCalculatedObjectSize = calculateObjectSize(
+        targetObject as IObject<{}>,
+        layer,
+        breakpointConfig,
+        { resetPosition: false },
+        undefined,
+        { skipHeight: !!targetObject.properties?.autoHeight },
+      ) as ICalculatedObjectSize;
+    }
+  }
+
+  html += `      <div class="object-wrapper object-wrapper-${object.id}" style='${wrapperStyle}'>`; // open object wrapper
+  html += effectWrappers
+    .map(
+      (cn) =>
+        `<div class="animation-wrapper ${cn}" style='${objectAnimWrapperStyle}position:absolute;width:100%;height:100%;'>`,
+    )
+    .join("");
+
+  html += `      <div>${clipMaskHtml}</div>`;
+
+  html += `      <div class="object ${objectClass} ${getCustomIdClass(
+    object,
+  )}" style='${style}'>`; // open object
+
+  let objectHtml = "";
+  if (object.type === "group") {
+    const innerObjectArr = getObjectArr(objects, object.objectIds ?? []);
+
+    let innerObjectsHtml = "";
+    innerObjectArr.forEach((innerObject) => {
+      const objectData = generateObjectData(
+        objects,
+        innerObject,
+        itemsData,
+        extensionTypes,
+        layer,
+        breakpointConfig,
+        breakpoints,
+        layerValues,
+        layerTransformValues,
+        options,
+        object.objectIds,  // pass group's objectIds so sibling detection works inside a group
+      );
+
+      innerObjectsHtml += objectData.html;
+    });
+
+    let groupStyle = "";
+    groupStyle = addCommonPropertiesToStyle(
+      groupStyle,
+      object,
+      breakpointConfig.type,
+    );
+    groupStyle = addTransformPropertiesToStyle(
+      groupStyle,
+      object,
+      breakpointConfig.type,
+    );
+    objectHtml += `<div style="${groupStyle}">${innerObjectsHtml}</div>`;
+  } else {
+    objectHtml = getObjectHtml(
+      object,
+      calculatedObjectSize,
+      true,
+      options.isSave,
+      breakpointConfig.type,
+      options.isForThumbnail,
+      targetObject,
+      targetCalculatedObjectSize,
+    );
+  }
+
+  itemsData.push({
+    itemId: object.id,
+    parentItemId: layer.id,
+    itemType: object.type,
+    itemVersion: object.version,
+    properties: object.properties,
+    style: object.style ?? {},
+    transform: object.transform ?? {},
+    itemSystemType: getAppObjectDefinition(object.type, object.version)?.meta
+      ?.coreType,
+    calculatedObjectSize,
+    calculatedObjectSizePerDevice,
+    objectClass: objectClass,
+    data: {
+      objectWidth: parseInt(calculatedObjectSize!.width + "", 10),
+      objectHeight: parseInt(calculatedObjectSize!.height + "", 10),
+      objectLeft: parseInt(calculatedObjectSize!.left + "", 10),
+      objectTop: parseInt(calculatedObjectSize!.top + "", 10),
+      overflow: overflowValue,
+      objectHtml,
+    },
+    layout: {
+      selfSize: object.selfSize,
+    },
+  });
+  html += objectHtml;
+
+  html += "      </div>"; // object close
+  html += effectWrappers.map((_cn) => `</div>`).join(""); // object-effect close
+  html += "      </div>"; // object close wrapper
+
+  return {
+    html,
+  };
+}

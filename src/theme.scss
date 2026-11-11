@@ -1,0 +1,45 @@
+// Blueprint variable overrides — must come before the Blueprint import
+$pt-app-background-color:     #e5e5e5;
+$pt-dark-app-background-color: rgb(51, 51, 51);
+$pt-dark-text-color:          #e3e5e9;
+$pt-text-color-muted:         #555555;
+
+@import "@blueprintjs/core/lib/scss/variables";
+
+// DAAP design tokens
+@import "./tokens";
+
+// ─── Backwards-compatible aliases ─────────────────────────────────
+// Existing files use $pt-* names. Do not remove these until all
+// usages are migrated to $daap-* variables from tokens.scss.
+
+$pt-app-background-color-secondary:      $daap-bg-secondary;
+$pt-dark-app-background-color-secondary: $daap-bg-secondary-dark;
+
+$pt-toolbar-large-button-size:    $daap-toolbar-btn-size-lg;
+$pt-toolbar-large-button-svg-size: $daap-toolbar-btn-svg-lg;
+$pt-toolbar-small-button-size:    $daap-toolbar-btn-size-sm;
+$pt-toolbar-small-button-svg-size: $daap-toolbar-btn-svg-sm;
+
+$pt-stage-page-guidelines-border:      $daap-guide-page;
+$pt-stage-stage-guidelines-border:     $daap-guide-stage;
+$pt-stage-guidebox-guidelines-border:  $daap-guide-box;
+$pt-dark-stage-page-guidelines-border: $daap-guide-page-dark;
+$pt-dark-stage-stage-guidelines-border: $daap-guide-stage-dark;
+$pt-dark-stage-guidebox-guidelines-border: $daap-guide-box-dark;
+
+$pt-layer-header-color:      $daap-layer-header;
+$pt-dark-layer-header-color: $daap-layer-header-dark;
+
+$pt-row-selection:      $daap-row-selection;
+$pt-dark-row-selection: $daap-row-selection-dark;
+
+$pt-active-color:        $daap-color-active;
+
+$pt-all-devices-color:       $daap-color-device-all;
+$pt-dark-all-devices-color:  $daap-color-device-all-dark;
+$pt-none-devices-color:      $daap-color-device-none;
+$pt-dark-none-devices-color: $daap-color-device-none-dark;
+
+$pt-panel-border-color:      $daap-border;
+$pt-dark-panel-border-color: $daap-border-dark;

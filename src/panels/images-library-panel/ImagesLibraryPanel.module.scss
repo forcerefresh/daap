@@ -1,0 +1,286 @@
+.imageLibraryPanel {
+  height: calc(var(--daap-forcerefresh-app-height) - 110px);
+  padding: 3px;
+  padding-right: 30px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.headerSection {
+  margin-bottom: 10px;
+}
+
+.mainSection {
+  overflow-y: auto;
+  overflow-x: hidden;
+  //height: calc(var(--daap-forcerefresh-app-height) - 310px);
+
+  img {
+    // margin: 8px;
+  }
+  :global {
+    .infinite-scroll-component {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: start;
+      align-content: start;
+      padding-bottom: 100px;
+      min-height: 80vh; // DO no remove this!  scrollbar iz visible to load next page
+    }
+  }
+}
+
+.breakLine {
+  flex-basis: 100%;
+  height: 0;
+}
+
+.selectionSectionHolder {
+  display: flex;
+}
+
+.selectionSection {
+  min-height: 80px;
+  margin: 10px 0px;
+  overflow-x: auto;
+  white-space: nowrap;
+  overflow-y: hidden;
+  flex-grow: 1;
+}
+.selectionActions {
+  min-width: 200px;
+  padding: 10px;
+}
+.mainSectionMultiple {
+  // height: calc(var(--daap-forcerefresh-app-height) - 410px);
+}
+
+.mediaHolder {
+  //height: 2000px;
+  //background-color: darkcyan;
+}
+
+.tag {
+  margin: 5px;
+  cursor: pointer;
+}
+
+.popoverHolder {
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  //THEME background: #333333;
+
+  > div:nth-child(2) {
+    padding-left: 20px;
+  }
+}
+
+.infScroll {
+  padding: 2px;
+}
+.previewTitle {
+  padding: 0px 0px 10px 0px;
+  font-weight: bold;
+}
+
+.imageListTitle {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selectedImage {
+  //border: 8px solid rgba(99, 99, 99, 0.5) !important;
+  box-shadow: 0 0 0 1px #137cbd;
+}
+
+.imageItemHolder {
+  position: relative;
+  border: 8px solid transparent;
+  display: flex;
+  flex-direction: column;
+  row-gap: 6px;
+
+  &:hover {
+    background: rgba(99, 99, 99, 0.5);
+    //border: 8px solid rgba(99, 99, 99, 0.5);
+  }
+}
+/*
+.image {
+  border: 8px solid transparent;
+  &:hover {
+    border: 8px solid rgba(99, 99, 99, 0.5);
+  }
+}*/
+
+.selectionImageHolder {
+  position: relative;
+  display: inline-block;
+}
+
+.removeSelection {
+  display: none;
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  :global {
+    .bp5-icon-delete {
+      color: #ff5151 !important;
+    }
+  }
+}
+
+.selectionImageHolder:hover > .removeSelection {
+  display: block;
+}
+
+.selectionImage {
+  height: 80px;
+  margin: 0 10px;
+}
+
+.emptySelection {
+  padding: 30px;
+}
+
+.subActionHolder {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.imageListTags {
+  max-width: 140px;
+
+  :global {
+    .bp5-tag {
+      cursor: default;
+      // margin-top: 5px;
+      margin-right: 5px;
+    }
+  }
+
+  :global {
+    .bp5-popover {
+      //THEME background: #333333;
+    }
+    .bp5-popover-content {
+      background: none !important;
+    }
+  }
+}
+
+.addButtonHolder {
+  display: inline-block;
+  white-space: nowrap;
+
+  > * {
+    margin-right: 5px;
+  }
+}
+
+.imageHolder {
+  width: 136px;
+  max-width: 136px;
+
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+  align-content: center;
+  > img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+.mainSectionFreeVer {
+  position: relative;
+  background-color: rgba(16, 22, 26, 0);
+  &::after {
+    transition: all 2s;
+    content: "";
+    //background-color: rgba(16, 22, 26, 0.4);
+    position: absolute;
+    inset: 0 0 0 0;
+    height: 2100px;
+  }
+}
+
+.registerAap {
+  position: absolute;
+  right: 0px;
+  background: #000000d1;
+  left: 0;
+  /* bottom: 0; */
+  padding: 100px;
+  text-align: center;
+  font-size: 30px;
+  top: 100px;
+  height: 300px;
+  text-transform: uppercase;
+  z-index: 1000;
+}
+.multiSelectPortalClass {
+  z-index: 1000;
+
+  :global {
+    ul {
+      max-height: 300px;
+      overflow: auto;
+    }
+  }
+}
+
+.imagePreviewPortal {
+  z-index: 1000;
+}
+
+.openPreview {
+  display: none;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+.imageItemHolder {
+  position: relative;
+  border: 8px solid transparent;
+  &:hover {
+    .openPreview {
+      display: block;
+    }
+  }
+}
+
+.allItemsLoaded {
+  background: rgba(150, 150, 150, 0.1);
+  padding: 35px;
+  text-align: center;
+}
+
+.floatingActionBar {
+  display: none;
+  position: absolute;
+  height: 30px;
+  right: 0px;
+  top: 0px;
+  left: 0px;
+  justify-content: end;
+  column-gap: 10px;
+}
+
+.itemHolder:hover .floatingActionBar,
+.floatingActionBar:hover {
+  display: flex;
+}
+
+.rightInputElements {
+  display: flex;
+  align-items: center;
+}

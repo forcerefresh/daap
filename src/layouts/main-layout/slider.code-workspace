@@ -1,0 +1,35 @@
+{
+  "folders": [
+    {
+      "path": "../../.."
+    },
+    {
+      "path": "../../../../replica-test"
+    },
+    {
+      "path": "../../../../webslider-sdk"
+    },
+    {
+      "path": "../../../../mern-boilerplate"
+    },
+    {
+      "path": "../../../../node-ts-test"
+    },
+    {
+      "path": "../../../../daap-server"
+    },
+    {
+      "path": "../../../../pptx-parser-test"
+    },
+    {
+      "path": "../../../../GoogleFontSpriteImageGenerator"
+    },
+    {
+      "path": "../../../../ffmpeg.wasm"
+    },
+    {
+      "path": "../../../../react-vite-app"
+    }
+  ],
+  "settings": {}
+}

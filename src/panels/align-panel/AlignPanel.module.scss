@@ -1,0 +1,50 @@
+.alignPanel {
+  // z-index: 120;
+  // position: absolute;
+  // top: 230px;
+  // left: 68px;
+  // width: 400px;
+  // height: 190px;
+
+  // background: #252526;
+  // box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  flex-direction: column;
+
+  input,
+  button,
+  textarea,
+  :focus {
+    outline: none;
+  }
+
+  .alignHolder {
+    //padding: 15px;
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+
+    row-gap: 20px;
+
+    // > div {
+    //   display: flex;
+    //   flex-direction: row;
+    // }
+
+    :global {
+      .bp5-label {
+        font-weight: bold;
+        color: #808080;
+        margin-bottom: 10px;
+        // margin: 5px 0px 15px 0px !important;
+      }
+    }
+  }
+
+  .alignButtonsHolder {
+    // margin-bottom: 20px;
+  }
+}
